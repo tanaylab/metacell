@@ -4,8 +4,8 @@
 \alias{mcell_mc_from_coclust_louv_sub}
 \title{build a metacell cover from a big co-clust using louvain clustering and metacell coverage within clusters}
 \usage{
-mcell_mc_from_coclust_louv_sub(mc_id, coc_id, mat_id, max_mc_size,
-  max_clust_size)
+mcell_mc_from_coclust_louv_sub(mc_id, coc_id, mat_id, max_clust_size,
+  max_mc_size, min_mc_size, T_weight = 1)
 }
 \arguments{
 \item{mc_id}{Id of new metacell object}
@@ -14,9 +14,9 @@ mcell_mc_from_coclust_louv_sub(mc_id, coc_id, mat_id, max_mc_size,
 
 \item{mat_id}{mat object to use when building the mc object}
 
-\item{max_mc_size}{maximum mc size (bigger clusters will be dissected)}
-
 \item{max_clust_size}{maximum clust size. Bigger chunks will be clustered}
+
+\item{max_mc_size}{maximum mc size (bigger clusters will be dissected)}
 }
 \description{
 build a metacell cover from a big co-clust using louvain clustering and metacell coverage within clusters

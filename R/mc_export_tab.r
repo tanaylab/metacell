@@ -11,7 +11,7 @@
 mcell_mc_export_tab = function(mc_id, gstat_id = NULL,
 											T_gene_tot = 50,
 											T_fold = 1,
-											metadata_fields = c("batch"))
+											metadata_fields = c("batch_set_id"))
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -29,8 +29,8 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL,
 	rownames(out_df) = c('mean_umis', 'n_cells')
 	
 	# add required breakdown to features
-	if (!is.null(clust_fp_metadata_fields)) {
-		for (s in clust_fp_metadata_fields) {
+	if (!is.null(metadata_fields)) {
+		for (s in metadata_fields) {
 			out_df = rbind(table(sc_cl@scmat@cell_metadata[names(sc_cl@clusts), s], sc_cl@clusts), out_df)
 		}
 	}

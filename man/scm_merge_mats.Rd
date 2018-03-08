@@ -2,17 +2,15 @@
 % Please edit documentation in R/scmat.r
 \name{scm_merge_mats}
 \alias{scm_merge_mats}
-\title{scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and some consideration to Batch IDs in the merged cell set, based on adding a prefix to batches in the second matrix. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.}
+\title{scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.}
 \usage{
-scm_merge_mats(scmat1, scmat2, batch2_prefix)
+scm_merge_mats(scmat1, scmat2)
 }
 \arguments{
 \item{scmat1}{tgScMat object.}
 
 \item{scmat2}{tgScMat object.}
-
-\item{batch2_prefix}{- this will be added to batch identifiers for cells in the second matrix.}
 }
 \description{
-scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and some consideration to Batch IDs in the merged cell set, based on adding a prefix to batches in the second matrix. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
+scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
 }

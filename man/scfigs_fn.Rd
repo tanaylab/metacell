@@ -4,12 +4,14 @@
 \alias{scfigs_fn}
 \title{Generate a standard figure name igven and object and figure type}
 \usage{
-scfigs_fn(id, type)
+scfigs_fn(id, type, dir = NULL)
 }
 \arguments{
 \item{id}{- is of the object the figure relates to (E.g. mat_id)}
 
 \item{type}{- a string defining the figure type}
+
+\item{dir}{- output dir. If null, using figs base dir. Creates it if it doesn't exist.}
 }
 \description{
 Generate a standard figure name igven and object and figure type

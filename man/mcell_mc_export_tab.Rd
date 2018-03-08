@@ -5,7 +5,7 @@
 \title{Output genes cell modules footprint matrix with metadata on the cell modules}
 \usage{
 mcell_mc_export_tab(mc_id, gstat_id = NULL, T_gene_tot = 50, T_fold = 1,
-  metadata_fields = c("batch"))
+  metadata_fields = c("batch_set_id"))
 }
 \arguments{
 \item{mc_id}{meta cell object id}

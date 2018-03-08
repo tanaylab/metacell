@@ -15,9 +15,9 @@ Methods for basic stat, gene selection, clustering are implemented separately
 \describe{
 \item{\code{mat}}{A sparse matrix containing the expression data}
 
-\item{\code{Genes}}{list of all genes. By default the matrix row names are used}
+\item{\code{genes}}{list of all genes. By default the matrix row names are used}
 
-\item{\code{Cells}}{list of all cells. By default the matrix col names are used}
+\item{\code{cells}}{list of all cells. By default the matrix col names are used}
 
 \item{\code{stat_type}}{Type of statistic. Currently only "umi" is supported}
 

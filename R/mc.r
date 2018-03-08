@@ -201,7 +201,7 @@ mc_compute_cov_gc= function(mc, us)
 #' @export
 mc_compute_n_bc= function(mc, scmat)
 {
-	tb = table(scmat@cell_metadata[names(mc@mc), "batch"], mc@mc)
+	tb = table(scmat@cell_metadata[names(mc@mc), "amp_batch_id"], mc@mc)
 	n_bc = matrix(tb, ncol=dim(tb)[2])
 	rownames(n_bc) = dimnames(tb)[[1]]
 	return(n_bc)

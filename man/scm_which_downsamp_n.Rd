@@ -2,7 +2,7 @@
 % Please edit documentation in R/scmat.r
 \name{scm_which_downsamp_n}
 \alias{scm_which_downsamp_n}
-\title{Determine recommended downsampling depth. If the parameter scm_n_downsamp is set, it will be returned. If it is null, we return the 5th percentile of the umi count or 750, depending which is larger. However, if the median umi count is lower than this, we use it as the depth. In usch "bad" cases, it may be a good idea to tune the parameter after looking at the umi distribution and resolving possibilities for empty wells/barcodes}
+\title{Determine recommended downsampling depth.}
 \usage{
 scm_which_downsamp_n(scmat)
 }
@@ -10,5 +10,5 @@ scm_which_downsamp_n(scmat)
 \item{mat_id}{}
 }
 \description{
-Determine recommended downsampling depth. If the parameter scm_n_downsamp is set, it will be returned. If it is null, we return the 5th percentile of the umi count or 750, depending which is larger. However, if the median umi count is lower than this, we use it as the depth. In usch "bad" cases, it may be a good idea to tune the parameter after looking at the umi distribution and resolving possibilities for empty wells/barcodes
+If the parameter scm_n_downsamp is set, it will be returned. If it is null, we return the 5th percentile of the umi count or 750, depending which is larger. However, if the median umi count is lower than this, we use it as the depth. In usch "bad" cases, it may be a good idea to tune the parameter after looking at the umi distribution and resolving possibilities for empty wells/barcodes
 }

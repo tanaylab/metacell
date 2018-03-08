@@ -70,11 +70,11 @@ setMethod(
 )
 
 # Checks metadata
-.scm_init_md = function(.Object, cell_metadata) 
+.scm_init_md = function(.Object, cell_metadata)
 {
-  if(is.null(cell_metadata)) { 
+  if(is.null(cell_metadata)) {
 		#by defulat the mat data indicate one single Batch
-		md = data.frame(batch = rep(1, nrow(.Object@mat)), 
+		md = data.frame(amp_batch_id = rep(1, nrow(.Object@mat)),
 							 row.names=.Object@cells)
 		return(md)
   }
@@ -83,8 +83,8 @@ setMethod(
 	  | length(md_nms) != length(intersect(.Object@cells, md_nms))) {
 		stop("Metadata cells names are incompatible with matrix cells - aborting")
   }
-  if(!"batch" %in% colnames(cell_metadata)) {
-		cell_metadata$batch = 1
+  if(!"amp_batch_id" %in% colnames(cell_metadata)) {
+		cell_metadata$amp_batch_id = 1
   }
   cell_metadata = cell_metadata[.Object@cells,]	#making sure it is reordered
 
@@ -140,19 +140,18 @@ mcell_merge_mats = function(id1, id2, new_id)
 	if(is.null(scdb_mat(id1)) | is.null(scdb_mat(id2))) {
 		stop("mcell_merge_mats called with missing mat ids, ", id1, " ", id2)
 	}
-	scdb_add_mat(new_id, 
+	scdb_add_mat(new_id,
 					 scm_merge_mats(scdb_mat(id1), scdb_mat(id2), batch2_prefix=id2))
 }
 
-#' scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and some consideration to Batch IDs in the merged cell set, based on adding a prefix to batches in the second matrix. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
+#' scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
 #'
 #' @param scmat1  tgScMat object.
 #' @param scmat2  tgScMat object.
-#' @param batch2_prefix - this will be added to batch identifiers for cells in the second matrix.
 #'
 #' @export
 #'
-scm_merge_mats = function(scmat1, scmat2, batch2_prefix)
+scm_merge_mats = function(scmat1, scmat2)
 {
 	if(class(scmat1)[1] != "tgScMat") {
 		stop("invalid scmat1 in scm_merge_mat - if you want to merge from the scdb, call mcell_merge_mats")
@@ -160,14 +159,6 @@ scm_merge_mats = function(scmat1, scmat2, batch2_prefix)
 	if(class(scmat2)[1] != "tgScMat") {
 		stop("invalid scmat2 in scm_merge_mat - if you want to merge from the scdb, call mcell_merge_mats")
 	}
-
-	if(!"batch" %in% colnames(scmat1@cell_metadata)) {	
-		scmat1@cell_metadata$batch = "Batch1"
-	} 
-	scmat2@cell_metadata$batch = batch2_prefix
-
-	colnames(scmat2@mat) = paste(batch2_prefix, colnames(scmat2@mat), sep="_")
-	rownames(scmat2@cell_metadata) = paste0(batch2_prefix, rownames(scmat2@cell_metadata))
 
 	scmat1@cell_metadata = bind_rows(scmat1@cell_metadata, scmat2@cell_metadata)
 
@@ -177,13 +168,15 @@ scm_merge_mats = function(scmat1, scmat2, batch2_prefix)
 	miss_nm1 = setdiff(scmat2@genes, scmat1@genes)
 	miss_nm2 = setdiff(scmat1@genes, scmat2@genes)
 
-	message("will add missing lines")
-	m1 = rBind(m1, 
-					sparseMatrix(i=c(), j=c(), 
+	if (length(miss_nm1) > 0 | length(miss_nm2) > 0) {
+	  message(sprintf("will add missing genes (%d to scmat1, %d to scmat2)", length(miss_nm1), length(miss_nm2)))
+	}
+	m1 = rBind(m1,
+					sparseMatrix(i=c(), j=c(),
 									dims=c(length(miss_nm1), ncol(m1)),
 									dimnames=list(miss_nm1, colnames(m1) )))
-	m2 = rBind(m2, 
-					sparseMatrix(i=c(), j=c(), 
+	m2 = rBind(m2,
+					sparseMatrix(i=c(), j=c(),
 									dims=c(length(miss_nm2), ncol(m2)),
 									dimnames=list(miss_nm2, colnames(m2) )))
 	scmat1@mat = cbind(m1,m2[rownames(m1),])
@@ -196,7 +189,7 @@ scm_merge_mats = function(scmat1, scmat2, batch2_prefix)
 	return(scmat1)
 }
 
-#' 
+#'
 #' Extract sub-matrix. This return a matrix object on a subset of the genes and cells.
 #'
 #' @param scmat A tgScMat object.
@@ -204,7 +197,7 @@ scm_merge_mats = function(scmat1, scmat2, batch2_prefix)
 #' @param cells Cells range. NULL implies the entire cell set
 #'
 #' @export
-scm_sub_mat = function(scmat, genes=NULL, cells=NULL) 
+scm_sub_mat = function(scmat, genes=NULL, cells=NULL)
 {
 	if (class(scmat)[1] != "tgScMat") {
 		stop("invalid scmat in scm_sub_mat")
@@ -225,8 +218,8 @@ scm_sub_mat = function(scmat, genes=NULL, cells=NULL)
 	meta = scmat@cell_metadata[cells,]
 	# remove unused levels
 	meta[] <- lapply(meta, function(x) if(is.factor(x)) factor(x) else x)
-	return(tgScMat(mat = scmat@mat[genes, cells,drop=F], 
-						stat_type= scmat@stat_type, 
+	return(tgScMat(mat = scmat@mat[genes, cells,drop=F],
+						stat_type= scmat@stat_type,
 						cell_metadata= meta))
 	#batch_map = scmat@batch_map[cells],
 
@@ -348,7 +341,7 @@ scm_ignore_genes = function(scmat, ig_genes, reverse=FALSE)
 	return(scmat)
 }
 
-#' Determine recommended downsampling depth. 
+#' Determine recommended downsampling depth.
 #'
 #' If the parameter scm_n_downsamp is set, it will be returned. If it is null, we return the 5th percentile of the umi count or 750, depending which is larger. However, if the median umi count is lower than this, we use it as the depth. In usch "bad" cases, it may be a good idea to tune the parameter after looking at the umi distribution and resolving possibilities for empty wells/barcodes
 #'

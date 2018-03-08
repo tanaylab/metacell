@@ -1,9 +1,10 @@
-#' scgfig_set_base - set base directory for metacell figures
+#' scgfig_set_base - set base directory for metacell figures, creates it if it doesn't exist.
 #'
 #' @export
 
 scfigs_init = function(base)
 {
+	dir.create(base, recursive = T, showWarnings = F)
 	.scfigs_base <<- base
 }
 
@@ -11,15 +12,21 @@ scfigs_init = function(base)
 #'
 #' @param id - is of the object the figure relates to (E.g. mat_id)
 #' @param type - a string defining the figure type
+#' @param dir - output dir. If null, using figs base dir. Creates it if it doesn't exist.
 #'
 #' @export
 #'
-scfigs_fn = function(id, type)
+scfigs_fn = function(id, type, dir = NULL)
 {
-	if(is.null(.scfigs_base) | !file.exists(.scfigs_base)) {
-		stop("figs directory at ", .scfigs_base, " is missing")
+  if (is.null(dir)) {
+    dir = .scfigs_base
+  }
+
+	if(!file.exists(dir)) {
+		dir.create(dir, recursive = T, showWarnings = F)
 	}
-	return(sprintf("%s/%s.%s.png", .scfigs_base, id, type))
+
+	return(sprintf("%s/%s.%s.png", dir, id, type))
 }
 
 #' Generate a standard figure dir name igven and object and figure type
@@ -41,16 +48,21 @@ scfigs_dir = function(id, type)
 	return(dir_nm)
 }
 
-# wrap for opening a plot (png or ps)
-.plot_start = function(fn, w, h, 
-		device=get_param("plot_device"), 
-		res=get_param("plot_ppi")) 
+# wrap for opening a plot (png, ps or pdf)
+.plot_start = function(fn, w, h)
+
 {
+  device = get_param("mc_plot_device")
+  res = get_param("mc_plot_ppi")
+
 	if (device == "png") {
 		png(filename=sub("ps$", "png", fn), width=w, height=h, res=res)
 	}
 	else if (device == "ps") {
 		postscript(file=sub("png$", "ps", fn), width=w/res, height=h/res)
+	}
+	else if (device == "pdf") {
+		pdf(file=sub("png$", "pdf", fn), width=w/res, height=h/res)
 	}
 	else {
 		stop(sprintf("unknown output device type: %s", device))

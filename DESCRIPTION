@@ -1,0 +1,70 @@
+Package: metacell
+Title: Meta cell analysis for single cell RNA-seq data
+Version: 0.2.0
+Authors@R: person("Amos", "Tanay", email = "amos.tanay@weizmann.ac.il", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+Depends: R (>= 3.4.2)
+License: TBD
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports:
+  data.table,
+  dplyr,
+  graph,
+  methods,
+  Matrix,
+  matrixStats,
+  pdist,
+  pheatmap, 
+  plotrix,
+  RColorBrewer,
+  Rgraphviz,
+  KernSmooth,
+  zoo,
+  tgconfig,
+  ggplot2,
+  cowplot,
+  cluster,
+  tgstat,
+  doMC,
+  igraph
+Collate:
+	'cgraph_knn_mcnorm.r'
+	'coclust.r'
+	'coclust_graph_cov.r'
+	'mc2d_force_knn.r'
+	'mc2d_plot.r'
+	'mc_confusion.r'
+	'mc_from_coclust.r'
+	'mc_outliers.r'
+	'mc_plot_cross_mc.r'
+	'pipe_vanila.r'
+	'scmat_gcors.r'
+	'cgraph.r'
+	'cgraph_knn.r'
+	'gset_mc.r'
+	'mc.r'
+	'mc2d.r'
+	'mc_colorize.r'
+	'mc_export_tab.r'
+	'mc_graphcov.r'
+	'mc_plot_marks.r'
+	'gset.r'
+	'gset_clust.r'
+	'gset_feat_select.r'
+	'gset_plot_mats.r'
+	'gstats_report.r'
+	'scmat_10x.r'
+	'scmat_batch_stat.r'
+	'scmat.r'
+	'scfigs.r'
+	'gstats.r'
+	'stat_utils.r'
+	'utils.r'
+	'scdb.r'
+	'package-metacell.r'
+Remotes:
+  bitbucket::tanaylab/tgconfig@default,
+  bitbucket::tanaylab/tgstat@default,
+  bitbucket::tanaylab/tgutil@default

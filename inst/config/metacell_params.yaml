@@ -1,0 +1,328 @@
+# scrdb package default parameters (registered when the package is loaded)
+#
+#
+
+##########
+# general
+##########
+
+# which cor to use: native "cor" or "tgs_cor"
+mc_use_tgs_cor: true
+
+mc_cores: 16
+
+#########################################
+# scdb: loading and saving scrdb objects
+#########################################
+
+
+############################################################
+# scmat: Reading, processing and pooling of MARS-seq batches
+############################################################
+
+# Type of statistic. ("umi", "rpkm", "tpm" etc.)
+scm_stat_type: umi
+
+#the "zero expansion parameter" that we used to transform  umi as log(1+ku)
+scm_k_nonz_exp: 7
+
+# used?
+scm_feature_type: all
+
+scm_balance_graph_k_alpha: 10
+scm_balance_graph_k_beta: 3
+
+scm_tgs_clust_cool: 1.05
+scm_tgs_clust_burn_in: 10
+
+scm_coclust_hc_type: ward.D2
+
+scm_mc_mark_k_per_clust: 5
+scm_mc_mark_min_gene_fold: 1.5
+scm_mc_mark_min_gene_cov: 0.25
+
+# how to handle paralog genes (which have the same gene name): 'sum' or 'remove'
+scm_10x_paralogs_policy: sum
+
+
+# heat map parameters
+mcp_heatmap_height: null
+mcp_heatmap_width: null
+mcp_heatmap_ideal_umi: null
+mcp_heatmap_fp_shades: !expr c("white", "lightsteelblue", "blue", "darkblue", "purple", "brown", "black","yellow")
+mcp_heatmap_text_cex: 1
+mcp_heatmap_alt_side_text: FALSE
+mcp_heatmap_latgene_color: red
+mcp_heatmap_lwd: 0
+
+#2d projection
+
+mcell_mc2d_K: 20
+mcell_mc2d_T_edge: 0.05
+mcell_mc2d_max_deg: 5
+mcell_mc2d_edge_asym: TRUE
+mcell_mc2d_k_expand_inout_factor: NULL
+mcell_mc2d_filt_by_fpcor: FALSE
+mcell_mc2d_proj_blur: 0.02
+mcell_mc2d_K_cellproj: 20
+
+mcell_mc2d_height: 2000
+mcell_mc2d_width: 2000
+mcell_mc2d_plot_key: TRUE
+mcell_mc2d_cex: 1
+mcell_mc2d_legend_cex: 1
+
+
+scm_skip_missing_batches: true
+#=======================TO BE EVALIATED==================
+# Skip batches that are present in the metadata file but a missing from the UMI directory
+
+# sample N batches
+scm_n_batches_to_sample: null
+
+# minimum number of umi's for retaining the cell in the matrix after initial load
+scm_min_cell_umis_init: 200
+
+# minimum number of umi's for retaining the cell in the matrix after ambient noise cleaning
+scm_min_cell_umis: 500
+
+# column with batches in the batches metadata table
+scm_batch_meta_attr: "Batch"
+
+# gene blacklist regexps (will remove matching genes from the umi matrix)
+scm_gene_blacklist_names: !expr numeric(0)
+
+# batch QC report: field name to to stratify cells by 
+scm_cells_breakdown_field: null
+
+# batch QC report: color dictionary for scm_cells_breakdown_field values
+scm_cell_col_dict: null
+
+
+# epsilon for removing ambient noise
+scm_amb_noise_epsilon: 0.05
+
+# max gene's downsampled umi count
+scm_outlier_max_gene_top1: 20
+
+# min number of cells with positive umi count for a gene
+scm_outlier_gene_on_count: 200
+
+########################################################################
+# cluster: Representing a clustered matrix, and implementing several 
+# basic algorithms for constructing it from a matrix
+########################################################################
+
+# gene marker selection:
+
+## min var/mean ratio
+scc_marker_min_var_mean: 0.2
+
+## max normalized size correlation
+scc_marker_sz_cor_norm_max: !expr -Inf
+
+## min niche score
+scc_marker_niche_T: !expr Inf
+
+## min total gene UMIs
+scc_marker_min_tot: null
+
+## constraint on the number of umis in the top 3 cells of a marker
+scc_marker_top3_T: null
+
+## gene marker blacklist regexps
+scc_marker_blacklist_names: !expr character(0)
+
+## gene marker blacklist genes (added to genes matching scc_marker_blacklist_names)
+scc_marker_blacklist_genes: !expr character(0)
+
+# Defining markers for a-priori filtering of cells
+scc_marker_for_blacklist_cells: null
+scc_thresh_for_blacklist_cells: 0
+
+# Features normalization: Scale cell's umi by total cell umi count
+scc_norm_size: true
+
+# Features normalization: Scale fraction of umi by median cell umi count (if scc_norm_size == true)
+scc_factor_by_median: true
+
+# Features normalization: umi 'inflation' factor. applying log2(1 + scc_k_scale_umi * UMI) 
+scc_k_scale_umi: 7
+
+# KNN: Balance knn similarity matrix
+scc_use_balanced_knn: true
+
+# KNN: number of neareast cells to consider (If null: n_cells / 40, bound by 75 and 500)
+scc_k_knn: null
+
+# KNN: Minimum cluster size (calculated automaticaly if null: 1/5 of scc_k_knn)
+scc_min_clust_size: null
+
+# KNN: If scc_min_clust_size is null, set scc_min_clust_size to be scc_k_knn * scc_clust_size_to_k_knn_ratio 
+scc_clust_size_to_k_knn_ratio: 0.2
+
+# KNN: Performa cluster consolidation 
+scc_knn_consolidate: true
+
+# Minimal total number of gene UMIs to calculate cluster footprint
+scc_min_total_gene_count_for_footprint: 50
+
+# Factor to expand k_knn by when calculating a balanced knn matrix 
+scc_k_expand_for_balanced: 10
+
+# min max-gene-fold-change thershold on reported clust_fp matrix 
+scc_min_max_clust_fp_to_report: 1.5
+
+# Removing bad clusters: filter clusters with maximal fold change gene below this threshold (not used by default)
+scc_min_max_clust_fp_to_filter: null
+
+# Removing bad clusters: k_knn to calculate knn matrix for confusion matrix
+scc_k_knn_for_confu: null
+
+# Removing bad clusters: Fraction of knn cells required to be in the same cluster to retain the cluster
+scc_min_self_confusion: null
+
+# removing orphan cells: Min confusion score
+scc_min_confusion_score: 0.15
+
+# removing cluster outliers: threshold on genes and cluster (log) fold-change
+scc_clust_outliers_t_lfc: !expr log2(10)
+
+# removing cluster outliers: total gene umi count, thershold on which genes to consider
+scc_clust_outliers_min_gene_count: 8
+
+# removing ambient noise from clusters: Zmax value 
+scc_filter_ambient_Z_max: 2
+
+# output file name for clust_fp table
+scc_clust_fp_fn: clust_fp.txt
+
+# cells metadata fields to summarize cells in clusters by (file per field), to be used as scc_clust_fp_fn header
+scc_clust_fp_metadata_fields: !expr numeric(0)
+
+## bootstrap parameters ##
+
+# use bootstrap
+scc_bootstrap: false
+
+# number of clusters to generate
+scc_bootstrap_k_cut: 20
+
+# number of clustering iterations
+scc_bootstrap_n_boot: 500
+
+# fraction of cells to sample in each iteration
+scc_bootstrap_ratio: 0.75
+
+# parallelize boostrapping using several processes
+scc_bootstrap_n_procs: 4
+
+# print bootstrap progress messages
+scc_bootstrap_verbose: false
+
+# pool cells in small clusters into a single outlier cluster                
+scc_bootstrap_min_clust_size: 10
+
+# hclust/louvain. Generate cluster from coclust matrix by cutree on hclust (default) or by louvain community detection
+scc_bootstrap_clust_method: hclust
+
+##########################
+# gene modules parameters
+##########################
+
+# number of gene modules to generate
+scgm_n_gmods: 20
+
+# genes to use 
+scgm_foc_genes: null
+
+# if feat_type is clust_fp, select genes with abs log2 fold change above this value
+scgm_min_abs_log2_fold: 1
+
+# if feat_type is residual, select genes with total umi coutn above this value
+scgm_min_tot_umis: 500
+
+######################
+# Plotting parameters
+######################
+
+# table used to assign color to cells/modules, with columns: gene, color, group [, priority] 
+scp_mark_colors_fn: null
+
+# confusion matrix width (px)
+scp_width_confu: 1200
+
+# number of top varying genes from each cell module to select for ordering
+scp_ord_per_clust_genes: 10
+
+# filter genes for cell order by min fold enrichment (on clust_fp)
+scp_ord_gene_min_fold: 2.5
+
+# filter genes for cell order by min mean umi count
+scp_ord_gene_min_cov: 0.5
+
+# ignore blacklisted genes while ordering cells
+scp_ord_ignore_blist_genes: true
+
+# gene/cell and gene/cell-module heatmap parameters: 
+scp_mat_width: 2000
+scp_mat_height: 3500
+scp_mat_text_cex: 0.8
+scp_mat_smooth_n: 10 # when showing cells and not cell-modules 
+
+# table with specific genes for an additional genes x cell-modules heatmap 
+scp_mat_focus_genes_fn: null
+
+# 2d projection plot size (px)
+scp_2d_height: 1500
+scp_2d_width: 1500
+
+# show legend of cell color markers, grouped by 'group' column
+scp_show_2d_color_markers: false
+
+# plot gene density over 2d projection 
+scp_plot_genes_2d: false
+
+# fig per value of meta field names, coloring in each cells by meta field value 
+scp_highlight_cells_by_meta_field_nms: null
+
+# metadata field name to stratify by in cluster breakdown plot (use batch name, first column, if null)
+scp_metadata_fig_factor: null
+
+# knn graph parameters
+scp_K_2dproj: 15
+scp_K_cells_2dproj: 15
+scp_force_max_deg_2dproj: 4
+scp_T_edge_2dproj: 0.05
+scp_T_edge_asym: false
+scp_restrict_edges_by_fpcor: true
+scp_expand_K_connect_2dproj: 10
+
+# file name with table of TFs to plot
+scp_focus_tfs_fn: null
+
+## 
+# cells breakdown to cell modules by a feature (e.g. sample, patient) 
+##
+
+# field to breakdown by (will not plot anything if null)
+scp_cell_mod_tab_by: null
+
+# fields with attributes of scp_cell_mod_tab_by to show (the combination of scp_cell_mod_tab_by and scp_cell_mod_tab_key_fields must be unique)
+scp_cell_mod_tab_key_fields: null
+
+# show text values for these key fields
+scp_cell_mod_tab_add_txt_to: null
+
+# map of per key of key values to ordinal numbers
+scp_cell_mod_tab_key_dict: null
+
+# color for missing values in key fields
+scp_cell_mod_tab_na_col: grey
+
+# key values colors. simply ordinal for keys with numeric values, and for textual ones - matching scp_cell_mod_tab_key_dict ordering
+scp_cell_mod_tab_keys_col_dict: null
+
+# plot legend for these key fields
+scp_cell_mod_tab_show_legend_for: null
+

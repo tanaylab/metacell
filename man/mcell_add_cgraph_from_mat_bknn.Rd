@@ -9,7 +9,7 @@ mcell_add_cgraph_from_mat_bknn(mat_id, gset_id, graph_id, K)
 \arguments{
 \item{mat_id}{matrix object id}
 
-\item{gset_id}{gset object id}
+\item{gset_id}{gset object id defining the features used for distances}
 
 \item{graph_id}{new graph id to create}
 

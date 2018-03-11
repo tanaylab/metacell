@@ -16,8 +16,6 @@ mcell_read_scmat_10x(matrix_fn, genes_fn, cells_fn,
 
 \item{cells_fn}{linking to the colnames.tab}
 
-\item{min_umis_n}{minimum number of umi's for retaining the cell in the matrix (default: 200)}
-
 \item{paralog_policy}{- how to treat entries with the same gene name. Currently supporting "sum" for adding up the umis and "remove" for removing the gene. TBA: "split".}
 }
 \description{

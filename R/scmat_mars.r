@@ -33,9 +33,9 @@ mcell_import_multi_mars = function(mat_nm,
 mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 {
 	if(!file.exists(datasets_table_fn)) {
-		stop("MC-ERR: 10x multi_batch index file is missing, fn = ", datasets_table_fn)
+		stop("MC-ERR: MARS multi_batch index file is missing, fn = ", datasets_table_fn)
 	}
-	dsets = fread(datasets_table_fn)
+	dsets = fread(datasets_table_fn, sep="\t")
 	mandatory = c("Amp.Batch.ID", "Seq.Batch.ID", "Batch.Set.ID")
 	miss_f = setdiff(mandatory, colnames(dsets))
 	if(length(miss_f)>0) {
@@ -46,20 +46,31 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 
 	for(i in 1:nrow(dsets)) {
 		amp_batch = dsets$Amp.Batch.ID[i]
-		message("will read ", amb_batch)
+		message("will read ", amp_batch)
 
-		umis = fread_rownames(sprintf("%s/%s.txt", base_dir, amp_batch), sep="\t")
+		umis = fread_rownames(sprintf("%s/%s.txt", base_dir, amp_batch), sep="\t", set_rownames=T)
 
-		md = as.data.frame(matrix(c('MARS', dsets[i,]), nrow=ncol(umis), ncol=ncol(dsets)+1, dimnames=list(colnames(umis), c('type', colnames(dsets))))) %>%
+		md = as.data.frame(matrix(c('MARS', unlist(dsets[i,])), nrow=ncol(umis), ncol=ncol(dsets)+1, byrow=T, dimnames=list(colnames(umis), c('type', colnames(dsets))))) %>%
 		  rename(batch_set_id=Batch.Set.ID, amp_batch_id=Amp.Batch.ID, seq_batch_id=Seq.Batch.ID)
 
-		amat = tgScMat(bumis, stat_type = "umi", cell_metadata = md)
+		spike_regexp = get_param("scm_spike_regexp")
+		if(!is.null(spike_regexp)) {
+		  ercc = grep(spike_regexp, rownames(umis))
+		  md$spike_count = colSums(umis[ercc,])
+		  no_ercc = grep(spike_regexp, rownames(umis), invert=T)
+		  umis = umis[no_ercc, ] # remove ERCC & first col
+		} else {
+		  md$spike_count = 0
+		}
+
+		amat = tgScMat(as.matrix(umis), stat_type = "umi", cell_metadata = md)
 
 		if(is.null(mat)) {
 			mat = amat
 		} else {
-			mat = scm_merge_mats(mat, amat, dnm)
+			mat = scm_merge_mats(mat, amat)
 		}
+
 	}
 	return(mat)
 }

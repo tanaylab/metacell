@@ -56,6 +56,7 @@ Collate:
 	'gset_plot_mats.r'
 	'gstats_report.r'
 	'scmat_10x.r'
+	'scmat_mars.r'
 	'scmat_batch_stat.r'
 	'scmat.r'
 	'scfigs.r'

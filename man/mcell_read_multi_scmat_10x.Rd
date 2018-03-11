@@ -2,15 +2,15 @@
 % Please edit documentation in R/scmat_10x.r
 \name{mcell_read_multi_scmat_10x}
 \alias{mcell_read_multi_scmat_10x}
-\title{read multiple 10x umi matrices and merge them, based on a table defining the datasets.}
+\title{read multiple 10x umi matrices and merge them, based on a table defining the datasets. Field amp_batch_id from the table is added to the cell name to prevent cell names clashes.}
 \usage{
 mcell_read_multi_scmat_10x(datasets_table_fn, base_dir)
 }
 \arguments{
-\item{datasets_table_fn}{the index file of the 10x multi batch dataset. Fileds include: dataset_nm, mat_fn, genes_fn, cells_fn. The first field must be specifieid for each row. The others may be NA, in which case the import process will search for base_dir/dataset_nm/matrix.mtx, genes.tsv, barcodes.tsv.}
+\item{datasets_table_fn}{the index file of the 10x multi batch dataset. Fileds include: Batch.Set.ID, mat_fn, genes_fn, cells_fn. The first field must be specifieid for each row. The others may be NA, in which case the import process will search for base_dir/Batch.Set.ID/matrix.mtx, genes.tsv, barcodes.tsv.}
 
-\item{mcell_min_cell_umis}{(ENVIRON) minimum number of umi's for retaining the cell in the matrix (default: 200)}
+\item{base_dir}{where the input matrices reside.}
 }
 \description{
-read multiple 10x umi matrices and merge them, based on a table defining the datasets.
+read multiple 10x umi matrices and merge them, based on a table defining the datasets. Field amp_batch_id from the table is added to the cell name to prevent cell names clashes.
 }

@@ -42,7 +42,9 @@ scm_downsamp = function(umis, n)
 		max_bin =  round(ncol(umis))/10000
 	}
 	cell_quant = ceiling(ncol(umis)/max_bin)
+	seed = 19
 	sub_dsamp = function(x) {
+		set.seed(seed)
 		i = 1+(x-1)*cell_quant 
 		j = min(x*cell_quant, ncol(umis))  
 	   ret = Matrix(apply(umis[,i:j], 2, .downsamp_one, n))
@@ -62,7 +64,8 @@ scm_downsamp = function(umis, n)
 	else {
 		oldseed = NULL
 	}
-	set.seed(rseed)
+	message("will set seed")
+	set.seed(seed=rseed)
 
 	return(oldseed)
 }

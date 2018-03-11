@@ -28,6 +28,7 @@ mcell_gset_split_by_dsmat = function(gset_id, mat_id, K, force=F)
 
 	feat = log2(1+k_nonz_exp*as.matrix(feat))
 	feat_cor = tgs_cor(t(feat))
+	set.seed(19)
 	hc = hclust(as.dist(1-feat_cor), "ward.D2")
 	clst = cutree(hc, K)
 

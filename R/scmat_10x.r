@@ -25,8 +25,11 @@ mcell_import_multi_scmat_10x = function(mat_nm,
 
 #' Load a matrix from a 10x dataset. The scdb version of mcell_read_multi_scmat_10x
 #'
-#' @param mat_nm - the name of the new matrix in scdb
-#' @param dataset_table_fn - path of the key table
+#' @param mat_nm  the name of the new matrix in scdb
+#' @param base_dir a directory with data files - if this is specified, the matrix,gene and cells file names are determined by defulat
+#' @param matrix_fn if base_dir is missing, this must define the matrix file name to be imported
+#' @param genes_fn if base_dir is missing this must define the genes file name to be imported
+#' @param cells_fn if base_dir is missing, this must define the cells file name to be imported
 #' @param force - if true, will import from 10x files even when the matrix is present in the DB
 #'
 #' @export
@@ -48,6 +51,10 @@ mcell_import_scmat_10x = function(mat_nm,
 		matrix_fn = sprintf("%s/matrix.mtx", base_dir)
 		genes_fn = sprintf("%s/genes.tsv", base_dir)
 		cells_fn = sprintf("%s/barcodes.tsv", base_dir)
+	} else {
+		if(is.null(matrix_fn)) {
+			stop("MCERR - in importing a single 10x matrix, either specify a basedir or the individual matrix, gene and cells file")
+		}
 	}
 	scdb_add_mat(mat_nm,
 			mcell_read_scmat_10x(matrix_fn, genes_fn, cells_fn, dataset_id=mat_nm))

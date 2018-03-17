@@ -100,7 +100,7 @@ scm_gene_stat = function(scmat,
 
 	message("will downsamp")
 	mat_ds = scm_downsamp(mat, downsample_n)
-	message("down downsamp")
+	message("done downsamp")
 	mat_ds = mat_ds[f_g,]
 	mat_fg = mat[f_g,]
 	mat_n = t(t(mat_fg)*(K_std_n/colSums(mat)))

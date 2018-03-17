@@ -42,8 +42,8 @@ mcell_cgraph_norm_gcor = function(cgraph_id, mat_id, K=-1, min_gtot=1000)
 				x[shuf]
 				}))
 
-	gcor = cor(as.matrix(t(mat_ds[f_gene,])), m="spearman")
+	gcor = tgs_cor(as.matrix(t(mat_ds[f_gene,])), spearman = T)
 	r_mat[is.na(r_mat)] = 0
-	r_gcor = cor(t(r_mat), m="spearman")
+	r_gcor = tgs_cor(t(r_mat), spearman = T)
 	return(list(gcor=gcor, r_gcor=r_gcor))
 }

@@ -8,11 +8,17 @@ mcell_import_scmat_10x(mat_nm, base_dir = NULL, matrix_fn = NULL,
   genes_fn = NULL, cells_fn = NULL, force = FALSE)
 }
 \arguments{
-\item{mat_nm}{- the name of the new matrix in scdb}
+\item{mat_nm}{the name of the new matrix in scdb}
+
+\item{base_dir}{a directory with data files - if this is specified, the matrix,gene and cells file names are determined by defulat}
+
+\item{matrix_fn}{if base_dir is missing, this must define the matrix file name to be imported}
+
+\item{genes_fn}{if base_dir is missing this must define the genes file name to be imported}
+
+\item{cells_fn}{if base_dir is missing, this must define the cells file name to be imported}
 
 \item{force}{- if true, will import from 10x files even when the matrix is present in the DB}
-
-\item{dataset_table_fn}{- path of the key table}
 }
 \description{
 Load a matrix from a 10x dataset. The scdb version of mcell_read_multi_scmat_10x

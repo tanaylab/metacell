@@ -4,7 +4,7 @@
 \alias{mcell_add_cgraph_from_mat_bknn}
 \title{Build a cell graph using balanced knn graph on given gene features}
 \usage{
-mcell_add_cgraph_from_mat_bknn(mat_id, gset_id, graph_id, K)
+mcell_add_cgraph_from_mat_bknn(mat_id, gset_id, graph_id, K, dsamp = F)
 }
 \arguments{
 \item{mat_id}{matrix object id}

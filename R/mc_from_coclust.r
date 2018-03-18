@@ -62,10 +62,11 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 	}
 
 #hierarchically break coclust
-	tot_deg = tabulate(c(coc@coclust$node1, coc@coclust$node2), nbins = ncol(mat@mat))
+	filt_coc = coc@coclust[coc@coclust$cnt > T_weight,]
+	tot_deg = tabulate(c(filt_coc$node1, filt_coc$node2), nbins = ncol(mat@mat))
 	outliers = colnames(mat@mat)[tot_deg <= 1]
-	h_mc = list(root=which(tot_deg>0))
-	h_coc = list(root=coc@coclust[coc@coclust$cnt > T_weight,])
+	h_mc = list(root=which(tot_deg>1))
+	h_coc = list(root=filt_coc)
 	recent_zoom=TRUE
 	while(recent_zoom) {
 		new_h_mc = list()
@@ -76,7 +77,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 			next_id = length(new_h_mc) + 1
 			sz = length(h_mc[[cl_i]])
 			if(sz > max_clust_size) {
-				sub_clust = coc_dissect_louvain(h_coc[[cl_i]], h_mc[[cl_i]], T_weight)
+				sub_clust = coc_dissect_louvain(h_coc[[cl_i]], h_mc[[cl_i]])
 				message("open up large cluster on ", sz, " nodes, got ", length(sub_clust), " sub clusts, sizes ", paste(lapply(sub_clust, length),collapse=","))
 				f = lapply(sub_clust, length) < min_mc_size
 				if(sum(f) > 0) {
@@ -98,7 +99,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 					message("louvain returned just one cluster on N =", length(h_mc[[cl_i]]), "\n")
 				}
 			} else if(sz > max_mc_size) {
-				sub_mc = coc_dissect_mc(h_coc[[cl_i]], h_mc[[cl_i]], min_mc_size, T_weight)
+				sub_mc = coc_dissect_mc(h_coc[[cl_i]], h_mc[[cl_i]], min_mc_size)
 				message("cover intermediate cluster on ", sz, " nodes, got ", length(sub_mc), " new mcs, size ", paste(lapply(sub_mc, length),collapse=","))
 				if(length(sub_mc) == 1 & length(sub_mc[["0"]])>0) {
 					message("renaming ", length(sub_mc[["0"]]), " outliers, tot edges was ", nrow(h_coc[[cl_i]]))
@@ -136,13 +137,12 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 	mcell_mc_reorder_hc(mc_id)
 }
 
-coc_dissect_louvain = function(coclust, nodes, T_weight)
+coc_dissect_louvain = function(coclust, nodes)
 {
 	colnames(coclust) = c("node1", "node2", "weight")
-	f = coclust$weight>T_weight
 
 	message("will build graph")
-	g_cc = graph_from_data_frame(d=coclust[f,], directed=F)
+	g_cc = graph_from_data_frame(d=coclust, directed=F)
 	message("will cluster w louvain")
 	a = cluster_louvain(g_cc)
 	
@@ -150,12 +150,12 @@ coc_dissect_louvain = function(coclust, nodes, T_weight)
 	return(clusts)
 }
 
-coc_dissect_mc = function(coclust, nodes, min_mc_size, T_weight)
+coc_dissect_mc = function(coclust, nodes, min_mc_size)
 {
 	tgs_clust_cool = get_param("scm_tgs_clust_cool")
 	tgs_clust_burn = get_param("scm_tgs_clust_burn_in")
 
-	edges = coclust[coclust$cnt> T_weight,]
+	edges = coclust
 	colnames(edges) = c("col1", "col2", "weight")
 	edges$weight = edges$weight/max(edges$weight)
 

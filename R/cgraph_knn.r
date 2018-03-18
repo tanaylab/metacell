@@ -7,9 +7,9 @@
 #'
 #' @export
 
-mcell_add_cgraph_from_mat_bknn = function(mat_id, gset_id, graph_id, K)
+mcell_add_cgraph_from_mat_bknn = function(mat_id, gset_id, graph_id, K, dsamp=F)
 {
-	feat = gset_get_feat_mat(gset_id, mat_id, downsamp=F)
+	feat = gset_get_feat_mat(gset_id, mat_id, downsamp=dsamp, add_non_dsamp=dsamp)
 	k_nonz_exp = get_param("scm_k_nonz_exp")
 	feat = log2(1+k_nonz_exp*as.matrix(feat))
 

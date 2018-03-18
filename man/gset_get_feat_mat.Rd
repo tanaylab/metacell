@@ -4,7 +4,7 @@
 \alias{gset_get_feat_mat}
 \title{extract umi matrix for the genes in the set, possibly donwsampling}
 \usage{
-gset_get_feat_mat(gset_id, mat_id, downsamp = F)
+gset_get_feat_mat(gset_id, mat_id, downsamp = F, add_non_dsamp = F)
 }
 \arguments{
 \item{gset_id}{gene set in scdb}

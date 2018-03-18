@@ -21,10 +21,15 @@ mc2d_comp_mgraph = function(mc_id, graph_id)
 {
 	mc2d_K = get_param("mcell_mc2d_K")
 	mc2d_T_edge = get_param("mcell_mc2d_T_edge") 
-	mc2d_max_deg = get_param("mcell_mc2d_max_deg")
+	mc2d_max_confu_deg = get_param("mcell_mc2d_max_confu_deg")
 	mc2d_edge_asym = get_param("mcell_mc2d_edge_asym")
 	mc2d_k_expand_inout_factor = get_param("mcell_mc2d_expand_inout_factor")
-	mc2d_filt_by_fpcor = get_param("mcell_mc2d_filt_by_fpcor")
+	mc2d_max_fpcor_indeg = get_param("mcell_mc2d_max_fpcor_indeg")
+	mc2d_max_fpcor_outdeg = get_param("mcell_mc2d_max_fpcor_outdeg")
+
+	if(is.null(mc2d_max_confu_deg) & is.null(mc2d_max_fpcor_outdeg)) {
+		stop("MC-ERR: Either max_confu_deg or max_fpcor_deg must be defined - currently both are null")
+	}
 
 	graph = scdb_cgraph(graph_id)
 	if(is.null(graph)) {
@@ -36,44 +41,53 @@ mc2d_comp_mgraph = function(mc_id, graph_id)
 	}
 	restrict_in_degree = T
 
-	message("comp mc graph using the graph ", graph_id, " and K ", mc2d_K) 
-	confu = mcell_mc_confusion_mat(mc_id, graph_id, mc2d_K)
+	if(!is.null(mc2d_max_confu_deg)) {
+
+		message("comp mc graph using the graph ", graph_id, " and K ", mc2d_K) 
+		confu = mcell_mc_confusion_mat(mc_id, graph_id, mc2d_K)
 # k_expand_inout_factor=k_expand_inout_factor
 
-	csize = as.matrix(table(mc@mc))
-	csize = pmax(csize, 20)
-	csize2 = csize %*% t(csize)
-	csize2 = csize2 / median(csize)**2
-	confu = confu / csize2
+		csize = as.matrix(table(mc@mc))
+		csize = pmax(csize, 20)
+		csize2 = csize %*% t(csize)
+		csize2 = csize2 / median(csize)**2
+		confu = confu / csize2
 
-	confu_p_from = confu/rowSums(confu)
-	confu_p_to = t(confu)/colSums(confu)
+		confu_p_from = confu/rowSums(confu)
+		confu_p_to = t(confu)/colSums(confu)
 
-	if(!is.null(mc2d_max_deg)) {
-		rank_fr = t(apply(confu_p_from, 1, rank))
-		rank_to = t(apply(confu_p_to, 1, rank))
-		rank2 = rank_fr * rank_to
-		diag(rank2) = 1e+6
-		amgraph = apply(rank2, 1, function(x) {  rank(-x) <= (1+mc2d_max_deg) })
-		mgraph = amgraph * ((confu_p_from + confu_p_to) > mc2d_T_edge)
-		if(restrict_in_degree) {
-			amgraph2 = t(apply(rank2, 2, function(x) {  rank(-x) <= (1+mc2d_max_deg) }))
-			mgraph = mgraph * amgraph2
+		if(!is.null(mc2d_max_confu_deg)) {
+			rank_fr = t(apply(confu_p_from, 1, rank))
+			rank_to = t(apply(confu_p_to, 1, rank))
+			rank2 = rank_fr * rank_to
+			diag(rank2) = 1e+6
+			amgraph = apply(rank2, 1, function(x) {  rank(-x) <= (1+mc2d_max_confu_deg) })
+			mgraph = amgraph * ((confu_p_from + confu_p_to) > mc2d_T_edge)
+			if(restrict_in_degree) {
+				amgraph2 = t(apply(rank2, 2, function(x) {  rank(-x) <= (1+mc2d_max_confu_deg) }))
+				mgraph = mgraph * amgraph2
+			}
+
+			if(mc2d_edge_asym) {
+				mgraph = amgraph * (confu_p_from>mc2d_T_edge)
+				mgraph = amgraph * (t(confu_p_to)>mc2d_T_edge)
+			}
+			mgraph = mgraph>0 | t(mgraph>0)
+		} else {
+			mgraph = (confu_p_from + confu_p_to) > mc2d_T_edge
 		}
-
-		if(mc2d_edge_asym) {
-			mgraph = amgraph * (confu_p_from>mc2d_T_edge)
-			mgraph = amgraph * (t(confu_p_to)>mc2d_T_edge)
-		}
-		mgraph = mgraph>0 | t(mgraph>0)
-	} else {
-		mgraph = (confu_p_from + confu_p_to) > mc2d_T_edge
 	}
 
-	if(mc2d_filt_by_fpcor & !is.na(mc2d_max_deg)) {
-		fp_cor = cor(log2(mc@mc_fp))
-		fp_rnk = t(apply(-fp_cor,1,function(x) rank(x)<3*mc2d_max_deg))
-		mgraph = mgraph * fp_rnk * t(fp_rnk)
+	if(!is.null(mc2d_max_fpcor_outdeg)) {
+		f = apply(abs(log2(mc@mc_fp)),1,max)>0.5
+		fp_cor = tgs_cor(log2(mc@mc_fp[f,]))
+		fp_rnk = t(apply(-fp_cor,1,function(x) rank(x)<=(mc2d_max_fpcor_outdeg+1)))
+		fp_rnk_in = apply(-fp_cor,1,function(x) rank(x)<=(1+mc2d_max_fpcor_indeg))
+		if(!is.null(mc2d_max_confu_deg)) {
+				  mgraph = mgraph * fp_rnk * fp_rnk_in
+		} else {
+				  mgraph = fp_rnk * fp_rnk_in
+		}
 	}
 
 	N = nrow(mgraph)

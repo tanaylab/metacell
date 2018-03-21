@@ -15,6 +15,6 @@ Representing a cell-to-cell similarity graph.
 
 \item{\code{edges}}{data frame specifiying the graph weighted edges as returned from tgs_cor_graph}
 
-\item{\code{vector}}{of node names}
+\item{\code{nodes}}{vector of node names}
 }}
 

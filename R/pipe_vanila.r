@@ -12,9 +12,9 @@
 #'
 #' @export
 
-mcell_pipe_mat2mc2d = function(mat_id, 
-	T_vm=0.2, 
-	T_tot=200, 
+mcell_pipe_mat2mc2d = function(mat_id,
+	T_vm=0.2,
+	T_tot=200,
 	T_top3=3,
 	Knn=120,
 	n_resamp=500,
@@ -30,15 +30,15 @@ mcell_pipe_mat2mc2d = function(mat_id,
 
 	mcell_add_cgraph_from_mat_bknn(id, id, id, K=Knn)
 
-	mcell_coclust_from_graph_resamp(id, id, id, 
-			min_mc_size=round(Knn/6), 
-			p_resamp=0.75, 
-			n_resamp=n_resamp)
+	mcell_coclust_from_graph_resamp(id, id,
+	                                min_mc_size=round(Knn/6),
+	                                p_resamp=0.75,
+	                                n_resamp=n_resamp)
 
 	mcell_mc_from_coclust_louv_sub(id, id, id,
-			 max_clust_size=4000, 
-			 max_mc_size=100, 
-			 min_mc_size=round(Knn/6), 
+			 max_clust_size=4000,
+			 max_mc_size=100,
+			 min_mc_size=round(Knn/6),
 			 T_weight = T_weight)
 
 	mcell_gset_from_mc_markers(gset_id=id_plot_marks, mc_id=id)
@@ -48,8 +48,8 @@ mcell_pipe_mat2mc2d = function(mat_id,
 	  mc_colorize(mc_id=id, marker_colors=marks_colors)
 	}
 
-	mcell_mc_plot_marks(mc_id=id, 
-						gset_id=id, 
+	mcell_mc_plot_marks(mc_id=id,
+						gset_id=id,
 						mat_id=id)
 
 	mcell_mc2d_force_knn(id, id, id)

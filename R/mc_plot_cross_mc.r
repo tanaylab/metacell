@@ -1,10 +1,9 @@
 #' Plotting a matrix of co-occurences between two metacell covers of the same dataset
 #'
-#' @param mc_id1
-#' @param mc_id2
+#' @param mc_id1 first mc object to use
+#' @param mc_id2 second mc object to use
 #'
 #' @export
-
 mcell_plot_cross_mc = function(mc_id1, mc_id2)
 {
 	mc1 = scdb_mc(mc_id1)

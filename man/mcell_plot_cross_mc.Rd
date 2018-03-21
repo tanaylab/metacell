@@ -7,7 +7,9 @@
 mcell_plot_cross_mc(mc_id1, mc_id2)
 }
 \arguments{
-\item{mc_id2}{}
+\item{mc_id1}{first mc object to use}
+
+\item{mc_id2}{second mc object to use}
 }
 \description{
 Plotting a matrix of co-occurences between two metacell covers of the same dataset

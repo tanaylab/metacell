@@ -55,7 +55,35 @@ scm_spike_regexp: null
 mcp_heatmap_height: null
 mcp_heatmap_width: null
 mcp_heatmap_ideal_umi: null
-mcp_heatmap_fp_shades: !expr c("white", "lightsteelblue", "blue", "darkblue", "purple", "brown", "black","yellow")
+#mcp_heatmap_fp_shades: !expr c("white", "lightsteelblue", "blue", "darkblue", "purple", "brown", "black","yellow")
+# rev(RColorBrewer::brewer.pal(n=11, "RdBu"))
+mcp_heatmap_fp_shades:
+- "#053061"
+- "#2166AC"
+- "#4393C3"
+- "#92C5DE"
+- "#D1E5F0"
+- "#F7F7F7"
+- "#FDDBC7"
+- "#F4A582"
+- "#D6604D"
+- "#B2182B"
+- "#67001F"
+
+# white, RColorBrewer::brewer.pal(n=9, 'YlOrRd'), black
+mcp_heatmap_seq_shades:
+- "white"
+- "#FFFFCC"
+- "#FFEDA0"
+- "#FED976"
+- "#FEB24C"
+- "#FD8D3C"
+- "#FC4E2A"
+- "#E31A1C"
+- "#BD0026"
+- "#800026"
+- "black"
+
 mcp_heatmap_text_cex: 1
 mcp_heatmap_alt_side_text: FALSE
 mcp_heatmap_latgene_color: red
@@ -76,7 +104,7 @@ mcell_mc2d_height: 2000
 mcell_mc2d_width: 2000
 mcell_mc2d_plot_key: TRUE
 mcell_mc2d_cex: 1
-mcell_mc2d_legend_cex: 1
+mcell_mc2d_legend_cex: 2
 
 
 scm_skip_missing_batches: true

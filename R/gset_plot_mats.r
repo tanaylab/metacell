@@ -1,7 +1,7 @@
 #' Plot gene set correlation matrices given a an scamt. See version using metacells for potentially more robust behavior. This is used to detemrine initial feature selectio (e.g. filtering biologically irrelevant gene modules)
 #'
 #'
-#' 
+#'
 #' @export
 
 mcell_plot_gset_cor_mats = function(gset_id, scmat_id, downsamp=T)
@@ -24,14 +24,14 @@ mcell_plot_gset_cor_mats = function(gset_id, scmat_id, downsamp=T)
 	if(!dir.exists(dir_nm)) {
 		dir.create(dir_nm)
 	}
-	
-	s_ids = unique(gset@gene_set)	
+
+	s_ids = unique(gset@gene_set)
 	for(s_id in s_ids) {
 		s_nms = names(gset@gene_set)[which(gset@gene_set==s_id)]
 		s_nms = c(s_nms, "tot_umi")
 		n = length(s_nms)
 		fn = sprintf("%s/%s.png", dir_nm, s_id)
-		png(fn, w=160+n*10, h=120+n*10)
+		png(fn, w=160+n*15, h=120+n*15)
 		shades = colorRampPalette(c("darkblue", "blue","white", "red", "yellow"))(1000)
 		breaks = seq(-0.5,0.5,l=1001)
 		vs = pmin(pmax(gcor[s_nms,s_nms],-0.5),0.5)

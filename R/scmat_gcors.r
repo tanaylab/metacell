@@ -7,7 +7,7 @@
 #' @param gene_anchors genes that will be used as anchors for computing correlation against all other genes
 #' @param gene_anti genes that will be used as negative anchors - high correlation to these will be considered negatively
 #' @param cor_thresh correlation threshold (on downsampled data) - the table will include genes with maximal correlation higher than the threshold, AND, maximal correlation for negative anchor lower than for positive nachors
-#' @param tab_fn file name of tabular report 
+#' @param tab_fn file name of tabular report
 #' @export
 #'
 
@@ -17,6 +17,7 @@ mcell_mat_rpt_cor_anchors = function(mat_id, gene_anchors, gene_anti = c(), cor_
 	if(is.null(mat)) {
 		stop("missing mat ", mat_id)
 	}
+
 	downsample_n = scm_which_downsamp_n(mat)
 	mat_ds = scm_downsamp(mat@mat, downsample_n)
 	mat_ds = mat_ds[rowSums(mat_ds)>10,]
@@ -30,7 +31,7 @@ mcell_mat_rpt_cor_anchors = function(mat_id, gene_anchors, gene_anti = c(), cor_
 	}
 	N1 = length(gene_anchors) + 1
 	N2 = N1 + length(gene_anti)
-	
+
 	if(length(gene_anchors) == 1) {
 		gcors$max = gcors[,2]
 	} else {

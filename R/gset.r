@@ -147,7 +147,7 @@ gset_new_restrict_gset = function(gset, filt_gset, inverse=F, desc)
 #' @param downsamp if this is true the returned matrix is downsampled
 #'
 #' @export
-gset_get_feat_mat = function(gset_id, mat_id, downsamp = F)
+gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, add_non_dsamp=F)
 {
 	gset = scdb_gset(gset_id)
 	if(is.null(gset)) {
@@ -162,6 +162,16 @@ gset_get_feat_mat = function(gset_id, mat_id, downsamp = F)
 		downsample_n = scm_which_downsamp_n(mat)
 		message("will downsample the matrix, N= ", downsample_n, " (and yes - this should have been chached")
 		umis = scm_downsamp(mat@mat, downsample_n)
+		if(add_non_dsamp) {
+			csz = colSums(mat@mat)
+			if(sum(csz < downsample_n) > 0) {
+				umis = cbind(umis, mat@mat[,csz < downsample_n])
+				umis = umis[,colnames(mat@mat)]
+				if(ncol(umis) != ncol(mat@mat)) {
+					stop("size mismatch after dsamp umis on gset")
+				}
+			}
+		}
 	} else {
 		umis = mat@mat
 	}

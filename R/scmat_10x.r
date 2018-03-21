@@ -25,8 +25,11 @@ mcell_import_multi_scmat_10x = function(mat_nm,
 
 #' Load a matrix from a 10x dataset. The scdb version of mcell_read_multi_scmat_10x
 #'
-#' @param mat_nm - the name of the new matrix in scdb
-#' @param dataset_table_fn - path of the key table
+#' @param mat_nm  the name of the new matrix in scdb
+#' @param base_dir a directory with data files - if this is specified, the matrix,gene and cells file names are determined by defulat
+#' @param matrix_fn if base_dir is missing, this must define the matrix file name to be imported
+#' @param genes_fn if base_dir is missing this must define the genes file name to be imported
+#' @param cells_fn if base_dir is missing, this must define the cells file name to be imported
 #' @param force - if true, will import from 10x files even when the matrix is present in the DB
 #'
 #' @export
@@ -48,9 +51,13 @@ mcell_import_scmat_10x = function(mat_nm,
 		matrix_fn = sprintf("%s/matrix.mtx", base_dir)
 		genes_fn = sprintf("%s/genes.tsv", base_dir)
 		cells_fn = sprintf("%s/barcodes.tsv", base_dir)
+	} else {
+		if(is.null(matrix_fn)) {
+			stop("MCERR - in importing a single 10x matrix, either specify a basedir or the individual matrix, gene and cells file")
+		}
 	}
 	scdb_add_mat(mat_nm,
-			mcell_read_scmat_10x(matrix_fn, genes_fn, cells_fn, dataset_id=mat_nm))
+			scmat_read_scmat_10x(matrix_fn, genes_fn, cells_fn, dataset_id=mat_nm))
 	return(TRUE)
 }
 
@@ -96,25 +103,28 @@ mcell_read_multi_scmat_10x = function(datasets_table_fn, base_dir)
 		} else {
 			cells_fn = sptrinf("%s/%s", base_dir, cells_fn)
 		}
-		amat = mcell_read_scmat_10x(matrix_fn = mat_fn,
+		amat = scmat_read_scmat_10x(matrix_fn = mat_fn,
 										genes_fn = genes_fn,
 										cells_fn = cells_fn,
 										dataset_id = dnm)
 
-		colnames(mat@mat) = paste(dnm, colnames(mat@mat), sep="_")
-		mat@cells = colnames(mat@mat)
-		rownames(mat@cell_metadata) = colnames(mat@mat)
+		colnames(amat@mat) = paste(dnm, colnames(amat@mat), sep="_")
+		amat@cells = colnames(amat@mat)
+		rownames(amat@cell_metadata) = colnames(amat@mat)
 
-		mat@cell_metadata$batch_set_id = dnm
-		mat@cell_metadata$amp_batch_id = dnm
-		mat@cell_metadata$seq_batch_id = dnm
+		amat@cell_metadata$batch_set_id = dnm
+		amat@cell_metadata$amp_batch_id = dnm
+		amat@cell_metadata$seq_batch_id = dnm
 
 		if(is.null(mat)) {
+			message("will add")
 			mat = amat
 		} else {
+			message("will merge")
 			mat = scm_merge_mats(mat, amat)
 		}
 	}
+	message("done reading")
 	return(mat)
 }
 
@@ -130,7 +140,7 @@ mcell_read_multi_scmat_10x = function(datasets_table_fn, base_dir)
 #'
 #' @importFrom data.table fread
 #'
-mcell_read_scmat_10x = function(matrix_fn,
+scmat_read_scmat_10x = function(matrix_fn,
 		genes_fn,
 		cells_fn,
 		paralogs_policy = get_param("scm_10x_paralogs_policy"),

@@ -30,6 +30,9 @@ Imports:
   doMC,
   igraph
 Collate:
+	'cgraph_gcor_norm.r'
+	'scmat_ccor.r'
+	'scmat_import.r'
 	'cgraph_knn_mcnorm.r'
 	'coclust.r'
 	'coclust_graph_cov.r'

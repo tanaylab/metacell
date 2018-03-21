@@ -24,7 +24,7 @@ mcell_mc2d_plot = function(mc2d_id)
 	png(fig_nm, width = mcp_2d_width, height = mcp_2d_height)
 	cols = mc@colors
 	cols[is.na(cols)] = "gray"
-	plot(mc2d@sc_x, mc2d@sc_y, cex=mcp_2d_cex, pch=19, col=cols[mc@mc])
+	plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]])
 	fr = mc2d@graph$mc1
 	to = mc2d@graph$mc2
 	segments(mc2d@mc_x[fr], mc2d@mc_y[fr], mc2d@mc_x[to], mc2d@mc_y[to])

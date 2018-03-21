@@ -351,10 +351,10 @@ scm_ignore_genes = function(scmat, ig_genes, reverse=FALSE)
 scm_which_downsamp_n = function(scmat)
 {
 	downsample_n = get_param("scm_n_downsamp_gstat")
-  if(is.null(downsample_n)) {
-    downsample_n = min(round(quantile(colSums(scmat@mat), 0.5)),
+	if(is.null(downsample_n)) {
+   	downsample_n = min(round(quantile(colSums(scmat@mat), 0.5)),
                   max(750, round(quantile(colSums(scmat@mat), 0.05))))
-  }
+  	}
 	return(downsample_n)
 }
 

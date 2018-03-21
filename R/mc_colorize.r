@@ -40,7 +40,7 @@ mc_colorize = function(mc_id, marker_colors = NULL, override = T)
 	marker_fold = ifelse(marker_fold > marker_colors$T_fold, log2(marker_fold), 0)
 	marker_fold = marker_fold * marker_colors$priority
 	marker_fold[marker_fold == 0] = NA
-  browser()
+
 	if(length(good_marks) > 1) {
 		nonz = colSums(!is.na(marker_fold)) > 0
 		hit = apply(marker_fold[, nonz], 2, which.max)

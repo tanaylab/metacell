@@ -95,13 +95,8 @@ mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, single_plot = 
     c_by_f = c_by_f[names(c_by_f) %in% filter_values]
   }
 
-
   cols = mc@colors
   cols[is.na(cols)] = "white"
-
-  # dirty workaround
-  names(mc2d@sc_x) = c(names(mc@mc), mc@outliers)
-  names(mc2d@sc_y) = c(names(mc@mc), mc@outliers)
 
   if (single_plot) {
     ny = ifelse(is.null(ncols), floor(sqrt(length(c_by_f))), ncols)

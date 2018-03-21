@@ -42,7 +42,7 @@ mc_colorize = function(mc_id, marker_colors = NULL, override = T)
 	marker_fold[marker_fold == 0] = NA
   browser()
 	if(length(good_marks) > 1) {
-		nonz = colMeans(is.na(marker_fold)) < 1
+		nonz = colSums(!is.na(marker_fold)) > 0
 		hit = apply(marker_fold[, nonz], 2, which.max)
 	} else {
 		nonz = marker_fold > 0

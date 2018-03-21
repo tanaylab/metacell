@@ -20,7 +20,7 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, mc_subset = NULL)
 mc2d_comp_mgraph = function(mc_id, graph_id)
 {
 	mc2d_K = get_param("mcell_mc2d_K")
-	mc2d_T_edge = get_param("mcell_mc2d_T_edge") 
+	mc2d_T_edge = get_param("mcell_mc2d_T_edge")
 	mc2d_max_confu_deg = get_param("mcell_mc2d_max_confu_deg")
 	mc2d_edge_asym = get_param("mcell_mc2d_edge_asym")
 	mc2d_k_expand_inout_factor = get_param("mcell_mc2d_expand_inout_factor")
@@ -43,7 +43,7 @@ mc2d_comp_mgraph = function(mc_id, graph_id)
 
 	if(!is.null(mc2d_max_confu_deg)) {
 
-		message("comp mc graph using the graph ", graph_id, " and K ", mc2d_K) 
+		message("comp mc graph using the graph ", graph_id, " and K ", mc2d_K)
 		confu = mcell_mc_confusion_mat(mc_id, graph_id, mc2d_K)
 # k_expand_inout_factor=k_expand_inout_factor
 
@@ -123,6 +123,7 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
 	mc2d_proj_blur = get_param("mcell_mc2d_proj_blur")
 	mc2d_K_cellproj = get_param("mcell_mc2d_K_cellproj")
 
+
 	mc = scdb_mc(mc_id)
 	graph = scdb_cgraph(graph_id)
 
@@ -142,8 +143,10 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
 	is_active[(mgraph$mc1-1) * N_mc + mgraph$mc2] = TRUE
 	is_active[((1:N_mc)-1) * N_mc + 1:N_mc] = TRUE
 
-	mc1 = mc@mc[graph@edges$mc1]
-	mc2 = mc@mc[graph@edges$mc2]
+	mc_key1 = mc@mc[levels(graph@edges$mc1)]
+	mc_key2 = mc@mc[levels(graph@edges$mc2)]
+	mc1 = mc_key1[graph@edges$mc1]
+	mc2 = mc_key2[graph@edges$mc2]
 
 	f_in_mc = !is.na(mc1) & !is.na(mc2) #missing mc's, for example orphans
 	f_active = is_active[(mc1-1)*N_mc + mc2]
@@ -152,12 +155,12 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
 	deg = nrow(graph@edges[f,])/length(graph@nodes)
 	T_w = 1-(mc2d_K_cellproj+1)/deg
 	f = f & graph@edges$w > T_w
-	
+
 	to_x = x_cl[mc2]
 	to_y = y_cl[mc2]
 	c_x = tapply(to_x[f], graph@edges$mc1[f], mean)
 	c_y = tapply(to_y[f], graph@edges$mc1[f], mean)
-	
+
 	base_x = min(c_x)
 	base_y = min(c_y)
 	max_x = max(c_x)

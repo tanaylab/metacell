@@ -1,6 +1,6 @@
 #' Meta cell cover
 #'
-#' Representing a meta cell cove of a given cell graph (or more generally of a scRNA data matrix)
+#' Representing a meta cell cover of a given cell graph (or more generally of a scRNA data matrix)
 #'
 #' @slot mc assignment of cells to metacell id
 #' @slot cell_names names of cells (all other objects use running integres relating to these names)
@@ -31,7 +31,7 @@ tgMCCov <- setClass(
 	  color_key = "data.frame")
 )
 
-#' Construct a meta cell object 
+#' Construct a meta cell object
 #'
 #' This constructs a meta cell cover object. It gets an MC assignment (cell->MC_ID), and a matrix, and call standard api of this class to compute the footprints.
 #'
@@ -134,7 +134,7 @@ mc_set_outlier_mc = function(mc, mc_id)
 }
 
 
-#' Compute metacell gene footprint 
+#' Compute metacell gene footprint
 #'
 #' The footprint is defined as the size-normalized geometric mena of the number of umis per metacells, dvided by the median over all metacells.
 #'
@@ -145,17 +145,17 @@ mc_compute_fp = function(mc, us)
 {
 	f_g_cov = rowSums(us) > 10
 
-	clust_geomean = .row_stats_by_factor(us[f_g_cov,], 
-									mc@mc, 
+	clust_geomean = .row_stats_by_factor(us[f_g_cov,],
+									mc@mc,
 									function(y) {exp(rowMeans(log(1+y)))-1})
 
 	clust_meansize = tapply(colSums(us), mc@mc, mean)
 	ideal_cell_size = pmin(1000, median(clust_meansize))
 	g_fp = t(ideal_cell_size*t(clust_geomean)/as.vector(clust_meansize))
 	#normalize each gene
-	fp_reg = 0.1   
-	#0.1 is defined here because 0.1*mean_num_of_cells_in_cluster 
-	#is epxected to be 3-7, which means that we regulairze 
+	fp_reg = 0.1
+	#0.1 is defined here because 0.1*mean_num_of_cells_in_cluster
+	#is epxected to be 3-7, which means that we regulairze
 	#umicount in the cluster by 3-7.
 	g_fp_n = (fp_reg+g_fp)/apply(fp_reg+g_fp, 1, median)
 
@@ -173,8 +173,8 @@ mc_compute_e_gc= function(mc, us)
 {
 	f_g_cov = rowSums(us) > 10
 
-	e_gc = .row_stats_by_factor(us[f_g_cov,], 
-									mc@mc, 
+	e_gc = .row_stats_by_factor(us[f_g_cov,],
+									mc@mc,
 									function(y) {exp(rowMeans(log(1+y)))-1})
 
 	return(e_gc)
@@ -188,8 +188,8 @@ mc_compute_e_gc= function(mc, us)
 #' @export
 mc_compute_cov_gc= function(mc, us)
 {
-	cov_gc = .row_stats_by_factor(us > 0, 
-										fact = mc@mc, 
+	cov_gc = .row_stats_by_factor(us > 0,
+										fact = mc@mc,
 										rowFunction = rowMeans)
 	return(cov_gc)
 }
@@ -222,7 +222,7 @@ mcell_mc_add_annot = function(mc_id, annots)
 	scdb_add_mc(mc_id, mc)
 }
 
-#' Update metacells  colors 
+#' Update metacells  colors
 #'
 #' @param mc a metacell object
 #' @param colors a vector of colors per metacell
@@ -233,7 +233,7 @@ mcell_mc_add_color= function(mc_id, colors)
 	if(is.null(mc)) {
 		stop("MC-ERR: missing mc_id when updating annotation id = ", mc_id)
 	}
-	mc@colors = colors 
+	mc@colors = colors
 	scdb_add_mc(mc_id, mc)
 }
 
@@ -241,7 +241,7 @@ mcell_mc_add_color= function(mc_id, colors)
 #'
 #' @param mc metacell object
 #' @param ord new order metacells
-#' 
+#'
 #' @export
 
 mc_reorder = function(mc, ord)
@@ -275,10 +275,10 @@ mc_reorder = function(mc, ord)
 		mc@colors = mc@colors[ord]
 		names(mc@colors) = 1:length(mc@colors)
 	}
-	return(mc)	
+	return(mc)
 }
 
-#' Reorder metacells using hierarchical clustering 
+#' Reorder metacells using hierarchical clustering
 #'
 #' MEtacells are reorder according to their footprint similarity based on hclust and the reordering using two select antagonistic markers (that can be selected automatically)
 #'
@@ -289,8 +289,8 @@ mc_reorder = function(mc, ord)
 #'
 #'
 
-mcell_mc_reorder_hc = function(mc_id, 
-							gene_left = NULL, gene_right = NULL, 
+mcell_mc_reorder_hc = function(mc_id,
+							gene_left = NULL, gene_right = NULL,
 							gset_blist_id = NULL)
 {
 	mc = scdb_mc(mc_id)
@@ -322,7 +322,7 @@ mcell_mc_reorder_hc = function(mc_id,
 				function(x)  {
 				   names(head(sort(-x[x>0.5]),n=10)) })
 		     )))
-	
+
 	if(is.null(good_marks) | length(good_marks) < 4) {
 		good_marks= rownames(gene_folds)
 	}
@@ -348,8 +348,8 @@ mcell_mc_reorder_hc = function(mc_id,
 		message("reorder on ", main_mark, " vs ", second_mark)
 	}
 
-	d = reorder(as.dendrogram(hc), 
-				feat[gene_right,]-feat[gene_left,], 
+	d = reorder(as.dendrogram(hc),
+				feat[gene_right,]-feat[gene_left,],
 				agglo.FUN=mean)
 	hc2 = as.hclust(d)
 
@@ -363,10 +363,10 @@ mcell_mc_reorder_hc = function(mc_id,
 #'
 #' @export
 #'
-mcell_mc_match_graph = function(mc_id, graph_id) 
+mcell_mc_match_graph = function(mc_id, graph_id)
 {
 	mc = scdb_mc(mc_id)
 	graph = scdb_cgraph(graph_id)
 	cov = intersect(graph@cell_names, mc@cell_names)
-	return(length(cov) == length(mc@cell_names)) 
+	return(length(cov) == length(mc@cell_names))
 }

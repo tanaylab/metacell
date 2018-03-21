@@ -6,7 +6,7 @@
 \alias{tgMCCov}
 \title{Meta cell cover}
 \description{
-Representing a meta cell cove of a given cell graph (or more generally of a scRNA data matrix)
+Representing a meta cell cover of a given cell graph (or more generally of a scRNA data matrix)
 }
 \section{Slots}{
 

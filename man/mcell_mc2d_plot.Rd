@@ -6,6 +6,9 @@
 \usage{
 mcell_mc2d_plot(mc2d_id)
 }
+\arguments{
+\item{mc2d_id}{mc2d object to plot}
+}
 \description{
 Plot mc+cell graph using pre-defined mc colorization
 }

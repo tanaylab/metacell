@@ -3,7 +3,7 @@
 #' @param gstat_id id of gene state object
 #' @param gset_id optional gene set, will be used to mark select genes if specified
 #' @param fig_dir optional base dir (default is to use the std fig dir)
-#' 
+#'
 #' @export
 #'
 mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL)
@@ -18,6 +18,12 @@ mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL)
 			stop("MC-ERR non existing gset id ", gset_id, " when calling plot gstat")
 		}
 		marks = names(gset@gene_set)
+
+		set_cols = rep(RColorBrewer::brewer.pal(n=max(3, min(length(gset@set_names), 9)) , 'Set1'), times=length(gset@set_names))[1:length(gset@set_names)]
+		names(set_cols) = gset@set_names
+
+		cols = unlist(set_cols[gset@gene_set])
+
 	}
 	if(is.null(fig_dir)) {
 		vm_fn = scfigs_fn(gstat_id, "varmin")
@@ -35,9 +41,10 @@ mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL)
 		 ylim = c(min(vm), max(vm)+0.25),
        xlab = "log(downsampled mean)", ylab="log2(var/mean downsampled)");
 	if(!is.null(gset_id)) {
-		points(log2(gstat[marks,"ds_mean"]), 
+		points(log2(gstat[marks,"ds_mean"]),
 				 vm[marks],
-				 cex=1.2, pch=19, col="red");
+				 cex=0.8, pch=19, col=cols);
+	  legend("topleft", legend=names(set_cols), pch=19, cex=0.8, col=set_cols, bty='n')
 	}
 	dev.off()
 
@@ -45,19 +52,21 @@ mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL)
    plot(log2(gstat$ds_mean), gstat$sz_cor, cex=0.8, pch=19,
        xlab = "log(downsampled mean)", ylab="sz correlation");
 	if(!is.null(gset_id)) {
-		points(log2(gstat[marks,"ds_mean"]), 
-				 gstat[marks, "sz_cor"], 
-				 cex=1.2, pch=19, col="red");
+		points(log2(gstat[marks,"ds_mean"]),
+				 gstat[marks, "sz_cor"],
+				 cex=0.8, pch=19, col=cols);
+	  legend("topleft", legend=names(set_cols), pch=19, cex=0.8, col=set_cols, bty='n')
 	}
 	dev.off()
-	
+
 	png(top3_fn, w=1200, h=1200, pointsize=7, res=300)
    plot(log2(gstat$ds_mean), log2(1+gstat$ds_top3), cex=0.8, pch=19,
        xlab = "log(downsampled mean)", ylab="log third highest umi (downsamp)");
 	if(!is.null(gset_id)) {
-		points(log2(gstat[marks,"ds_mean"]), 
-				 log2(1+gstat[marks, "ds_top3"]), 
-				 cex=1.2, pch=19, col="red");
+		points(log2(gstat[marks,"ds_mean"]),
+				 log2(1+gstat[marks, "ds_top3"]),
+				 cex=0.8, pch=19, col=cols);
+	  legend("topleft", legend=names(set_cols), pch=19, cex=0.8, col=set_cols, bty='n')
 	}
 	dev.off()
 }

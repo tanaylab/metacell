@@ -158,7 +158,6 @@ gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, add_non_dsamp=F)
 		stop("MC-ERR non existing mat in gset_get_geat_mat, id ", mat_id)
 	}
 
-
 	if(downsamp) {
 		downsample_n = scm_which_downsamp_n(mat)
 		message("will downsample the matrix, N= ", downsample_n, " (and yes - this should have been chached")

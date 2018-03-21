@@ -8,14 +8,14 @@
 #' @param plot_cells by defulat this is TRUE and data is shown for single cells. If this is false, than metacells fold change values will be plotted
 #'
 
-mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id, 
+mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 						fig_fn = NULL, lateral_gset_id = NULL,
 						plot_cells = T)
 {
 	mcp_heatmap_height = get_param("mcp_heatmap_height")
 	mcp_heatmap_width = get_param("mcp_heatmap_width")
 	mcp_heatmap_ideal_umi = get_param("mcp_heatmap_ideal_umi")
-	mcp_heatmap_fp_shades = colorRampPalette(get_param("mcp_heatmap_fp_shades"))(1000)
+	mcp_heatmap_fp_shades = colorRampPalette(get_param(ifelse(plot_cells, "mcp_heatmap_seq_shades", "mcp_heatmap_fp_shades")))(1000)
 	mcp_heatmap_text_cex = get_param("mcp_heatmap_text_cex")
 	mcp_heatmap_alt_side_text = get_param("mcp_heatmap_alt_side_text")
 	mcp_heatmap_latgene_color = get_param("mcp_heatmap_latgene_color")
@@ -43,7 +43,7 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	}
 
 	if(is.null(fig_fn)) {
-		fig_fn = scfigs_fn(mc_id, "heat_marks")
+		fig_fn = scfigs_fn(mc_id, ifelse(plot_cells, "cells_heat_marks", "mc_heat_marks"))
 	}
 
 	cell_ord = names(mc@mc)[order(mc@mc)]
@@ -104,7 +104,7 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	} else {
 		mat = log2(gene_folds[good_marks, ])
 		mat = pmax(pmin(mat,3),-3)
-		image(t(mat), col=fp_shades, xaxt='n', yaxt='n', zlim=c(-3,3))
+		image(t(mat), col=mcp_heatmap_fp_shades, xaxt='n', yaxt='n', zlim=c(-3,3))
 		mtext(1:n_mc, side = 3, at=seq(0,1,l=n_mc), las=2, line = 2, cex=mcp_heatmap_text_cex)
 	}
 
@@ -168,8 +168,8 @@ mcell_mc_plot_subheats = function(mc_id, mat_id, lateral_gset_id)
 #	mc_hc = hclust(
 #	for()
 #		mcell_add_sub_mc(tmp_mc_id, mc_id, which(mc_clust==cl_i))
-#		mcell_mc_plot_marks(tmp_mc_id, gset_id = tmp_gset_id, 
-#							mat_id = mat_id, fig_fn, 
+#		mcell_mc_plot_marks(tmp_mc_id, gset_id = tmp_gset_id,
+#							mat_id = mat_id, fig_fn,
 #							lateral_gset_id = lateral_gset_id)
 #		scdb_del_mc(tmp_mc_id)
 }

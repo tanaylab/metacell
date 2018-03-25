@@ -103,9 +103,9 @@ mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, single_plot = 
     nx = ceiling((length(c_by_f)/ny))
 
     fig_nm = scfigs_fn(mc2d_id, sprintf("2d_proj_%sall", ifelse(is.null(filter_name), "", paste0(filter_name, "_"))), sprintf("%s/%s.by_%s", .scfigs_base, mc2d_id, meta_field))
-    .plot_start(fig_nm, w=mcp_2d_width, h=mcp_2d_height)
+    .plot_start(fig_nm, w=mcp_2d_width, h=mcp_2d_width / ny * nx)
 
-    layout(matrix(1:(nx*ny), ny, nx, byrow=T))
+    layout(matrix(1:(nx*ny), nx, ny, byrow=T))
     par(mar=c(0.5,0.5,3,0.5))
   }
 
@@ -123,7 +123,7 @@ mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, single_plot = 
     points(mc2d@sc_x[ccells], mc2d@sc_y[ccells], cex= mcp_2d_cex, col="black", lwd=0.5, pch=21, bg=cols[mc@mc[ccells]])
     #text(mc2d@mc_x, mc2d@mc_y, 1:length(mc2d@mc_x), cex=mcp_2d_cex)
 
-    title(main=sprintf("%s (%d cells)", meta_field_v, length(ccells)), cex.main=1.5*mcp_2d_legend_cex)
+    title(main=sprintf("%s (%d)", meta_field_v, length(ccells)), cex.main=1.2*mcp_2d_legend_cex)
 
     if (!single_plot) {
 

@@ -16,7 +16,7 @@ mcell_mc_plot_marks(mc_id, gset_id, mat_id = mc_id, fig_fn = NULL,
 
 \item{fig_fn}{file name for the figure (if null it will be call heat_marks in the fig directory)}
 
-\item{lateral_gset_id}{markers to plot at the bottom (e.g. cell cycle)}
+\item{lateral_gset_id}{markers to plot on top (e.g. cell cycle)}
 
 \item{plot_cells}{by defulat this is TRUE and data is shown for single cells. If this is false, than metacells fold change values will be plotted}
 }

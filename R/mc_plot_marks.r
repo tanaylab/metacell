@@ -4,7 +4,7 @@
 #' @param gset_id markers to plot (e.g. using mcell_gset_from_mc_markers)
 #' @param mat_id matrix object to us (default is the mc_id - assuming they use the same ID), if some cells in mc@mc are missing from the matrix, the function will generate an error
 #' @param fig_fn file name for the figure (if null it will be call heat_marks in the fig directory)
-#' @param lateral_gset_id markers to plot at the bottom (e.g. cell cycle)
+#' @param lateral_gset_id markers to plot on top (e.g. cell cycle)
 #' @param plot_cells by defulat this is TRUE and data is shown for single cells. If this is false, than metacells fold change values will be plotted
 #'
 
@@ -33,7 +33,7 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	}
 	scmat = scdb_mat(mat_id)
 	if(is.null(scmat)) {
-		stop("undefined matobject when trying to plot markers, id " , mat_id)
+		stop("undefined mat object when trying to plot markers, id " , mat_id)
 	}
 	if(length(intersect(names(mc@mc), colnames(scmat@mat))) != length(names(mc@mc))) {
 		stop("cells in meta cell are missing from provided matrix in mc_plot_marks")
@@ -51,8 +51,8 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	good_marks = intersect(names(gset@gene_set), rownames(mc@mc_fp))
 	lateral_marks = c()
 	if(!is.null(lateral_gset_id)) {
-		gset = scdb_gset(lateral_gset_id)
-		if(is.null(gset)) {
+		lateral_gset = scdb_gset(lateral_gset_id)
+		if(is.null(lateral_gset)) {
 			stop("undefined lateral gset object when trying to plot markers, id " , lateral_gset_id)
 		}
 		lateral_marks = intersect(names(lateral_gset@gene_set), rownames(mc@mc_fp))
@@ -80,7 +80,7 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	par(mar=top_marg)
 
 	if(plot_cells) {
-		mat = as.matrix(scmat@mat[c(lateral_marks, good_marks),names(mc@mc)])
+		mat = as.matrix(scmat@mat[c(good_marks, lateral_marks),names(mc@mc)])
 		mat = mat[,cell_ord]
 		totu = colSums(scmat@mat[,names(mc@mc)])
 		mat = t(t(mat)/totu)*mcp_heatmap_ideal_umi
@@ -102,7 +102,7 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 		cl_x_b = tapply(cell_x, mc@mc, max)/length(cell_ord)
 		abline(v=cl_x_b, lwd=mcp_heatmap_lwd)
 	} else {
-		mat = log2(gene_folds[good_marks, ])
+		mat = log2(gene_folds[c(good_marks, lateral_marks), ])
 		mat = pmax(pmin(mat,3),-3)
 		image(t(mat), col=mcp_heatmap_fp_shades, xaxt='n', yaxt='n', zlim=c(-3,3))
 		mtext(1:n_mc, side = 3, at=seq(0,1,l=n_mc), las=2, line = 2, cex=mcp_heatmap_text_cex)

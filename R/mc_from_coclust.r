@@ -9,7 +9,7 @@
 mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 {
 	
-	tgs_coclust_hc_type= get_param("scm_coclust_hc_type")
+	tgs_coclust_hc_type = get_param("scm_coclust_hc_type")
 
 	coc = scdb_coclust(coc_id)
 	if(is.null(coc)) {
@@ -20,7 +20,7 @@ mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 		stop("MC-ERR: mat id ", mat_id, " is missing when running add_mc_from_graph")
 	}
 	if(ncol(mat@mat) > 20000 & !force) {
-		stop("no support for hclust on coclust iwth more than 20K nodes, use force=T")
+		stop("no support for hclust on coclust with more than 20K nodes, use force=T")
 	}
 	message("running cocluster hclust now")
 

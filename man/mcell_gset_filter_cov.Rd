@@ -13,7 +13,7 @@ mcell_gset_filter_cov(gstat_id, gset_id, T_tot, T_top3, force_new = F)
 
 \item{T_tot}{total down sampled coverage threhsold}
 
-\item{T_top3}{total down sampled coverage threhsold}
+\item{T_top3}{threshold value for the third highest umi count for the gene (only genes with top3>T_top3 are used)}
 }
 \description{
 gnereate/filter gene features from coverage threshold in gstat table

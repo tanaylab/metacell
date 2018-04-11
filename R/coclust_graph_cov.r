@@ -22,9 +22,26 @@ mcell_coclust_from_graph_resamp = function(coc_id,
 	edges = graph@edges
 	colnames(edges) = c("col1", "col2", "weight")
 
+if(1) {
+orig_levels = levels(edges$col1)
+edges$col1 <- as.character(edges$col1)
+edges$col2 <- as.character(edges$col2)
+reduced_levels <- unique(c(as.character(edges$col1),as.character(edges$col2)))
+edges$col1<-factor(as.character(edges$col1), levels=reduced_levels)
+edges$col2<-factor(as.character(edges$col2), levels=reduced_levels)
+}
+
 	K = round(nrow(edges)/length(graph@cell_names))
 
 	resamp = tgs_graph_cover_resample(edges, knn = K, min_mc_size, cooling = tgs_clust_cool, burn_in = tgs_clust_burn, p_resamp = p_resamp, n_resamp = n_resamp)
+
+	message("done resampling")
+if(1) {
+resamp$co_cluster$node1 = factor(as.character(resamp$co_cluster$node1), 
+															levels=orig_levels)
+resamp$co_cluster$node2 = factor(as.character(resamp$co_cluster$node2), 
+															levels=orig_levels)
+}
 
 	scdb_add_coclust(coc_id, 
 			tgCoClust(graph_id=graph_id, coclust = resamp$co_cluster, n_samp=resamp$samples))

@@ -38,6 +38,8 @@ scm_downsamp = function(umis, n)
 	max_bin = get_param("mc_cores")
 	doMC::registerDoMC(max_bin)
 
+	max_bin = min(max_bin, ceiling(ncol(umis)/500))
+
 	if(max_bin*10000 < ncol(umis)) {
 		max_bin =  round(ncol(umis))/10000
 	}
@@ -109,6 +111,15 @@ fread_rownames <- function(..., row.var='rowname', set_rownames = F) {
 		mat = mat[,-1]
 	}
 	return(mat)
+}
+
+tgs_cor_graph = function(x, knn, k_expand, k_alpha, k_beta)
+{
+	x_c = tgs_cor(x)
+	x_knn = tgs_knn(x_c, knn*k_expand)
+	gr = tgs_graph(x_knn, knn, k_expand, k_beta)
+	return(gr)
+#	gr = tgs_cor_graph(x=feat, knn=K, k_expand=10, k_alpha=k_alpha, k_beta=k_beta)
 }
 
 

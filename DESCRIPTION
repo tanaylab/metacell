@@ -28,7 +28,8 @@ Imports:
   cluster,
   tgstat,
   doMC,
-  igraph
+  igraph,
+  parallel
 Collate:
 	'cgraph_gcor_norm.r'
 	'cgraph_knn_mcnorm.r'

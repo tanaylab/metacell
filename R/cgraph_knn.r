@@ -22,3 +22,18 @@ mcell_add_cgraph_from_mat_bknn = function(mat_id, gset_id, graph_id, K, dsamp=F)
 
 	scdb_add_cgraph(graph_id, tgCellGraph(gr, cnames))
 }
+#' Compute a cell cell correlation matrix using features defined by a gene set
+#'
+#' @param mat_id matrix object id
+#' @param gset_id gset object id defining the features used for distances
+#'
+#' @export
+
+mcell_gen_cell_cor_gset = function(mat_id, gset_id, dsamp=F)
+{
+	feat = gset_get_feat_mat(gset_id, mat_id, downsamp=dsamp, add_non_dsamp=dsamp)
+	k_nonz_exp = get_param("scm_k_nonz_exp")
+	feat = log2(1+k_nonz_exp*as.matrix(feat))
+
+	return(tgs_cor(feat))
+}

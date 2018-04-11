@@ -4,7 +4,7 @@
 \alias{scm_gene_stat}
 \title{Calculate basic statistics on a matrix}
 \usage{
-scm_gene_stat(scmat, niche_quantile = 0.2, rseed = 321,
+scm_gene_stat(mat_id, niche_quantile = 0.2, rseed = 321,
   downsample_n = NULL, K_std_n = 1000)
 }
 \arguments{

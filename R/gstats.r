@@ -84,14 +84,6 @@ scm_gene_stat = function(mat_id,
   # filtering cells with too many or too few umis
 	f_oversize = colSums(mat) > quantile(colSums(mat), 0.95) * 2 |
 							colSums(mat) < 100
-	if (sum(f_oversize) > 0)
-	{
-	mcell_mat_ignore_cells(new_mat_id = mat_id , mat_id = mat_id, ig_cells = colnames(mat)[f_oversize], reverse = F)
-	scmat = scdb_mat(mat_id)
-	mat = scmat@mat
-	
-	message(paste0('filtered: ', sum(f_oversize), ' oversized cells'))
-	}
 	
 	# returns how many of the gene's umis are found in
 	# X% of the most highly expressing cells. (regularized)

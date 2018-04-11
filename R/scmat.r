@@ -300,6 +300,9 @@ mcell_mat_ignore_genes = function(new_mat_id, mat_id, ig_genes, reverse=F)
 
 scm_ignore_cells = function(scmat, ig_cells, reverse=FALSE)
 {
+	if(is.null(ig_cells) | length(ig_cells) == 0) {
+		ig_cells = vector(l=0)
+	}
 	if(length(scmat@ignore_cells) > 0) {
 		scmat@mat = cbind(scmat@mat, scmat@ignore_cmat)
 		if(length(scmat@ignore_genes) > 0) {

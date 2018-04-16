@@ -19,6 +19,11 @@ scdb_init = function(base_dir, force_reinit=F)
 				ifelse(exists(".scdb_base"), .scdb_base, "NA"), 
 				" use force reinit to restart it")
 	}
+	if(!dir.exists(base_dir)) {
+		stop("cannot initialize db to non existing directory base_dir")
+	} else {
+		message("initializing scdb to ", base_dir)
+	}
 	.scdb_base <<- base_dir
 #init repos
 	.scdb <<- list("mat" = list(), 

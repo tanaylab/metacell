@@ -71,3 +71,6 @@ Remotes:
   bitbucket::tanaylab/tgconfig@default,
   bitbucket::tanaylab/tgstat@default,
   bitbucket::tanaylab/tgutil@default
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

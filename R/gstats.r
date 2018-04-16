@@ -103,7 +103,11 @@ scm_gene_stat = function(mat_id,
 	message("done downsamp")
 	mat_ds = mat_ds[f_g,]
 	mat_fg = mat[f_g,]
-	mat_n = t(t(mat_fg)*(K_std_n/colSums(mat)))
+
+	message("will gen mat_n")
+	mat_n = rescale_sparse_mat_cols(mat_fg, K_std_n/colSums(mat))
+#	mat_n = t(t(mat_fg)*(K_std_n/colSums(mat)))
+	message("done gen mat_n")
 
 	n_ds = ncol(mat_ds)
 	n = ncol(mat)

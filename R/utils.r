@@ -123,3 +123,11 @@ tgs_cor_graph = function(x, knn, k_expand, k_alpha, k_beta)
 }
 
 
+rescale_sparse_mat_cols = function(A, v_norm)
+{
+	if(!is(A, 'dgCMatrix')) {
+		stop("cannot rescale sparse matrix for type that is not dgCMatrix")
+	}
+	A@x <- A@x * rep.int(v_norm, diff(A@p))
+	return(A)
+}

@@ -7,6 +7,8 @@
 #' @param force - if true, will import from 10x files even when the matrix is present in the DB
 #'
 #' @export
+#'
+#' @import RCurl
 
 mcell_import_multi_scmat_10x = function(mat_nm,
 							dataset_table_fn,
@@ -163,15 +165,33 @@ scmat_read_scmat_10x = function(matrix_fn,
 		min_umis_n = get_param("scm_min_cell_umis"),
 		dataset_id = "NS")
 {
-	if(!file.exists(matrix_fn) |
+	remote_mode = F
+	if(grepl("^http", matrix_fn)) {
+		if(!url.exists(matrix_fn) |
+			!url.exists(genes_fn) |
+			!url.exists(cells_fn)) {
+			stop("MC-ERR: missing 10x matrix urls, links: ", matrix_fn, " ", genes_fn, " ", cells_fn)
+		} else {
+			message("remote mode")
+			remote_mode = T
+		}
+	} else if(!file.exists(matrix_fn) |
 		!file.exists(genes_fn) |
 		!file.exists(cells_fn)) {
 		stop("MC-ERR: missing 10x matrix files, fns: ", matrix_fn, " ", genes_fn, " ", cells_fn)
 	}
 	# read sparse matrix with all genes and batches
-	umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
+	if(remote_mode) {
+			mat_mm = fread(matrix_fn)
+			genes = fread(genes_fn)
+			cells = fread(cells_fn)
+			browser()
+	} else {
+		umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
 
-	genes = read.table(genes_fn, header=F, stringsAsFactors = F)
+		genes = fread(genes_fn, header=F, stringsAsFactors = F)
+	}
+
 	colnames(genes) = c('id', 'name')
 	rownames(genes) = genes$id
 

@@ -182,15 +182,15 @@ scmat_read_scmat_10x = function(matrix_fn,
 	}
 	# read sparse matrix with all genes and batches
 	if(remote_mode) {
-			mat_mm = fread(matrix_fn)
-			genes = fread(genes_fn)
-			cells = fread(cells_fn)
-			browser()
-	} else {
-		umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
-
-		genes = fread(genes_fn, header=F, stringsAsFactors = F)
+			download.file(matrix_fn, destfile="/tmp/matrix.mtx")
+			download.file(genes_fn, destfile="/tmp/genes.tsv")
+			download.file(cells_fn, destfile="/tmp/cells.tsv")
+			matrix_fn = "/tmp/matrix.mtx"
+			genes_fn = "/tmp/genes.tsv"
+			cells_fn = "/tmp/cells.tsv"
 	}
+	umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
+	genes = fread(genes_fn, header=F, stringsAsFactors = F)
 
 	colnames(genes) = c('id', 'name')
 	rownames(genes) = genes$id

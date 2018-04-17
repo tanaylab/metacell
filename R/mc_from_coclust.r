@@ -204,7 +204,7 @@ gen_sub_coclust = function(coc, subc)
 #' @param alpha the threshold for filtering edges by their coclust weight is alpha * (Kth highest coclust on either node1 or node2)
 #'
 mcell_mc_from_coclust_balanced = function(mc_id, coc_id, 
-												mat_id, K, min_mc_size, alpha=0.5)
+												mat_id, K, min_mc_size, alpha=2)
 {
 	
 	tgs_clust_cool = get_param("scm_tgs_clust_cool")

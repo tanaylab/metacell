@@ -111,8 +111,8 @@ mcell_plot_outlier_heatmap = function(mc_id, mat_id, T_lfc)
 		hc2 = hclust(dist(cor(t(outu_gi))), "ward.D2")
 		fig_nm = scfigs_fn(mc_id, "outlier")
 	
-		h_mat = 300+length(out_g_nms)*20
-		png(fig_nm, w=300+20*length(out_i_nms), h=h_mat+100)
+		h_mat = min(300+length(out_g_nms)*20,2000)
+		png(fig_nm, w=min(300+20*length(out_i_nms),3000), h=h_mat+100)
 
 		layout(matrix(c(1,2),nrow=2),heights=c(h_mat, 100))
 		top_marg=c(0,13,5,20)

@@ -3,12 +3,12 @@
 #' @param mc_id Id of new metacell object
 #' @param coc_id cocluster object to use
 #' @param mat_id mat object to use when building the mc object
-#' @param K number of clusters to generate from the coclust hclust. Look at the coclust plot to detemrine this. But make sure you keep the clusters at reasonable size (e.g. <100) for use as metacells. 
+#' @param K number of clusters to generate from the coclust hclust. Look at the coclust plot to detemrine this. But make sure you keep the clusters at reasonable size (e.g. <100) for use as metacells.
 #' @param force set this to true to overide size limits on hclust
 #'
 mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 {
-	
+
 	tgs_coclust_hc_type= get_param("scm_coclust_hc_type")
 
 	coc = scdb_coclust(coc_id)
@@ -46,10 +46,10 @@ mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 #' @param max_mc_size maximum mc size (bigger clusters will be dissected)
 #' @param max_clust_size maximum clust size. Bigger chunks will be clustered
 #'
-mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id, 
+mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 		max_clust_size, max_mc_size, min_mc_size, T_weight = 1)
 {
-	
+
 #	tgs_coclust_hc_type= get_param("scm_coclust_hc_type")
 
 	coc = scdb_coclust(coc_id)
@@ -91,7 +91,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 					sub_coc = gen_sub_coclust(h_coc[[cl_i]],sub_clust)
 					new_h_coc = append(new_h_coc, sub_coc)
 				}
-				
+
 				#break using louvain
 				if(length(sub_clust) > 1) {
 					recent_zoom = TRUE
@@ -130,7 +130,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 		h_coc = new_h_coc
 	}
 
-	clust = rep(as.numeric(names(h_mc)), times=lapply(h_mc, length))	
+	clust = rep(as.numeric(names(h_mc)), times=lapply(h_mc, length))
 	names(clust) = colnames(mat@mat)[unlist(h_mc)]
 	scdb_add_mc(mc_id, tgMCCov(clust, outliers, mat))
 	message("reordering metacells by hclust and most variable two markers")
@@ -145,7 +145,7 @@ coc_dissect_louvain = function(coclust, nodes)
 	g_cc = graph_from_data_frame(d=coclust, directed=F)
 	message("will cluster w louvain")
 	a = cluster_louvain(g_cc)
-	
+
 	clusts = split(nodes, a$membership)
 	return(clusts)
 }
@@ -165,7 +165,7 @@ coc_dissect_mc = function(coclust, nodes, min_mc_size)
 	redges$col2= edges$col1
 	edges = rbind(edges,redges)
 
-	node_clust = tgs_graph_cover(edges, min_mc_size, 
+	node_clust = tgs_graph_cover(edges, min_mc_size,
 					cooling = tgs_clust_cool, burn_in = tgs_clust_burn)
 	rownames(node_clust) = node_clust$node
 	clusts = split(nodes, node_clust$cluster[nodes])
@@ -175,7 +175,7 @@ coc_dissect_mc = function(coclust, nodes, min_mc_size)
 gen_sub_coclust = function(coc, subc)
 {
 	message("dissect ", nrow(coc), " edges ")
-	clust = rep(as.numeric(names(subc)), times=lapply(subc, length))	
+	clust = rep(as.numeric(names(subc)), times=lapply(subc, length))
 	clust_map = rep(NA, max(unlist(subc)))
 	clust_map[unlist(subc)] = clust
 	c1 = clust_map[coc$node1]

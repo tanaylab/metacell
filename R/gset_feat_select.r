@@ -34,7 +34,7 @@ mcell_gset_filter_varmean = function(gstat_id, gset_id, T_vm, force_new=F)
 #' @param gstat_id the ID of the gstat object to use
 #' @param gset_id if this exists, filter_varmean will restrict hte current genes in the set with genes matching the var mean threshold, if not, it will generate a new gene sets object with one set including all high variance genes
 #' @param T_tot total down sampled coverage threhsold
-#' @param T_top3 total down sampled coverage threhsold
+#' @param T_top3 threshold value for the third highest umi count for the gene (only genes with top3>T_top3 are used)
 #'
 #' @export
 

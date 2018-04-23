@@ -17,7 +17,7 @@ mcell_add_gene_stat = function(mat_id, gstat_id, force=F)
 		stop("cannot gen gstat for non existing mat ", mat_id)
 	}
 	downsample_n = scm_which_downsamp_n(scdb_mat(mat_id))
-	gstat = scm_gene_stat(scdb_mat(mat_id),
+	gstat = scm_gene_stat(mat_id,
 								 downsample_n = downsample_n)
 	scdb_add_gstat(gstat_id, gstat)
 }
@@ -64,7 +64,7 @@ mcell_add_gene_stat = function(mat_id, gstat_id, force=F)
 #'
 #' @export
 #'
-scm_gene_stat = function(scmat,
+scm_gene_stat = function(mat_id,
                          niche_quantile = 0.2, #TODO: change to 0.1?
                          rseed=321, 
 								 downsample_n = NULL,
@@ -73,6 +73,7 @@ scm_gene_stat = function(scmat,
   oldseed = .set_seed(rseed)
 
 #currently converting to non-sparse. Let's see if this need to be optimized
+  scmat = scdb_mat(mat_id)
   mat =scmat@mat
   cat("Calculating gene statistics... ")
 
@@ -81,10 +82,9 @@ scm_gene_stat = function(scmat,
   }
 
   # filtering cells with too many or too few umis
-	f_oversize = colSums(mat) > quantile(colSums(mat),0.95)*2 |
-							colSums(mat)<100
-	mat = mat[,!f_oversize]
-
+	f_oversize = colSums(mat) > quantile(colSums(mat), 0.95) * 2 |
+							colSums(mat) < 100
+	
 	# returns how many of the gene's umis are found in
 	# X% of the most highly expressing cells. (regularized)
 	quant_mean = function(x, k_reg) {
@@ -103,7 +103,11 @@ scm_gene_stat = function(scmat,
 	message("done downsamp")
 	mat_ds = mat_ds[f_g,]
 	mat_fg = mat[f_g,]
-	mat_n = t(t(mat_fg)*(K_std_n/colSums(mat)))
+
+	message("will gen mat_n")
+	mat_n = rescale_sparse_mat_cols(mat_fg, K_std_n/colSums(mat))
+#	mat_n = t(t(mat_fg)*(K_std_n/colSums(mat)))
+	message("done gen mat_n")
 
 	n_ds = ncol(mat_ds)
 	n = ncol(mat)

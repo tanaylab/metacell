@@ -13,6 +13,7 @@
 #' @slot color_key data.frame defining color per markers genes
 #'
 #' @import Matrix
+#' @import parallel
 #'
 #' @export tgMCCov
 #' @exportClass tgMCCov
@@ -54,7 +55,7 @@ setMethod(
 		}
 		if(length(all_cells) != (length(mc_cells)+length(outliers))
 		| length(setdiff(all_cells, c(mc_cells, outliers))) > 0) {
-			stop("matrix cell names and mc assignments+outliers differ in tgMCCov initialization")
+			stop("matrix cell names and mc assignments+outliers differ in tgMCCov initialization", paste(head(setdiff(all_cells, c(mc_cells, outliers))),collapse=" "))
 		}
 		max_clust = max(mc)
 		.Object@colors = rep("white", n=max_clust)
@@ -104,32 +105,43 @@ mc_update_stats = function(mc, scmat)
 #' This can be used to treat doublets metacells or other artifacts.
 #'
 #' @param mc mc object
-#' @param mc_id metacell to eliminate
+#' @param mc_ids list of metacells to eliminate
 #'
 #' @export
-mc_set_outlier_mc = function(mc, mc_id)
+mc_set_outlier_mc = function(mc, mc_ids)
 {
+	miss_mc = setdiff(mc_ids, colnames(mc@mc_fp))
+	if(length(miss_mc) != 0) {
+		stop("trying to remove non existing mcs, ids ", paste(miss_mc, collapse=" "))
+	}
 	N = ncol(mc@mc_fp)
+	newN = N - length(mc_ids)
 	id_map = rep(-1,N)
-	id_map[(1:N)[-mc_id]] = 1:(N-1)
-	ocells = names(mc@mc)[which(mc@mc==mc_id)]
+	id_map[(1:N)[-mc_ids]] = 1:newN
+	ocells = names(mc@mc)[which(mc@mc %in% mc_ids)]
 	mc@outliers = c(mc@outliers, ocells)
 	gcells = setdiff(mc@cell_names, mc@outliers)
 	mc@mc = mc@mc[gcells]
 	mc@mc = id_map[mc@mc]
 	names(mc@mc) = gcells
-	drop_f = colnames(mc@mc_fp) != mc_id
+	drop_f = !(colnames(mc@mc_fp) %in% mc_ids)
 	mc@mc_fp = mc@mc_fp[,drop_f]
-	colnames(mc@mc_fp) = 1:(N-1)
+	colnames(mc@mc_fp) = 1:newN
 	mc@e_gc = mc@e_gc[,drop_f]
 	mc@cov_gc = mc@cov_gc[,drop_f]
-	colnames(mc@cov_gc) = 1:(N-1)
-	mc@n_bc = mc@n_bc[,drop_f]
-	colnames(mc@n_bc) = 1:(N-1)
+	colnames(mc@cov_gc) = 1:newN
+
+#handle cases of single batch (vector.matrix issues)
+	tb = mc@n_bc[,drop_f]
+	n_bc = matrix(tb, ncol=sum(drop_f))
+	rownames(n_bc) = rownames(mc@n_bc)
+	mc@n_bc = n_bc
+	colnames(mc@n_bc) = 1:newN
+
 	mc@annots = mc@annots[drop_f]
-	names(mc@annots) = 1:(N-1)
+	names(mc@annots) = 1:newN
 	mc@colors= mc@colors[drop_f]
-	names(mc@colors) = 1:(N-1)
+	names(mc@colors) = 1:newN
 	return(mc)
 }
 
@@ -145,13 +157,25 @@ mc_compute_fp = function(mc, us)
 {
 	f_g_cov = rowSums(us) > 10
 
-	clust_geomean = .row_stats_by_factor(us[f_g_cov,],
+	mc_cores = get_param("mc_cores")
+	doMC::registerDoMC(mc_cores)
+	all_gs = rownames(us[f_g_cov,])
+	n_g = length(all_gs)
+	g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
+	fnc = function(gs) { 
+					.row_stats_by_factor(us[gs,],
 									mc@mc,
-									function(y) {exp(rowMeans(log(1+y)))-1})
+									function(y) {exp(rowMeans(log(1+y)))-1}) }
 
-	clust_meansize = tapply(colSums(us), mc@mc, mean)
-	ideal_cell_size = pmin(1000, median(clust_meansize))
-	g_fp = t(ideal_cell_size*t(clust_geomean)/as.vector(clust_meansize))
+	clust_geomean = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
+
+#	clust_geomean = .row_stats_by_factor(us[f_g_cov,],
+#									mc@mc,
+#									function(y) {exp(rowMeans(log(1+y)))-1})
+
+	mc_meansize = tapply(colSums(us), mc@mc, mean)
+	ideal_cell_size = pmin(1000, median(mc_meansize))
+	g_fp = t(ideal_cell_size*t(clust_geomean)/as.vector(mc_meansize))
 	#normalize each gene
 	fp_reg = 0.1
 	#0.1 is defined here because 0.1*mean_num_of_cells_in_cluster
@@ -173,9 +197,20 @@ mc_compute_e_gc= function(mc, us)
 {
 	f_g_cov = rowSums(us) > 10
 
-	e_gc = .row_stats_by_factor(us[f_g_cov,],
+	mc_cores = get_param("mc_cores")
+	doMC::registerDoMC(mc_cores)
+	all_gs = rownames(us[f_g_cov,])
+	n_g = length(all_gs)
+	g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
+	fnc = function(gs) { 
+					.row_stats_by_factor(us[gs,],
 									mc@mc,
-									function(y) {exp(rowMeans(log(1+y)))-1})
+									function(y) {exp(rowMeans(log(1+y)))-1}) }
+
+	e_gc = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
+	mc_meansize = tapply(colSums(us), mc@mc, mean)
+
+	e_gc = t(t(e_gc)/as.vector(mc_meansize))
 
 	return(e_gc)
 }
@@ -188,9 +223,16 @@ mc_compute_e_gc= function(mc, us)
 #' @export
 mc_compute_cov_gc= function(mc, us)
 {
-	cov_gc = .row_stats_by_factor(us > 0,
-										fact = mc@mc,
-										rowFunction = rowMeans)
+	f_g_cov = rowSums(us) > 10
+	mc_cores = get_param("mc_cores")
+	doMC::registerDoMC(mc_cores)
+	all_gs = rownames(us[f_g_cov,])
+	n_g = length(all_gs)
+	g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
+	fnc = function(gs) { 
+			.row_stats_by_factor(us[gs,] > 0, mc@mc, rowFunction = rowMeans) }
+
+	cov_gc = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
 	return(cov_gc)
 }
 

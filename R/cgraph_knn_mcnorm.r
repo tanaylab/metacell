@@ -16,7 +16,7 @@ mcell_add_cgraph_bknn_norm_mc = function(graph_id, mat_id, gset_id, K, mc_to_nor
 	if(is.null(norm_mc)) {
 		stop("missing metacell for cgraph normalization, id = ", mc_to_norm)
 	}
-	feat = gset_get_feat_mat(gset_id, mat_id, downsamp=F)
+	feat = gset_get_feat_mat(gset_id, mat_id, downsamp=F, add_non_dsamp=F)
 	k_nonz_exp = get_param("scm_k_nonz_exp")
 	feat = log2(1+k_nonz_exp*as.matrix(feat))
 

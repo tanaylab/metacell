@@ -4,12 +4,12 @@
 \alias{mc_set_outlier_mc}
 \title{Move all cels from specific metacells to the outliers}
 \usage{
-mc_set_outlier_mc(mc, mc_id)
+mc_set_outlier_mc(mc, mc_ids)
 }
 \arguments{
 \item{mc}{mc object}
 
-\item{mc_id}{metacell to eliminate}
+\item{mc_ids}{list of metacells to eliminate}
 }
 \description{
 This can be used to treat doublets metacells or other artifacts.

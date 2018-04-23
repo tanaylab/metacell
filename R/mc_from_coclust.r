@@ -8,8 +8,7 @@
 #'
 mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 {
-
-	tgs_coclust_hc_type= get_param("scm_coclust_hc_type")
+	tgs_coclust_hc_type = get_param("scm_coclust_hc_type")
 
 	coc = scdb_coclust(coc_id)
 	if(is.null(coc)) {
@@ -20,7 +19,7 @@ mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 		stop("MC-ERR: mat id ", mat_id, " is missing when running add_mc_from_graph")
 	}
 	if(ncol(mat@mat) > 20000 & !force) {
-		stop("no support for hclust on coclust iwth more than 20K nodes, use force=T")
+		stop("no support for hclust on coclust with more than 20K nodes, use force=T")
 	}
 	message("running cocluster hclust now")
 
@@ -137,6 +136,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 	mcell_mc_reorder_hc(mc_id)
 }
 
+
 coc_dissect_louvain = function(coclust, nodes)
 {
 	colnames(coclust) = c("node1", "node2", "weight")
@@ -190,4 +190,69 @@ gen_sub_coclust = function(coc, subc)
 	sub_coc = split(coc, intra_c)
 	names(sub_coc) = names(subc)
 	return(sub_coc)
+}
+
+#' build a metacell cover from co-clust data through filtering un-balanced edges
+#' and running graph cover 
+#'
+#' @param mc_id Id of new metacell object
+#' @param coc_id cocluster object to use
+#' @param mat_id mat object to use when building the mc object
+#' @param K - this will 
+#' @param min_mc_size minimum mc size for graph cov
+#' @param alpha the threshold for filtering edges by their coclust weight is alpha * (Kth highest coclust on either node1 or node2)
+#'
+mcell_mc_from_coclust_balanced = function(mc_id, coc_id, 
+												mat_id, K, min_mc_size, alpha=2)
+{
+	
+	tgs_clust_cool = get_param("scm_tgs_clust_cool")
+	tgs_clust_burn = get_param("scm_tgs_clust_burn_in")
+
+	coc = scdb_coclust(coc_id)
+	if(is.null(coc)) {
+		stop("MC-ERR: coclust ", coc_id , " is missing when running mc from coclust")
+	}
+	mat = scdb_mat(mat_id)
+	if(is.null(mat)) {
+		stop("MC-ERR: mat id ", mat_id, " is missing when running add_mc_from_graph")
+	}
+
+#hierarchically break coclust
+	edges = coc@coclust
+	deg_wgt = as.matrix(table(c(edges$node1, edges$node2), c(edges$cnt,edges$cnt)))
+	deg_cum = t(apply(deg_wgt, 1, function(x) cumsum(rev(x))))
+	thresh_Kr = rowSums(deg_cum > K)
+	thresh_K = rep(NA, length(levels(edges$node1)))
+	names(thresh_K) = levels(edges$node1)
+	thresh_K[as.numeric(names(thresh_Kr))] = thresh_Kr
+
+	filt_edges = thresh_K[edges$node1] < edges$cnt * alpha | 
+							thresh_K[edges$node2] < edges$cnt * alpha
+
+	message("filtered ", nrow(edges) - sum(filt_edges), " left with ", sum(filt_edges), " based on co-cluster imbalance")
+	edges = edges[filt_edges,]
+
+	colnames(edges) = c("col1", "col2", "weight")
+	edges$weight = edges$weight/max(edges$weight)
+
+	edges = edges[edges$col1 != edges$col2,]
+	redges = edges[,c("col1", "col2", "weight")]
+	redges$col1= edges$col2
+	redges$col2= edges$col1
+	edges = rbind(edges,redges)
+
+	node_clust = tgs_graph_cover(edges, min_mc_size, 
+					cooling = tgs_clust_cool, burn_in = tgs_clust_burn)
+
+	f_outlier = (node_clust$cluster == 0)
+
+	outliers = colnames(mat@mat)[node_clust$node[f_outlier]]
+	mc = as.integer(as.factor(node_clust$cluster[!f_outlier]))
+	names(mc) = colnames(mat@mat)[!f_outlier]
+	message("building metacell object, #mc ", max(mc))
+	cell_names = colnames(mat@mat)
+	scdb_add_mc(mc_id, tgMCCov(mc, outliers, mat))
+	message("reordering metacells by hclust and most variable two markers")
+	mcell_mc_reorder_hc(mc_id)
 }

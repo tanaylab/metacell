@@ -225,6 +225,28 @@ scm_sub_mat = function(scmat, genes=NULL, cells=NULL)
 
 }
 
+#' Generate a new matrix object after removing cells without enough umis
+#'
+#' The currently ignored cells are still going to be ignored, and small cells
+#' are goign to be added to them
+#'
+#' @param new_mat_id id of matrix in scdb
+#' @param mat_id existing matrix
+#' @param min_umis minimum number of umi per cell
+#'
+#' @export
+
+mcell_mat_ignore_small_cells = function(new_mat_id, mat_id, min_umis)
+{
+	if(is.null(scdb_mat(mat_id))) {
+		stop("mcell_mat_ignore_small_cells called with missing mat id, ", mat_id)
+	}
+	mat = scdb_mat(mat_id)
+	csize = colSums(mat@mat)
+	small_c = names(which(csize < min_umis))
+	mcell_mat_ignore_cells(new_mat_id, mat_id, union(mat@ignore_cells, small_c))
+}
+
 #' Generate a new matrix object with a given ignore cell list
 #'
 #' @param new_mat_id id of matrix in scdb
@@ -244,6 +266,7 @@ mcell_mat_ignore_cells = function(new_mat_id, mat_id, ig_cells, reverse=F)
 	new_mat = scm_ignore_cells(mat, ig_cells, reverse)
 	scdb_add_mat(new_mat_id, new_mat)
 }
+
 
 #' Generate a new matrix object with a given ignore gene list
 #'
@@ -277,6 +300,9 @@ mcell_mat_ignore_genes = function(new_mat_id, mat_id, ig_genes, reverse=F)
 
 scm_ignore_cells = function(scmat, ig_cells, reverse=FALSE)
 {
+	if(is.null(ig_cells) | length(ig_cells) == 0) {
+		ig_cells = vector(l=0)
+	}
 	if(length(scmat@ignore_cells) > 0) {
 		scmat@mat = cbind(scmat@mat, scmat@ignore_cmat)
 		if(length(scmat@ignore_genes) > 0) {
@@ -294,7 +320,8 @@ scm_ignore_cells = function(scmat, ig_cells, reverse=FALSE)
 		}
 	}
 	scmat@cells = good_cells
-	scmat@ignore_cmat = scmat@mat[,scmat@ignore_cells]
+	scmat@ncells = length(good_cells)
+	scmat@ignore_cmat = as(as.matrix(scmat@mat[,scmat@ignore_cells]), 'dgCMatrix')
 	if(length(scmat@ignore_genes) > 0) {
 		scmat@ignore_gcmat = scmat@ignore_gmat[,scmat@ignore_cells]
 		scmat@ignore_gmat = scmat@ignore_gmat[,good_cells]

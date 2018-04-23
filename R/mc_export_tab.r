@@ -8,24 +8,28 @@
 #'
 #' @return Nothing. But save a table in the figure directory that can be loaded to excel
 #'
-mcell_mc_export_tab = function(mc_id, gstat_id = NULL,
+mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 											T_gene_tot = 50,
-											T_fold = 1,
+											T_fold = 1, # should we also export genes with depletion (i.e. below certain threshold)?
 											metadata_fields = c("batch_set_id"))
 {
 	mc = scdb_mc(mc_id)
+	gstat = scdb_gstat(gstat_id)
+	scmat = scdb_mat(mat_id)
 	if(is.null(mc)) {
 		stop("MC-ERR non existing mc_id ", mc_id, " when trying to export fp table")
 	}
 
-	fp_max = apply(mc@mc_fp, 1, max)
-	if(!is.null(gstat_id)) {
+	if(is.null(gstat)) {
 		stop("MC-ERR non existing gstat id ", gstat_id, " when trying to export fp table")
 	}
-	fp_tot = gstat[rowmames(mc@mc_fp),"tot"]
+		
+	if(is.null(scmat)) {
+		stop("MC-ERR non existing mat id ", mat_id, " when trying to export fp table")
+	}
 	
 	# add #cells per clust and mean #umis (~ cell size)
-	out_df = rbind(tapply(colSums(sc_cl@scmat@mat), sc_cl@clusts, mean), table(sc_cl@clusts))
+	out_df = rbind(tapply(colSums(scmat@mat[, names(mc@mc)]), mc@mc, mean), table(mc@mc))
 	rownames(out_df) = c('mean_umis', 'n_cells')
 	
 	# add required breakdown to features
@@ -35,9 +39,15 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL,
 		}
 	}
 	
-	# actual clust_fp
-	out_df = rbind(out_df, round(log2(sc_cl@clust_fp[f,]), 2))
+	fp_max = apply(mc@mc_fp, 1, max)
+	fp_tot = gstat[intersect(rownames(mc@mc_fp), rownames(gstat)), "tot"]
 	
-	write.table(out_df, paste0(outdir, "/", tab_clust_fp_fn),	sep = "\t",quote = F)
-
+	# genes to export
+	f = fp_max > T_fold & fp_tot > T_gene_tot 
+	
+	# actual clust_fp
+	out_df = rbind(out_df, round(log2(mc@mc_fp[f,]), 2))
+	
+	tab_clust_fp_fn = paste0(mc_id, '_log2_fp.txt')
+	write.table(out_df, paste0(.scdb_base, "/", tab_clust_fp_fn),	sep = "\t", quote = F)
 }

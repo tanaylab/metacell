@@ -25,7 +25,9 @@ Imports:
   cluster,
   tgstat,
   doMC,
-  igraph
+  RCurl,
+  igraph,
+  parallel
 Collate:
 	'cgraph_gcor_norm.r'
 	'cgraph_knn_mcnorm.r'
@@ -41,6 +43,7 @@ Collate:
 	'scmat_gcors.r'
 	'cgraph.r'
 	'cgraph_knn.r'
+	'cgraph_extmat.r'
 	'gset_mc.r'
 	'mc.r'
 	'mc2d.r'
@@ -54,8 +57,10 @@ Collate:
 	'gset_feat_select.r'
 	'gset_plot_mats.r'
 	'gstats_report.r'
+	'scmat_ccor.r'
 	'scmat_10x.r'
 	'scmat_mars.r'
+	'scmat_import.r'
 	'scmat_batch_stat.r'
 	'scmat.r'
 	'scfigs.r'
@@ -68,3 +73,6 @@ Remotes:
   bitbucket::tanaylab/tgconfig@default,
   bitbucket::tanaylab/tgstat@default,
   bitbucket::tanaylab/tgutil@default
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

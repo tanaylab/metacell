@@ -7,6 +7,8 @@
 #' @param force - if true, will import from 10x files even when the matrix is present in the DB
 #'
 #' @export
+#'
+#' @import RCurl
 
 mcell_import_multi_scmat_10x = function(mat_nm,
 							dataset_table_fn,
@@ -58,6 +60,21 @@ mcell_import_scmat_10x = function(mat_nm,
 	}
 	scdb_add_mat(mat_nm,
 			scmat_read_scmat_10x(matrix_fn, genes_fn, cells_fn, dataset_id=mat_nm))
+	return(TRUE)
+}
+# imports custom count matrix from 10x run. Matrix file must be in RDS format. Either sparse or regular matrix format are supported.
+mcell_import_scmat_10x_custom = function(mat_nm,
+		matrix_fn = NULL,
+		force = FALSE)
+{
+	if(!scdb_is_valid()) {
+		stop("MCERR - scdb is not initialized, cannot import")
+	}
+	if(!force & !is.null(scdb_mat(mat_nm))) {
+		return(TRUE)
+	}
+	scdb_add_mat(mat_nm,
+			scmat_read_scmat_10x_custom(matrix_fn, dataset_id=mat_nm))
 	return(TRUE)
 }
 
@@ -148,15 +165,33 @@ scmat_read_scmat_10x = function(matrix_fn,
 		min_umis_n = get_param("scm_min_cell_umis"),
 		dataset_id = "NS")
 {
-	if(!file.exists(matrix_fn) |
+	remote_mode = F
+	if(grepl("^http", matrix_fn)) {
+		if(!url.exists(matrix_fn) |
+			!url.exists(genes_fn) |
+			!url.exists(cells_fn)) {
+			stop("MC-ERR: missing 10x matrix urls, links: ", matrix_fn, " ", genes_fn, " ", cells_fn)
+		} else {
+			message("remote mode")
+			remote_mode = T
+		}
+	} else if(!file.exists(matrix_fn) |
 		!file.exists(genes_fn) |
 		!file.exists(cells_fn)) {
 		stop("MC-ERR: missing 10x matrix files, fns: ", matrix_fn, " ", genes_fn, " ", cells_fn)
 	}
 	# read sparse matrix with all genes and batches
+	if(remote_mode) {
+			download.file(matrix_fn, destfile="/tmp/matrix.mtx")
+			download.file(genes_fn, destfile="/tmp/genes.tsv")
+			download.file(cells_fn, destfile="/tmp/cells.tsv")
+			matrix_fn = "/tmp/matrix.mtx"
+			genes_fn = "/tmp/genes.tsv"
+			cells_fn = "/tmp/cells.tsv"
+	}
 	umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
+	genes = fread(genes_fn, header=F, stringsAsFactors = F)
 
-	genes = read.table(genes_fn, header=F, stringsAsFactors = F)
 	colnames(genes) = c('id', 'name')
 	rownames(genes) = genes$id
 
@@ -194,7 +229,7 @@ scmat_read_scmat_10x = function(matrix_fn,
 						 amp_batch_id=cell_batch,
 						 seq_batch_id=cell_batch)
 
-	spike_regexp = get_param("scm_spike_regexp")
+	spike_regexp = get_param("scm_spike_regexp", 'metacell')
 	if(!is.null(spike_regexp)) {
 		ercc = grep(spike_regexp, rownames(umis))
 		md$spike_count = colSums(umis[ercc,])
@@ -215,3 +250,61 @@ scmat_read_scmat_10x = function(matrix_fn,
 	return(tgScMat(umis, stat_type="umi", cell_metadata = md))
 }
 
+#' Read a custom count matrix from the output of a 10x run. Batches can be stripped from the cell identifier if in BARCODE-LANE format.
+#'
+#' @param matrix_fn matrix input file name. Expecting a count matrix saved as .RDS file. Colnames represent barcodes, rownames represent custom gene annotation.
+#'
+#' @export
+#'
+#' @importFrom data.table fread
+#'
+scmat_read_scmat_10x_custom = function(matrix_fn,
+		#use_batches = get_param("scm_10x_batches"),
+		#min_umis_n = get_param("scm_min_cell_umis"),
+		dataset_id = "NS")
+{
+	if(!file.exists(matrix_fn)) 
+	{
+		stop("MC-ERR: missing matrix file: ", matrix_fn)
+	}
+	# read sparse matrix with all genes and batches
+	umis = readRDS(matrix_fn)
+	if (class(umis) == 'dgCMatrix')
+	{
+		umis = as.matrix(umis)
+	}
+
+	cell_lane = gsub(".*-", "", colnames(umis))
+	if(max(length(cell_lane)) == 0) {
+		cell_batch = dataset_id
+	} else {
+		cell_lane[cell_lane == ""] = 0
+		cell_batch=paste(sprintf("%s_L", dataset_id), cell_lane, sep="")
+	}
+
+	md = data.frame(row.names=colnames(umis),
+						 type='10x',
+						 batch_set_id=cell_batch,
+						 amp_batch_id=cell_batch,
+						 seq_batch_id=cell_batch)
+
+	spike_regexp = get_param("scm_spike_regexp")
+	if(!is.null(spike_regexp)) {
+		ercc = grep(spike_regexp, rownames(umis))
+		md$spike_count = colSums(umis[ercc,])
+		no_ercc = grep(spike_regexp, rownames(umis), invert=T)
+		umis = umis[no_ercc, ] # remove ERCC & first col
+	} else {
+		md$spike_count = 0
+	}
+
+	# filter small cells
+	# f = colSums(umis) > min_umis_n
+	# umis = umis[,f]
+	# md = md[f,]
+	# rownames(md) = colnames(umis)
+	#
+	# cat("MC: Filtered", sum(!f), "small cells\n")
+
+	return(tgScMat(umis, stat_type="umi", cell_metadata = md))
+}

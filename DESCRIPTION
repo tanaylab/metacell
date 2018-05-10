@@ -41,6 +41,7 @@ Collate:
 	'mc_confusion.r'
 	'mc_from_coclust.r'
 	'mc_outliers.r'
+	'mc_apx_qc.r'
 	'mc_plot_cross_mc.r'
 	'pipe_vanila.r'
 	'scmat_gcors.r'

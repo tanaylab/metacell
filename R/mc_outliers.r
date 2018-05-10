@@ -194,7 +194,7 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 		} else {
 			dst = 1-tgs_cor(log(1+7*as.matrix(mc_mat)))
 		}
-		clst = dbscan(as.dist(dst), eps=quantile(dst,0.25), minPts=5)
+		clst = dbscan(as.dist(dst), eps=quantile(dst,0.1), minPts=5)
 		clst = clst$cluster
 		names(clst) = filt_nms
 		clst[null_nms] = 0
@@ -204,12 +204,12 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 			names(clst) = nms
 			return(clst)
 		}
-		if(sum(clst!=1) > 0) {
-			message("breaking ", id, " : ", 
-					paste(as.numeric(table(clst)), collapse=" "))
-		} else {
-			message("homogeneous ", id)
-		}
+#		if(sum(clst!=1) > 0) {
+#			message("breaking ", id, " : ", 
+#					paste(as.numeric(table(clst)), collapse=" "))
+#		} else {
+#			message("homogeneous ", id)
+#		}
 		clst[is.na(clst)] = 0
 		return(clst)
 	}
@@ -225,9 +225,9 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 	good_cells = names(new_mc)
 	clust_outliers = c()
 	for(cid in 1:length(all_clst)) {
-		message("opening cid ", cid)
+#		message("opening cid ", cid)
 		clst = all_clst[[cid]]
-		message("opening clst length ", length(clst))
+#		message("opening clst length ", length(clst))
 		#adding cluster 1 and all dbscan outliers that were not filtered parametrically to a new MC
 		new_mc[intersect(good_cells, names(which(clst < 2)))] = next_mcid
 		next_mcid = next_mcid + 1

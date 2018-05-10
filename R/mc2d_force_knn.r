@@ -6,9 +6,9 @@
 #' @param mc_subset a subset of metacells to project (NULL by default)
 #'
 #' @export
-mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, mc_subset = NULL)
+mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F)
 {
-	mgraph = mc2d_comp_mgraph(mc_id, graph_id)
+	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch)
 	mc = scdb_mc(mc_id)
 	cl_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
 	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, cl_xy)
@@ -17,7 +17,7 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, mc_subset = NULL)
 }
 
 #' @export
-mc2d_comp_mgraph = function(mc_id, graph_id)
+mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F)
 {
 	mc2d_K = get_param("mcell_mc2d_K")
 	mc2d_T_edge = get_param("mcell_mc2d_T_edge")
@@ -44,7 +44,8 @@ mc2d_comp_mgraph = function(mc_id, graph_id)
 	if(!is.null(mc2d_max_confu_deg)) {
 
 		message("comp mc graph using the graph ", graph_id, " and K ", mc2d_K)
-		confu = mcell_mc_confusion_mat(mc_id, graph_id, mc2d_K)
+		confu = mcell_mc_confusion_mat(mc_id, graph_id, mc2d_K, 
+													ignore_mismatch=ignore_mismatch)
 # k_expand_inout_factor=k_expand_inout_factor
 
 		csize = as.matrix(table(mc@mc))
@@ -166,11 +167,12 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
 	max_x = max(c_x)
 	base_x = base_x - (max_x-base_x)*0.1
 
-	if(length(c_x) != length(mc@mc)+length(mc@outliers)) {
-		stop("Missing coordinates in projecting cell - check this out!")
+	n_miss = length(setdiff(names(mc@mc), names(c_x)))
+	if(n_miss > 0) {
+		stop("Missing coordinates in some cells that are not ourliers or ignored - check this out! (total ", n_miss, " cells are missing, maybe you used the wrong graph object?")
 	}
-	x = c_x
-	y = c_y
+	x = c_x[names(mc@mc)]
+	y = c_y[names(mc@mc)]
 	x = x + rnorm(mean=0, sd=blurx, n=N_c)
 	y = y + rnorm(mean=0, sd=blury, n=N_c)
 

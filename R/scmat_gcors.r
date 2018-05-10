@@ -11,15 +11,24 @@
 #' @export
 #'
 
-mcell_mat_rpt_cor_anchors = function(mat_id, gene_anchors, gene_anti = c(), cor_thresh, tab_fn, sz_cor_thresh = NA)
+mcell_mat_rpt_cor_anchors = function(mat_id, gene_anchors, gene_anti = c(), cor_thresh, tab_fn, sz_cor_thresh = NA, downsample_n = NA, cells = NULL)
 {
 	mat = scdb_mat(mat_id)
 	if(is.null(mat)) {
 		stop("missing mat ", mat_id)
 	}
 
-	downsample_n = scm_which_downsamp_n(mat)
-	mat_ds = scm_downsamp(mat@mat, downsample_n)
+	if(!is.null(cells)) {
+		umis = mat@mat[,cells]
+	} else {
+		umis = mat@mat
+	}
+
+	if(is.na(downsample_n)) {
+		downsample_n = quantile(colSums(umis), 0.05)
+	}
+	
+	mat_ds = scm_downsamp(umis, downsample_n)
 	mat_ds = mat_ds[rowSums(mat_ds)>10,]
 	csize = colSums(mat@mat[,colnames(mat_ds)])
 	gcors = data.frame(sz_cor = apply(mat_ds, 1, cor, csize))

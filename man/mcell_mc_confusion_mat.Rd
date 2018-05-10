@@ -4,7 +4,7 @@
 \alias{mcell_mc_confusion_mat}
 \title{Compute confusion matrix on metacells}
 \usage{
-mcell_mc_confusion_mat(mc_id, graph_id, K)
+mcell_mc_confusion_mat(mc_id, graph_id, K, ignore_mismatch = F)
 }
 \arguments{
 \item{mc_id}{meta cell object}

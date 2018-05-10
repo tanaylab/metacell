@@ -113,6 +113,14 @@ fread_rownames <- function(..., row.var='rowname', set_rownames = F) {
 	return(mat)
 }
 
+#' wrapping tgs functions to compute balanced graph from a matrix
+#'
+#' @param x matrix
+#' @param knn K parameter
+#' @param k_expand expansion parameter
+#' @param k_alpha used to threshold blanaced scores (k_alpha*K > rank_in*rank_out0
+#' @param k_beta used to threshold in-degree on k_beta*K before final thresholding of out-degree by K
+#'
 tgs_cor_graph = function(x, knn, k_expand, k_alpha, k_beta)
 {
 	x_c = tgs_cor(x)
@@ -123,6 +131,14 @@ tgs_cor_graph = function(x, knn, k_expand, k_alpha, k_beta)
 }
 
 
+#' Efficient version for scaling all columns in a sparse matrix
+#'
+#'
+#' @param A first matrix
+#' @param B second matrix - should be exactly same dimension as A
+#'
+#' @export
+
 rescale_sparse_mat_cols = function(A, v_norm)
 {
 	if(!is(A, 'dgCMatrix')) {
@@ -130,4 +146,22 @@ rescale_sparse_mat_cols = function(A, v_norm)
 	}
 	A@x <- A@x * rep.int(v_norm, diff(A@p))
 	return(A)
+}
+
+#' computing correlations between all rows in two matrices 
+#'
+#' Efficient version for computing correlations between all rows 
+#'
+#' @param A first matrix
+#' @param B second matrix - should be exactly same dimension as A
+#'
+#' @export
+
+allrow_cor = function(A,B) {
+	cA <- A - rowMeans(A)
+	cB <- B - rowMeans(B)
+	sA <- sqrt(rowMeans(cA^2))
+	sB <- sqrt(rowMeans(cB^2))
+
+	rowMeans(cA * cB) / (sA * sB)
 }

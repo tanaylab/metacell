@@ -4,7 +4,7 @@
 \alias{mcell_mc2d_force_knn}
 \title{Metacell layout using force directed pojrection of a low degree mc graph}
 \usage{
-mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, mc_subset = NULL)
+mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}

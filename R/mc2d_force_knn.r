@@ -173,8 +173,8 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
 	}
 	x = c_x[names(mc@mc)]
 	y = c_y[names(mc@mc)]
-	x = x + rnorm(mean=0, sd=blurx, n=N_c)
-	y = y + rnorm(mean=0, sd=blury, n=N_c)
+	x = x + rnorm(mean=0, sd=blurx, n=length(x))
+	y = y + rnorm(mean=0, sd=blury, n=length(y))
 
 	return(list(x=x, y=y))
 }

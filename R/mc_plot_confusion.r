@@ -30,7 +30,11 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
 	colors = mc@colors
 	if(order_hc) {
 #		hc = hclust(dist(cor(log2(1+confu))),"ward.D2")
-		hc = hclust(dist(confu_n),"ward.D2")
+		confu_nodiag = confu_n
+		diag(confu_nodiag) = 0
+		confu_n = pmin(confu_n, max(confu_nodiag))
+		confu_n = pmin(confu_n, quantile(confu_n, 1-3/nrow(confu_n)))
+		hc = hclust(as.dist(-log(1e-5+confu_n)),"average")
 		confu = confu[hc$order, hc$order]
 		confu_n = confu_n[hc$order, hc$order]
 		colors = colors[hc$order]
@@ -39,12 +43,11 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
 
 	shades = colorRampPalette(c("white", "pink", "red", "black", "brown", "orange"))
 	png(fig_fn, w=800, h=800)
-	layout(matrix(c(1,4,2,3),nrow=2),heights=c(800, 100), width=c(100,800))
+	layout(matrix(c(1,4,2,3),nrow=2),heights=c(800, 50), width=c(50,800))
 
 	tl_marg=c(0,2,5,0)
 	par(mar=tl_marg)
 	n_mc = ncol(mc@mc_fp)
-	browser()
 	image(t(as.matrix(1:n_mc,nrow=1)), col=colors, yaxt='n', xaxt='n')
 
 	top_marg=c(0,0,5,5)
@@ -56,6 +59,7 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
 		confu_nodiag = confu_n
 		diag(confu_nodiag) = 0
 		confu_n = pmin(confu_n, max(confu_nodiag))
+		confu_n = pmin(confu_n, quantile(confu_n, 1-3/nrow(confu_n)))
 		image(confu_n,col=shades(1000),xaxt='n', yaxt='n')
 	}
 
@@ -63,5 +67,12 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
 	par(mar=lower_marg)
 	image(as.matrix(1:n_mc,nrow=1), col=colors, yaxt='n', xaxt='n')
 	dev.off()
+
+	tree_fig_fn = sub("png", "hc.png", fig_fn)
+	png(tree_fig_fn, w = 1000, h=400)
+	plot(hc, cex=0.1)
+	grid()
+	dev.off()
+
 	return(hc)
 }

@@ -34,7 +34,8 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
 		diag(confu_nodiag) = 0
 		confu_n = pmin(confu_n, max(confu_nodiag))
 		confu_n = pmin(confu_n, quantile(confu_n, 1-3/nrow(confu_n)))
-		hc = hclust(as.dist(-log(1e-5+confu_n)),"average")
+		epsilon = quantile(confu_n[confu_n!=0],0.02)
+		hc = hclust(as.dist(-log10(epsilon+confu_n)),"average")
 		confu = confu[hc$order, hc$order]
 		confu_n = confu_n[hc$order, hc$order]
 		colors = colors[hc$order]

@@ -47,3 +47,34 @@ setMethod(
       return(.Object)
     }
 )
+
+#' Return a filter (boolean vector) selecting only coclust edges that are nearly as frequent as a user defined K-nn parameter
+#' 
+#' @param coc_id coclust object id
+#' @param K the number of top-coclustering neighbors to consider per node
+#' @param alpha the relexation paramter to apply for filtering coclustering neighbors below the ttop K ones. A pair (n1,n2) with weight w will be filtered if knn(n1,K) > w*alpha or knn(n2,K) > w*alpha
+#'
+#' @export
+
+mcell_coclust_filt_by_k_deg = function(coc_id, K, alpha)
+{
+	coc = scdb_coclust(coc_id)
+	if(is.null(coc)) {
+		stop("MC-ERR: coclust ", coc_id , " is missing when trying to derive K-deg filter")
+	}
+
+	edges = coc@coclust
+	
+	deg_wgt = as.matrix(table(c(edges$node1, edges$node2), c(edges$cnt,edges$cnt)))
+	deg_cum = t(apply(deg_wgt, 1, function(x) cumsum(rev(x))))
+	thresh_Kr = rowSums(deg_cum > K)
+	thresh_K = rep(NA, length(levels(edges$node1)))
+	names(thresh_K) = levels(edges$node1)
+	thresh_K[as.numeric(names(thresh_Kr))] = thresh_Kr
+
+	filt_edges = thresh_K[edges$node1] < edges$cnt * alpha | 
+							thresh_K[edges$node2] < edges$cnt * alpha
+
+	return(filt_edges)
+}
+

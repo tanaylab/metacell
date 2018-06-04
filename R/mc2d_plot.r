@@ -4,7 +4,7 @@
 #' @param mc2d_id mc2d object to plot
 #'
 #' @export
-mcell_mc2d_plot = function(mc2d_id)
+mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft")
 {
 	mcp_2d_height = get_param("mcell_mc2d_height")
 	mcp_2d_width = get_param("mcell_mc2d_width")
@@ -38,7 +38,7 @@ mcell_mc2d_plot = function(mc2d_id)
 		gcol = unique(data.frame(col=key$color, group=key$group))
 		rownames(gcol) = gcol$group
 		gmark = gmark[order(names(gmark))]
-		legend("topleft",
+		legend(legend_pos,
 				legend=gsub("_", " ", paste0(names(gmark), ": ", gmark)),
 				pch=19, cex=mcp_2d_legend_cex,
 				col=as.character(gcol[names(gmark), 'col']), bty='n')

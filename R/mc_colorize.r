@@ -58,6 +58,8 @@ mc_colorize = function(mc_id, marker_colors = NULL, override = T)
 #' colorize metacell using an ugly default color spectrum, or a user supplied one
 #'
 #' @param mc_id metacell id in scdb
+#'
+#' @export
 mc_colorize_default = function(mc_id, spectrum = NULL)
 {
 	mc = scdb_mc(mc_id)
@@ -71,3 +73,66 @@ mc_colorize_default = function(mc_id, spectrum = NULL)
 	mc@colors = spectrum(max(mc@mc))
 	scdb_add_mc(mc_id, mc)
 }
+
+#' colorize metacells using a set of super MCs derived by hclust, colored according to a user defined table
+#'
+#' @param mc_id metacell id in scdb
+#' @param supmc output from mcell_mc_hierarchy, defining groups of mcs
+#' @param supmc_key filename of color index, specifying an ordered list of supmc ids and colors, to be colored in the order of apperance (i.e. last line overrid previous lines). Expected field names: supid, color, name
+#'
+#' @export
+mc_colorize_sup_hierarchy = function(mc_id, supmc, supmc_key, gene_key=NULL)
+{
+	mc = scdb_mc(mc_id)
+	if(is.null(mc)) {
+		stop("MC-ERR metacell object is not avaialble in scdb, id = ", mc_id)
+	}
+
+	lfp = log2(mc@mc_fp)
+
+	mc@colors = rep("white", ncol(mc@mc_fp))
+
+	if(!file.exists(supmc_key)) {
+		stop("Sup mc key file ", supmc_key, " does not exist")
+	}
+	key = read.table(supmc_key, h=T, sep="\t", stringsAsFactors=F)
+	
+	if(class(key)[1] != "data.frame"
+	| length(intersect(c("supid", "color", "name"), colnames(key))) != 3) {
+		stop("MC-ERR sup id color key must be a data frame with fields supid, color, name")
+	}
+	for(i in 1:nrow(key)) {
+		mcs = supmc[[key$supid[i]]]$mcs
+		mc@colors[mcs] = key$color[i]
+	}
+	color_key = data.frame(gene=rep("",times=nrow(key)), group=as.character(key$name), color=as.character(key$color))
+	browser()
+	if(!is.null(gene_key)) {
+		if(!file.exists(gene_key)) {
+			stop("Gene color key file ", gene_key, " does not exist")
+		}
+		gkey = read.table(gene_key, h=T, sep="\t", stringsAsFactors=F)
+		if(class(gkey)[1] != "data.frame"
+		| length(intersect(c("name", "gene", "color", "T_fold"), colnames(gkey))) != 4) {
+			stop("MC-ERR sup id color key must be a data frame with fields gene, name, color, T_fold")
+		}
+		for(i in 1:nrow(gkey)) {
+			gene = gkey$gene[i]
+			if(gene %in% rownames(lfp)) {
+				T_fold = gkey$T_fold[i]
+				mcs = which(lfp[gene,]>T_fold)
+				if(length(mcs)>0) {
+					mc@colors[mcs] = gkey$color[i]
+					color_key = rbind(as.matrix(color_key), 
+										matrix(c(gene=gene, group=gkey$name[i], color=gkey$color[i]),nrow=1))
+				}
+			}
+		}
+	}
+
+	colnames(color_key) = c("gene", "group", "color")
+	mc@color_key = as.data.frame(color_key)
+	scdb_add_mc(mc_id, mc)
+}
+
+

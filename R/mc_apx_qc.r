@@ -44,7 +44,7 @@ mcell_mc_edge_density = function(mc_id, graph_id, mc2d_id = NA)
 #'@param do_log should log transofmration be performed
 #'@param focus_cells should correltion be computed to a specific set of cells
 #'
-mcell_graph_pred_corr = function(mat_id, graph_id, do_log = F, focus_cells=NULL)
+mcell_graph_pred_corr = function(mat_id, graph_id, do_log = F, focus_cells=NULL, filt_genes=NULL)
 {
 	graph = scdb_cgraph(graph_id)
 	if(is.null(graph)) {
@@ -56,6 +56,9 @@ mcell_graph_pred_corr = function(mat_id, graph_id, do_log = F, focus_cells=NULL)
 	}
 
 	umis = mat@mat
+	if(!is.null(filt_genes)) {
+		umis = umis[setdiff(rownames(umis),filt_genes),]
+	}
 
 	csize = colSums(umis)
 	n_downsamp = quantile(csize,0.05)
@@ -106,7 +109,7 @@ mcell_graph_pred_corr = function(mat_id, graph_id, do_log = F, focus_cells=NULL)
 #'@param do_log should log transofmration be performed
 #'@param focus_cells should correltion be computed to a specific set of cells
 #'
-mcell_mc_pred_corr = function(mc_id, mat_id, do_log = F, focus_cells=NULL)
+mcell_mc_pred_corr = function(mc_id, mat_id, do_log = F, focus_cells=NULL, filt_genes=NULL)
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -118,6 +121,9 @@ mcell_mc_pred_corr = function(mc_id, mat_id, do_log = F, focus_cells=NULL)
 	}
 
 	umis = mat@mat
+	if(!is.null(filt_genes)) {
+		umis = umis[setdiff(rownames(umis),filt_genes),]
+	}
 
 	csize = colSums(umis)
 	n_downsamp = quantile(csize,0.05)

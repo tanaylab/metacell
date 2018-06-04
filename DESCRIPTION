@@ -1,6 +1,6 @@
 Package: metacell
 Title: Meta cell analysis for single cell RNA-seq data
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: person("Amos", "Tanay", email = "amos.tanay@weizmann.ac.il", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.4.2)
@@ -32,6 +32,10 @@ Imports:
   igraph,
   parallel
 Collate:
+	'mc_apx_qc_cv.r'
+  	'mc_hierarchy.r'
+  	'mc_plot_confusion.r'
+	'mc_plot_vgels.r'
 	'cgraph_gcor_norm.r'
 	'cgraph_knn_mcnorm.r'
 	'coclust.r'

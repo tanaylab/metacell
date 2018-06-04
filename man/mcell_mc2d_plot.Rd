@@ -4,7 +4,7 @@
 \alias{mcell_mc2d_plot}
 \title{Plot mc+cell graph using pre-defined mc colorization}
 \usage{
-mcell_mc2d_plot(mc2d_id)
+mcell_mc2d_plot(mc2d_id, legend_pos = "topleft")
 }
 \arguments{
 \item{mc2d_id}{mc2d object to plot}

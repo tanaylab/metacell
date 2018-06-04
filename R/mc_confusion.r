@@ -38,6 +38,41 @@ mcell_mc_confusion_mat = function(mc_id, graph_id, K, ignore_mismatch = F)
 	return(confu)
 }
 
+#' Compute confusion matrix on metacells using a coclustering object
+#'
+#' @param mc_id meta cell object
+#' @param coc_id cocluster object id 
+#' @param K top K coclustering neighbors will be used for each cell
+#'
+#' @export
+
+mcell_mc_coclust_confusion_mat = function(mc_id, coc_id, K, ignore_mismatch = F, alpha=2)
+{
+	coc = scdb_coclust(coc_id)
+	if(is.null(coc)) {
+		stop("MC-ERR: coclust id ",coc_id, " is missing when computing mc coclust confusion")
+	}
+	mc = scdb_mc(mc_id)
+	if(is.null(mc)) {
+		stop("MC-ERR: mc id ", mc_id, " is missing when computing mc confusion")
+	}
+
+	edges = coc@coclust
+	filt_edges = mcell_coclust_filt_by_k_deg(coc_id, K, alpha)
+	edges = edges[filt_edges,]
+#filter top K edges
+#factor of edges$mc1 and factor of mc may be different
+	mc_map = mc@mc[as.character(levels(edges$node1))] 
+	mc1 = mc_map[edges$node1]
+	mc2 = mc_map[edges$node2]
+	N = max(mc1, mc2, na.rm=T)
+
+	confu = matrix(tabulate((mc1-1)*N+mc2, nbins=N*N), nrow=N)
+	rownames(confu) = 1:N
+	colnames(confu) = 1:N
+	return(confu)
+}
+
 #' Compute cell homogeneity - the fraction of intra mc edges per cell
 #'
 #' @param mc_id meta cell object
@@ -45,7 +80,7 @@ mcell_mc_confusion_mat = function(mc_id, graph_id, K, ignore_mismatch = F)
 #'
 #' @export
 
-mcell_mc_cell_homogeneity = function(mc_id, graph_id, ignore_mis=F)
+mcell_mc_cell_homogeneity = function(mc_id, graph_id, ignore_mis=F, T_w = 0)
 {
 	graph = scdb_cgraph(graph_id)
 	if(is.null(graph)) {
@@ -60,6 +95,9 @@ mcell_mc_cell_homogeneity = function(mc_id, graph_id, ignore_mis=F)
 	}
 #filter top K edges
 	edges = graph@edges
+	if(T_w != 0) {
+		edges = edges[edges$w >= T_w,]
+	}
 #factor of edges$mc1 and factor of mc may be different
 	mc_map = mc@mc[as.character(levels(edges$mc1))] 
 	intra_mc = mc_map[edges$mc1] == mc_map[edges$mc2]

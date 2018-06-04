@@ -219,17 +219,8 @@ mcell_mc_from_coclust_balanced = function(mc_id, coc_id,
 		stop("MC-ERR: mat id ", mat_id, " is missing when running add_mc_from_graph")
 	}
 
-#hierarchically break coclust
 	edges = coc@coclust
-	deg_wgt = as.matrix(table(c(edges$node1, edges$node2), c(edges$cnt,edges$cnt)))
-	deg_cum = t(apply(deg_wgt, 1, function(x) cumsum(rev(x))))
-	thresh_Kr = rowSums(deg_cum > K)
-	thresh_K = rep(NA, length(levels(edges$node1)))
-	names(thresh_K) = levels(edges$node1)
-	thresh_K[as.numeric(names(thresh_Kr))] = thresh_Kr
-
-	filt_edges = thresh_K[edges$node1] < edges$cnt * alpha | 
-							thresh_K[edges$node2] < edges$cnt * alpha
+	filt_edges = mcell_coclust_filt_by_k_deg(coc_id, K, alpha)
 
 	message("filtered ", nrow(edges) - sum(filt_edges), " left with ", sum(filt_edges), " based on co-cluster imbalance")
 	edges = edges[filt_edges,]

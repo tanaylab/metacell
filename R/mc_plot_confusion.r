@@ -2,44 +2,60 @@
 #'
 #' @param mc_id id of metacell object ina scdb
 #' @param graph_id cell to cell similarity graph
-#' @param order_hc if this is true, the metacells will be reordered according to an hclust of the confusion matrix
+#' @param coc_id coclustering object to be used as the graph. If this is not null, graph_id must be null (and vice versa)
+#' @param use_orig_order TRUE if you want to preserve the metacell order in the figu. Flase by default
+#' @param mc_order defining an order for the MCs. If this is null and use_orig_order is false, the ordering will be based on hclust of the confusion matrix
 #'
 #' @export
 
-mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
+mcell_mc_plot_confusion = function(mc_id, graph_id, coc_id = NULL,
+							use_orig_order=F, mc_order =NULL, fig_fn = NULL)
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
 		stop("undefined meta cell object " , mc_id)
 	}
-	cgraph = scdb_cgraph(graph_id)
-	if(is.null(cgraph)) {
-		stop("undefined cgraph object when trying to plot confusion, id " , graph_id)
-	}
 	if(is.null(fig_fn)) {
 		fig_fn = scfigs_fn(mc_id, sprintf("graph%s_confusion", graph_id))
 	}
-	
-	max_deg = nrow(cgraph@edges)
-	confu = mcell_mc_confusion_mat(mc_id, graph_id, max_deg, ignore_mismatch=T)
+
+	if(!is.null(graph_id)) {
+		if(!is.null(coc_id)) {
+			stop("cannot specify both a graph and coclust graph when plotting confusion")
+		}	
+		cgraph = scdb_cgraph(graph_id)
+		if(is.null(cgraph)) {
+			stop("undefined cgraph object when trying to plot confusion, id " , graph_id)
+		}
+		max_deg = nrow(cgraph@edges)
+		confu = mcell_mc_confusion_mat(mc_id, graph_id, max_deg, ignore_mismatch=T)
+	} else if(!is.null(coc_id)) {
+		coc = scdb_coclust(coc_id)
+		if(is.null(coc)) {
+			stop("undefined coclust object when trying to plot confusion, id " , coc_id)
+		}
+		max_deg = median(table(mc@mc))/2
+		confu = mcell_mc_coclust_confusion_mat(mc_id, coc_id=coc_id, K=max_deg, ignore_mismatch=T, alpha=2)
+	}
 	r_confu = rowSums(confu)
 	c_confu = colSums(confu)
 	norm = r_confu %*% t(c_confu)
 	confu_n = confu/norm
 
 	colors = mc@colors
-	if(order_hc) {
-#		hc = hclust(dist(cor(log2(1+confu))),"ward.D2")
-		confu_nodiag = confu_n
-		diag(confu_nodiag) = 0
-		confu_n = pmin(confu_n, max(confu_nodiag))
-		confu_n = pmin(confu_n, quantile(confu_n, 1-3/nrow(confu_n)))
-		epsilon = quantile(confu_n[confu_n!=0],0.02)
-		hc = hclust(as.dist(-log10(epsilon+confu_n)),"average")
-		confu = confu[hc$order, hc$order]
-		confu_n = confu_n[hc$order, hc$order]
-		colors = colors[hc$order]
+
+	if(!use_orig_order) {
+		if(is.null(mc_order)) {
+			hc = mcell_mc_hclust_confu(mc_id, graph_id=NULL, confu)
+			mc_order = hc$order
+		}
+		confu = confu[mc_order, mc_order]
+		confu_n = confu_n[mc_order, mc_order]
+		colors = colors[mc_order]
+		colnames(confu_n) = (1:ncol(confu_n))[mc_order]
+		rownames(confu_n) = (1:ncol(confu_n))[mc_order]
 	}
+
 	colors[is.na(colors)] = "gray"
 
 	shades = colorRampPalette(c("white", "pink", "red", "black", "brown", "orange"))
@@ -67,13 +83,6 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, order_hc=F, fig_fn = NULL)
 	lower_marg=c(3,0,0,5)
 	par(mar=lower_marg)
 	image(as.matrix(1:n_mc,nrow=1), col=colors, yaxt='n', xaxt='n')
-	dev.off()
 
-	tree_fig_fn = sub("png", "hc.png", fig_fn)
-	png(tree_fig_fn, w = 1000, h=400)
-	plot(hc, cex=0.1)
-	grid()
 	dev.off()
-
-	return(hc)
 }

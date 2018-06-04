@@ -47,8 +47,8 @@ scm_downsamp = function(umis, n)
 	seed = 19
 	sub_dsamp = function(x) {
 		set.seed(seed)
-		i = 1+(x-1)*cell_quant 
-		j = min(x*cell_quant, ncol(umis))  
+		i = 1+(x-1)*cell_quant
+		j = min(x*cell_quant, ncol(umis))
 	   ret = Matrix(apply(umis[,i:j], 2, .downsamp_one, n))
 	   rownames(ret) = rownames(umis)
 		return(as(ret,"dgCMatrix"))
@@ -94,24 +94,24 @@ scm_downsamp = function(umis, n)
 	1 + floor(v * ((n - 1) / max(v)))
 }
 
-# from tlsrc/analysis/common/fread.r; one day this will be in a "common" package
-# returns rownames as the first column, named row.var
-### @importFrom data.table fread
-fread <- function(...) data.table::fread(..., data.table=FALSE)
-
-fread_rownames <- function(..., row.var='rowname', set_rownames = F) {
-	params <- list(...)
-	header <- strsplit(readLines(params[[1]], n=1, warn=FALSE), '\t', fixed=TRUE)[[1]]
-
-	params$header = F; params$skip = 1; params$col.names = c(row.var, header)
-
-	mat = do.call(fread,params)
-	if (set_rownames) {
-		rownames(mat) = mat[,1]
-		mat = mat[,-1]
-	}
-	return(mat)
-}
+# # from tlsrc/analysis/common/fread.r; one day this will be in a "common" package
+# # returns rownames as the first column, named row.var
+# ### @importFrom data.table fread
+# fread <- function(...) data.table::fread(..., data.table=FALSE)
+#
+# fread_rownames <- function(..., row.var='rowname', set_rownames = F) {
+# 	params <- list(...)
+# 	header <- strsplit(readLines(params[[1]], n=1, warn=FALSE), '\t', fixed=TRUE)[[1]]
+#
+# 	params$header = F; params$skip = 1; params$col.names = c(row.var, header)
+#
+# 	mat = do.call(fread,params)
+# 	if (set_rownames) {
+# 		rownames(mat) = mat[,1]
+# 		mat = mat[,-1]
+# 	}
+# 	return(mat)
+# }
 
 #' wrapping tgs functions to compute balanced graph from a matrix
 #'
@@ -148,9 +148,9 @@ rescale_sparse_mat_cols = function(A, v_norm)
 	return(A)
 }
 
-#' computing correlations between all rows in two matrices 
+#' computing correlations between all rows in two matrices
 #'
-#' Efficient version for computing correlations between all rows 
+#' Efficient version for computing correlations between all rows
 #'
 #' @param A first matrix
 #' @param B second matrix - should be exactly same dimension as A

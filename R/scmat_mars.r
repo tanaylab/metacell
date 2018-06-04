@@ -48,7 +48,7 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 		amp_batch = dsets$Amp.Batch.ID[i]
 		message("will read ", amp_batch)
 
-		umis = fread_rownames(sprintf("%s/%s.txt", base_dir, amp_batch), sep="\t", set_rownames=T)
+		umis = fread_rownames(sprintf("%s/%s.txt", base_dir, amp_batch), sep="\t", row.var=NULL)
 
 		md = as.data.frame(matrix(c('MARS', unlist(dsets[i,])), nrow=ncol(umis), ncol=ncol(dsets)+1, byrow=T, dimnames=list(colnames(umis), c('type', colnames(dsets)))))
 		md = rename(md, batch_set_id=Batch.Set.ID, amp_batch_id=Amp.Batch.ID, seq_batch_id=Seq.Batch.ID)
@@ -74,4 +74,3 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 	}
 	return(mat)
 }
-

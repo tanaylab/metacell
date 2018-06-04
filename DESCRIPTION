@@ -15,16 +15,13 @@ Imports:
   methods,
   Matrix,
   matrixStats,
-  pdist,
   pheatmap, 
-  plotrix,
   RColorBrewer,
   Rgraphviz,
   KernSmooth,
   zoo,
   tgconfig,
   ggplot2,
-  cowplot,
   cluster,
   tgstat,
   doMC,
@@ -59,6 +56,7 @@ Collate:
 	'mc_export_tab.r'
 	'mc_graphcov.r'
 	'mc_plot_marks.r'
+	'mc_plot_by_factor.r'
 	'gset.r'
 	'gset_clust.r'
 	'gset_feat_select.r'

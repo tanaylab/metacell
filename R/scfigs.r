@@ -48,6 +48,35 @@ scfigs_dir = function(id, type)
 	return(dir_nm)
 }
 
+#' Plot a color bar with values
+#'
+#' @param vals to plot
+#' @param cols colors of the values (same length as vals)
+#' @param fig_fn if null - plot inline
+#' @param title of legend
+#' @param show_vals_ind logical vector - which values to show
+#'
+plot_color_bar = function(vals, cols, fig_fn=NULL, title="", show_vals_ind=NULL)
+{
+  if (!is.null(fig_fn)) {
+    .plot_start(fig_fn, 400, 400)
+  }
+  plot.new()
+  plot.window(xlim=c(0,100), ylim=c(0, length(cols) + 3))
+  rect(7, 1:length(cols), 17, 1:length(cols) + 1, border=NA, col=cols)
+  rect(7, 1, 17, length(cols)+1, col=NA, border = 'black')
+
+  if (is.null(show_vals_ind)) {
+    show_vals_ind = rep(T, length(cols))
+  }
+  text(19, (1:length(cols))[show_vals_ind] + 0.5, labels=vals[show_vals_ind], pos=4)
+  text(2, length(cols)/2 + 1, labels=title, srt=90, cex=1.5)
+
+  if (!is.null(fig_fn)) {
+    dev.off()
+  }
+}
+
 # wrap for opening a plot (png, ps or pdf)
 .plot_start = function(fn, w, h)
 

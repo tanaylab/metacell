@@ -194,7 +194,7 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 		} else {
 			dst = 1-tgs_cor(log(1+7*as.matrix(mc_mat)))
 		}
-		clst = dbscan(as.dist(dst), eps=quantile(dst,0.25), minPts=5)
+		clst = dbscan(as.dist(dst), eps=quantile(dst,0.1), minPts=5)
 		clst = clst$cluster
 		names(clst) = filt_nms
 		clst[null_nms] = 0

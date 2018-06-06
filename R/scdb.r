@@ -64,7 +64,7 @@ scdb_ls = function(objt)
 	if(!exists(".scdb")) {
 		message("scdb not initialized")
 	} else {
-		fns = grep(sprintf("^%s",objt),
+		fns = grep(sprintf("^%s\\.",objt),
 					list.files(sprintf("%s/", .scdb_base)), 
 					v=T)
 		fns = sub(".Rda","", fns)

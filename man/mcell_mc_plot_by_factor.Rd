@@ -6,7 +6,8 @@
 \usage{
 mcell_mc_plot_by_factor(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL,
   meta_field_annotate_by = NULL, meta_field_min_count = 0,
-  norm_by_factor = T, hclust_mcs = F, filter_values = NULL)
+  norm_by_factor = T, hclust_mcs = F, filter_values = NULL,
+  hclust_values = T)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}

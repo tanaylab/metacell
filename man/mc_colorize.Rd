@@ -4,10 +4,12 @@
 \alias{mc_colorize}
 \title{colorize metacell using a set of prefered markers and their colors}
 \usage{
-mc_colorize(mc_id, marker_colors = NULL, override = T)
+mc_colorize(new_mc_id, mc_id, marker_colors = NULL, override = T)
 }
 \arguments{
-\item{mc_id}{metacell id in scdb}
+\item{new_mc_id}{output metacell id in scdb}
+
+\item{mc_id}{input metacell id in scdb (default: new_mc_id)}
 
 \item{override}{if this is true, all colors are going to be set to white unless some marker match is found}
 

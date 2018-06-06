@@ -4,10 +4,12 @@
 \alias{mcell_mc2d_plot}
 \title{Plot mc+cell graph using pre-defined mc colorization}
 \usage{
-mcell_mc2d_plot(mc2d_id)
+mcell_mc2d_plot(mc2d_id, plot_edges = T)
 }
 \arguments{
 \item{mc2d_id}{mc2d object to plot}
+
+\item{plot_edges}{plot edges between metacells (true by default)}
 }
 \description{
 Plot mc+cell graph using pre-defined mc colorization

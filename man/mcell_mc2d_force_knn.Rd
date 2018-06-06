@@ -2,9 +2,9 @@
 % Please edit documentation in R/mc2d_force_knn.r
 \name{mcell_mc2d_force_knn}
 \alias{mcell_mc2d_force_knn}
-\title{Metacell layout using force directed pojrection of a low degree mc graph}
+\title{Metacell layout using force directed projection of a low degree mc graph}
 \usage{
-mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, mc_subset = NULL)
+mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, skip_missing = F)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}
@@ -13,8 +13,8 @@ mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, mc_subset = NULL)
 
 \item{graph_id}{graph_id of the similarity graph on cells from the metacell}
 
-\item{mc_subset}{a subset of metacells to project (NULL by default)}
+\item{skip_missing}{cells}
 }
 \description{
-Metacell layout using force directed pojrection of a low degree mc graph
+Metacell layout using force directed projection of a low degree mc graph
 }

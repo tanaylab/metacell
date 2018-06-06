@@ -17,13 +17,15 @@ mcell_gset_split_by_dsmat = function(gset_id, mat_id, K, force=F)
 	feat = gset_get_feat_mat(gset_id, mat_id, downsamp=T)
 
 	gs  = names(gset@gene_set)	
-	valid_gs = intersect(rownames(feat), gs)
+	valid_gs = intersect(rownames(feat)[rowSums(feat) > 0], gs)
 	if(!force & length(valid_gs) != length(gs)) {
 		stop("MC-ERR Missing genes in the matrix when trying to split gset by mat. Use force=T to filter these genes from the gene set before splitting genes into groups")
 	}
 	if(length(valid_gs) < 5) {
 		stop("MC-ERR less than 5 genes when trying to split gset, this does not make sense, breaking")
 	}
+	feat = feat[valid_gs, ]
+	
 	k_nonz_exp = get_param("scm_k_nonz_exp")
 
 	feat = log2(1+k_nonz_exp*as.matrix(feat))

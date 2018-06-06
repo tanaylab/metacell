@@ -28,14 +28,24 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 		stop("MC-ERR non existing mat id ", mat_id, " when trying to export fp table")
 	}
 	
-	# add #cells per clust and mean #umis (~ cell size)
-	out_df = rbind(tapply(colSums(scmat@mat[, names(mc@mc)]), mc@mc, mean), table(mc@mc))
-	rownames(out_df) = c('mean_umis', 'n_cells')
+	# add #cells per clust, mean #umis (~ cell size) and assigned group (if exist)
+	if (nrow(mc@color_key) > 0) {
+		col2group = mc@color_key$group
+		names(col2group) = mc@color_key$color
+		
+		groups = col2group[mc@colors]
+	}	
+	else {
+		groups = rep(NA, max(mc@mc))
+	}
 	
+	out_df = rbind(tapply(colSums(scmat@mat[, names(mc@mc)]), mc@mc, mean), table(mc@mc), groups, seq_along(groups))
+	rownames(out_df) = c('mean_umis', 'n_cells', 'group', 'mc_id')
+
 	# add required breakdown to features
 	if (!is.null(metadata_fields)) {
 		for (s in metadata_fields) {
-			out_df = rbind(table(sc_cl@scmat@cell_metadata[names(sc_cl@clusts), s], sc_cl@clusts), out_df)
+			out_df = rbind(table(scmat@cell_metadata[names(mc@mc), s], mc@mc), out_df)
 		}
 	}
 	
@@ -48,6 +58,6 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 	# actual clust_fp
 	out_df = rbind(out_df, round(log2(mc@mc_fp[f,]), 2))
 	
-	tab_clust_fp_fn = paste0(mc_id, '_log2_fp.txt')
-	write.table(out_df, paste0(.scdb_base, "/", tab_clust_fp_fn),	sep = "\t", quote = F)
+	tab_clust_fp_fn = sprintf("%s/%s.log2_mc_fp.txt", .scfigs_base, mc_id)
+	write.table(out_df, tab_clust_fp_fn,	sep = "\t", quote = F)
 }

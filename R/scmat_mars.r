@@ -85,11 +85,13 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 #' @param mat_id - id of the original matrix to add data to
 #' @param base_dir - directory where raw tab-delimited index-sort data files are located. Expecting file name to be <amp_batch_id>.txt with well names as row names and antibodies as column names
 #' @param amp_batch_ids - if not null, upload data from amp_batch_id specified here.
+#' @param force overwrite output matrix if it exist
 #'
 #' @export
 #'
+
 mcell_add_mars_facs_data = function(new_mat_id, mat_id,
-                                   base_dir, amp_batch_ids = NULL)
+                                   base_dir, amp_batch_ids = NULL, force=T)
 {
   if(!scdb_is_valid()) {
     stop("MCERR - scdb is not initialized, cannot add data")
@@ -126,6 +128,7 @@ scm_add_mars_facs_data = function(mat_id, base_dir, amp_batch_ids = NULL)
   w2c_well = get_param("scm_mars_wells2cells_well_field")
 
   all_batches = unique(scmat@cell_metadata[, "amp_batch_id"])
+
   if (is.null(amp_batch_ids)) {
     amp_batch_ids = all_batches
   } else {
@@ -145,7 +148,7 @@ scm_add_mars_facs_data = function(mat_id, base_dir, amp_batch_ids = NULL)
   wells_dict = wells_dict[ rownames(scmat@cell_metadata), c(w2c_batch, w2c_cell, w2c_well)]
 
   idx_tab = NULL
-  for (batch in facs_idx_batches) {
+  for (batch in amp_batch_ids) {
     ifn = sprintf("%s/%s.txt", base_dir, batch)
     if (file.exists(ifn)) {
       facs_idx = read.table(ifn,
@@ -163,12 +166,9 @@ scm_add_mars_facs_data = function(mat_id, base_dir, amp_batch_ids = NULL)
         idx_tab = rbind(idx_tab, facs_idx[, colnames(idx_tab)])
       }
     }
-    else {
-      stop(sprintf("missing FACS indices file %s", ifn))
-    }
   }
   message("loaded facs idxs from batches, merging with wells_cells...")
-  m = merge(wells_dict, idx_tab, by=c(w2c_batch, w2c_well), all.x=T)
+  m = merge(wells_dict, idx_tab, by.x=c(w2c_batch, w2c_well), by.y=c(w2c_batch, "Well"), all.x=T)
   rownames(m) = m[, w2c_cell]
   colnames(m) = paste0(colnames(m), "_Ab")
   scmat@cell_metadata = cbind(scmat@cell_metadata, m[ rownames(scmat@cell_metadata), ])

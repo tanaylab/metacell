@@ -1,6 +1,6 @@
 Package: metacell
 Title: Meta cell analysis for single cell RNA-seq data
-Version: 0.2.0
+Version: 0.2.1	
 Authors@R: person("Amos", "Tanay", email = "amos.tanay@weizmann.ac.il", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.4.2)
@@ -24,6 +24,7 @@ Imports:
   ggplot2,
   cluster,
   tgstat,
+	tgutil,  
   doMC,
   RCurl,
   igraph,
@@ -60,7 +61,6 @@ Collate:
 	'scmat_ccor.r'
 	'scmat_10x.r'
 	'scmat_mars.r'
-	'scmat_import.r'
 	'scmat_batch_stat.r'
 	'scmat.r'
 	'scfigs.r'
@@ -69,10 +69,6 @@ Collate:
 	'utils.r'
 	'scdb.r'
 	'package-metacell.r'
-Remotes:
-  bitbucket::tanaylab/tgconfig@default,
-  bitbucket::tanaylab/tgstat@default,
-  bitbucket::tanaylab/tgutil@default
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

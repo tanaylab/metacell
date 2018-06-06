@@ -1,10 +1,10 @@
 #' Plot mc+cell graph using pre-defined mc colorization
 #'
-#'
 #' @param mc2d_id mc2d object to plot
+#' @param plot_edges plot edges between metacells (true by default)
 #'
 #' @export
-mcell_mc2d_plot = function(mc2d_id)
+mcell_mc2d_plot = function(mc2d_id, plot_edges=T)
 {
 	mcp_2d_height = get_param("mcell_mc2d_height")
 	mcp_2d_width = get_param("mcell_mc2d_width")
@@ -27,7 +27,9 @@ mcell_mc2d_plot = function(mc2d_id)
 	plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]])
 	fr = mc2d@graph$mc1
 	to = mc2d@graph$mc2
-	segments(mc2d@mc_x[fr], mc2d@mc_y[fr], mc2d@mc_x[to], mc2d@mc_y[to])
+	if (plot_edges) {
+		segments(mc2d@mc_x[fr], mc2d@mc_y[fr], mc2d@mc_x[to], mc2d@mc_y[to])
+	}
 	points(mc2d@mc_x, mc2d@mc_y, cex= 3*mcp_2d_cex, col="black", pch=21, bg=cols)
 	text(mc2d@mc_x, mc2d@mc_y, 1:length(mc2d@mc_x), cex=mcp_2d_cex)
 
@@ -148,4 +150,61 @@ mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, single_plot = 
     dev.off()
   }
 
+}
+
+#' Plot the (log2) metacell footprint value of the selected gene on the 2d projection
+#'
+#' @param mc2d_id mc2d object to use for plot
+#' @param gene gene name to plot
+#' @param show_mc_ids plot metacell ids (false by default)
+#' @param show_legend plot color bar legend (true by default)
+#'
+#' @export
+#'
+mcell_mc2d_plot_gene = function(mc2d_id, gene, show_mc_ids=F, show_legend=T)
+{
+	height = get_param("mcell_mc2d_gene_height")
+	width = get_param("mcell_mc2d_gene_width")
+	mc_cex = get_param("mcell_mc2d_gene_mc_cex")
+	sc_cex = get_param("mcell_mc2d_gene_cell_cex")
+	colspec = get_param("mcell_mc2d_gene_shades")
+	max_lfp = get_param("mcell_mc2d_gene_max_lfp")
+	
+	mc2d = scdb_mc2d(mc2d_id)
+	if(is.null(mc2d)) {
+		stop("missing mc2d when trying to plot, id ", mc2d_id)
+	}
+	mc = scdb_mc(mc2d@mc_id)
+	if(is.null(mc)) {
+		stop("missing mc in mc2d object, id was, ", mc2d@mc_id)
+	}
+	
+	if (!(gene %in% rownames(mc@mc_fp))) {
+		stop(sprintf("gene %s not found in mc object id %s mc_fp table", gene, mc2d@mc_id))
+	}
+	
+	x = pmin(pmax(log2(mc@mc_fp[gene, ]), -max_lfp), max_lfp) + max_lfp
+	shades = colorRampPalette(colspec)(200 * max_lfp + 1)
+	mc_cols = shades[round(100 * x) + 1] 
+	
+	fig_nm = scfigs_fn(mc2d_id, gene, sprintf("%s/%s.genes", .scfigs_base, mc2d_id))
+	png(fig_nm, width = width * ifelse(show_legend, 1.25, 1), height = height)
+	if (show_legend) {
+		layout(matrix(c(1,1:3), nrow=2, ncol=2), widths = c(4,1))
+	}
+	par(mar=c(4,4,4,1))
+
+	plot(mc2d@sc_x, mc2d@sc_y, pch=19, cex=sc_cex, col='grey', xlab="", ylab="", main=gene, cex.main=mc_cex)
+	points(mc2d@mc_x, mc2d@mc_y, pch=21, bg=mc_cols, cex=mc_cex)
+	
+	if (show_mc_ids) {
+		text(mc2d@mc_x, mc2d@mc_y, seq_along(mc2d@mc_y), cex=mc_cex * 0.5)
+	}
+	
+	if (show_legend) {
+		par(mar=c(4,1,4,1))
+		plot_color_bar(seq(-max_lfp, max_lfp, l=length(shades)), shades, show_vals_ind=c(1, 100 * max_lfp + 1, 200 * max_lfp + 1))
+	}
+	
+	dev.off()
 }

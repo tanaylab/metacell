@@ -9,7 +9,6 @@
 #'
 #' @export tgCoClust
 #' @exportClass tgCoClust
-
 tgCoClust <- setClass(
    "tgCoClust",
 	slots = c(

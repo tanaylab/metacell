@@ -30,8 +30,8 @@ scm_stat_type: umi
 # wells2cells file maps cells to their well_id and amp_batch_id
 scm_mars_wells2cells_fn: null
 scm_mars_wells2cells_batch_field: Amp_batch_ID
-scm_mars_wells2cells_cell_field: Cell
-scm_mars_wells2cells_well_field: Well
+scm_mars_wells2cells_cell_field: Well_ID
+scm_mars_wells2cells_well_field: well_coordinates
 
 #the "zero expansion parameter" that we used to transform  umi as log(1+ku)
 scm_k_nonz_exp: 7
@@ -64,7 +64,7 @@ mcp_heatmap_ideal_umi: null
 
 #mcp_heatmap_fp_shades: !expr c("white", "lightsteelblue", "blue", "darkblue", "purple", "brown", "black","yellow")
 # rev(RColorBrewer::brewer.pal(n=11, "RdBu"))
-mcp_heatmap_fp_shades:
+mcp_heatmap_fp_shades: &diverge_colspec
 - "#053061"
 - "#2166AC"
 - "#4393C3"
@@ -98,6 +98,8 @@ mcp_heatmap_lwd: 0
 
 mcp_metadata_annot_colors: null
 
+mcp_colorize_by_seq_priority: false
+
 #2d projection
 
 mcell_mc2d_K: 20
@@ -115,6 +117,13 @@ mcell_mc2d_width: 2000
 mcell_mc2d_plot_key: TRUE
 mcell_mc2d_cex: 1
 mcell_mc2d_legend_cex: 2
+
+mcell_mc2d_gene_height: 800
+mcell_mc2d_gene_width: 800
+mcell_mc2d_gene_mc_cex: 4
+mcell_mc2d_gene_cell_cex: 0.2
+mcell_mc2d_gene_shades: *diverge_colspec
+mcell_mc2d_gene_max_lfp: 3
 
 
 scm_skip_missing_batches: true

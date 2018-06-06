@@ -22,8 +22,8 @@ mcell_gset_add_gene = function(gset_id, genes, subset_id = 1)
 #'
 #' @param gset_id id of gene set to generate
 #' @param mc_id id of metacell object
-#' @param filt_gset_id geneset to select from (null by default)
-#' @param blacklist_gset_id geneset to exclude (null by default)
+#' @param filt_gset_id gene set to select from (null by default)
+#' @param blacklist_gset_id gene set to exclude (null by default)
 #'
 #' @export
 mcell_gset_from_mc_markers = function(gset_id, mc_id, 
@@ -32,12 +32,11 @@ mcell_gset_from_mc_markers = function(gset_id, mc_id,
 	k_per_clust = get_param("scm_mc_mark_k_per_clust")
 	min_gene_fold = get_param("scm_mc_mark_min_gene_fold")
 	min_gene_cov = get_param("scm_mc_mark_min_gene_cov")
-
+	
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
 		stop("MC-ERR: undefined metacell ", mc_id, " when selecting markers")
 	}
-	
 	gene_folds = mc@mc_fp
 	genes_pool = rownames(gene_folds)
 	if(!is.null(filt_gset_id)) {

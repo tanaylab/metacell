@@ -412,3 +412,48 @@ mcell_mc_match_graph = function(mc_id, graph_id)
 	cov = intersect(graph@cell_names, mc@cell_names)
 	return(length(cov) == length(mc@cell_names))
 }
+
+#' Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>
+#'
+#' @param mc_id input mc object
+#' @param mat_id mat object corresponsing to mc_id
+#' @param min_cells_per_sub_mc minimum number of cells per group required to create a new metacell 
+#'
+#' @export
+#'
+mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500)
+{
+	mat = scdb_mat(mat_id)
+	if(is.null(mat)) {
+		stop("MC-ERR: missing mat_id when splitting by color group = ", mat_id)
+	}
+	
+	mc = scdb_mc(mc_id)
+	if(is.null(mc)) {
+		stop("MC-ERR: missing mc_id when splitting by color group = ", mc_id)
+	}
+	col2grp =  unique(mc@color_key[, c('group', 'color')])
+	rownames(col2grp) = col2grp$color
+	
+	cg = split(names(mc@mc), col2grp[mc@colors[mc@mc], 'group'])
+	for (gr in names(cg)) {
+		nms = cg[[gr]]
+		if (length(nms) >= min_cells_per_sub_mc) {
+			message(sprintf("splitting %s, creating %s_submc_%s with %d cells", mc_id, mc_id, gr, length(nms)))
+			mc_map = 1:length(unique(mc@mc[nms]))
+			names(mc_map) = names(table(mc@mc[nms]))
+		
+			dst_mc = mc_map[as.character(mc@mc[nms])]
+			names(dst_mc) = nms
+			
+			new_id = paste(mc_id, "submc", gr, sep="_")
+			
+			mcell_mat_ignore_cells(new_id, mat_id, nms, reverse=T)
+			
+			mcell_new_mc(mc_id = new_id, 
+									 mc = dst_mc, 
+									 outliers = character(0), #setdiff(c(mc@outliers, names(mc@mc)), nms),
+									 scmat = scdb_mat(new_id))
+		}
+	}
+}

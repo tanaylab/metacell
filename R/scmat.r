@@ -321,7 +321,7 @@ scm_ignore_cells = function(scmat, ig_cells, reverse=FALSE)
 	}
 	scmat@cells = good_cells
 	scmat@ncells = length(good_cells)
-	scmat@ignore_cmat = as(scmat@mat[,scmat@ignore_cells], 'dgCMatrix')
+	scmat@ignore_cmat = scmat@mat[,scmat@ignore_cells]
 	if(length(scmat@ignore_genes) > 0) {
 		scmat@ignore_gcmat = scmat@ignore_gmat[,scmat@ignore_cells]
 		scmat@ignore_gmat = scmat@ignore_gmat[,good_cells]

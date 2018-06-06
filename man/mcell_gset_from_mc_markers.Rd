@@ -12,9 +12,9 @@ mcell_gset_from_mc_markers(gset_id, mc_id, filt_gset_id = NULL,
 
 \item{mc_id}{id of metacell object}
 
-\item{filt_gset_id}{geneset to select from (null by default)}
+\item{filt_gset_id}{gene set to select from (null by default)}
 
-\item{blacklist_gset_id}{geneset to exclude (null by default)}
+\item{blacklist_gset_id}{gene set to exclude (null by default)}
 }
 \description{
 This should be mostly used for visualization and highlighting key genes

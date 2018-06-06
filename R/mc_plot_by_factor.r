@@ -11,7 +11,7 @@
 #' @param filter_values vector of meta_field values to display
 #'
 
-mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, filter_values=NULL)
+mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, filter_values=NULL, hclust_values=T)
 {
 	mcp_heatmap_width = get_param("mcp_heatmap_width")
   mcp_heatmap_shades = get_param("mcp_heatmap_seq_shades")
@@ -37,7 +37,11 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	mc_t = table(mc@mc, scmat@cell_metadata[names(mc@mc), meta_field])
 	mc_t = mc_t[, colSums(mc_t) >= meta_field_min_count]
 	if (!is.null(filter_values)) {
-		mc_t = mc_t[, colnames(mc_t) %in% filter_values]
+		diff_values = setdiff(filter_values, colnames(mc_t))
+		if (length(diff_values) > 0) {
+			stop(sprintf("Missing values (%s) in mcell_mc_plot_by_factor", past0(diff_values, collapse=", ")))
+		}
+		mc_t = mc_t[, filter_values]
 	}
 	if (ncol(mc_t) == 0) {
 		stop(sprintf("nothing to plot in mcell_mc_plot_by_factor by %s when requiring at least %d cells %s for factor %s", meta_field, meta_field_min_count, ifelse(is.null(filter_values), "", paste0(" and these values: ", paste0(filter_values, collapse=", ")))))
@@ -71,6 +75,13 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	else {
 		rord = 1:nrow(mc_t_n)
 	}
+	
+	if (hclust_values) {
+		cord = chc$order
+	}
+	else {
+		cord = 1:ncol(mc_t_n)
+	}
 
 	mf_ann = data.frame(row.names=colnames(mc_t), n_cells=colSums(mc_t))
 	if (!is.null(meta_field_annotate_by)) {
@@ -87,7 +98,7 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	  mf_ann[is.na(mf_ann)] = "N/A"
 	  mf_ann[mf_ann == ""] = "N/A"
 
-	  mf_ann = mf_ann[chc$order, ]
+	  mf_ann = mf_ann[cord, ]
 	}
 
 	par(mar=c(10,0.5,0.5,0.5))
@@ -107,7 +118,7 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	image(as.matrix(1:nrow(mc_t)), col=mc@colors[rord], xaxt='n', yaxt='n', xlab="", ylab="")
 
 	par(mar=c(10, 0.5, 0.5, 20))
-	mc_t_n = mc_t_n[rord, chc$order]
+	mc_t_n = mc_t_n[rord, cord]
 	#mc_t_enr = mc_t_enr[, chc$order]
 
 	max_p = ceiling(100 * quantile(mc_t_n, 0.99))/100

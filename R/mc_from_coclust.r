@@ -8,7 +8,6 @@
 #'
 mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 {
-	
 	tgs_coclust_hc_type = get_param("scm_coclust_hc_type")
 
 	coc = scdb_coclust(coc_id)

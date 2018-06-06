@@ -1,19 +1,33 @@
-#' Metacell layout using force directed pojrection of a low degree mc graph
+#' Metacell layout using force directed projection of a low degree mc graph
 #'
 #' @param mc2d_id 2d object to add
 #' @param mc_id meta cell id to work with
 #' @param graph_id graph_id of the similarity graph on cells from the metacell
-#' @param mc_subset a subset of metacells to project (NULL by default)
+#' @param ignore_mismatch
 #'
 #' @export
 mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F)
 {
 	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch)
-	mc = scdb_mc(mc_id)
-	cl_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
-	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, cl_xy)
+	mc_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
+	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, mc_xy)
+	scdb_add_mc2d(mc2d_id, tgMC2D(mc_id, mc_xy$mc_x, mc_xy$mc_y, xy$x, xy$y, mgraph))
+}
 
-	scdb_add_mc2d(mc2d_id, tgMC2D(mc_id, cl_xy$x_cl, cl_xy$y_cl, xy$x, xy$y, mgraph))
+#' Compute cells 2d coordinates based on the mc graph when the mc coordinates are supplied externally 
+#'
+#' @param mc2d_id 2d object to add
+#' @param mc_id meta cell id to work with
+#' @param graph_id graph_id of the similarity graph on cells from the metacell
+#' @param mc_xy pre-defined metacells coordinates (so only coordinates of cells will be computed). Data frame with 2 columns named mc_x and mc_y (x and y coodinates, respectively). 
+#' @param ignore_mismatch
+#'
+#' @export
+mcell_mc2d_force_knn_on_cells = function(mc2d_id, mc_id, graph_id, mc_xy, ignore_mismatch=F)
+{
+	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch)
+	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, mc_xy)
+	scdb_add_mc2d(mc2d_id, tgMC2D(mc_id, mc_xy$mc_x, mc_xy$mc_y, xy$x, xy$y, mgraph))
 }
 
 #' @export
@@ -115,11 +129,11 @@ mc2d_comp_graph_coord = function(mc_graph, N)
 	y_cl = nodeRenderInfo(g)$nodeY
 	names(x_cl) = 1:N
 	names(y_cl) = 1:N
-	return(list(g=g, x_cl=x_cl, y_cl=y_cl))
+	return(list(g=g, mc_x=x_cl, mc_y=y_cl))
 }
 
 #' @export
-mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
+mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy, skip_missing=F)
 {
 	mc2d_proj_blur = get_param("mcell_mc2d_proj_blur")
 	mc2d_K_cellproj = get_param("mcell_mc2d_K_cellproj")
@@ -128,8 +142,8 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy)
 	mc = scdb_mc(mc_id)
 	graph = scdb_cgraph(graph_id)
 
-	x_cl = cl_xy$x_cl
-	y_cl = cl_xy$y_cl
+	x_cl = cl_xy$mc_x
+	y_cl = cl_xy$mc_y
 
 	N_mc = length(x_cl)
 	N_c = length(mc@mc)+length(mc@outliers)

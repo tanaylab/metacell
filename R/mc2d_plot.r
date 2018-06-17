@@ -20,7 +20,7 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T)
 	if(is.null(mc)) {
 		stop("missing mc in mc2d object, id was, ", mc2d@mc_id)
 	}
-	fig_nm = scfigs_fn(mc2d_id, "2d_proj")
+	fig_nm = scfigs_fn(mc2d_id, ifelse(plot_edges, "2d_graph_proj", "2d_proj"))
 	png(fig_nm, width = mcp_2d_width, height = mcp_2d_height)
 	cols = mc@colors
 	cols[is.na(cols)] = "gray"

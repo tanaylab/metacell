@@ -153,7 +153,7 @@ mc_set_outlier_mc = function(mc, mc_ids)
 #' @param mc a metacell object
 #' @param us umi matrix
 #' @export
-mc_compute_fp = function(mc, us)
+mc_compute_fp = function(mc, us, norm_by_mc_size=T)
 {
 	f_g_cov = rowSums(us) > 10
 
@@ -173,9 +173,14 @@ mc_compute_fp = function(mc, us)
 #									mc@mc,
 #									function(y) {exp(rowMeans(log(1+y)))-1})
 
-	mc_meansize = tapply(colSums(us), mc@mc, mean)
-	ideal_cell_size = pmin(1000, median(mc_meansize))
-	g_fp = t(ideal_cell_size*t(clust_geomean)/as.vector(mc_meansize))
+	if (norm_by_mc_size) {
+		mc_meansize = tapply(colSums(us), mc@mc, mean)
+		ideal_cell_size = pmin(1000, median(mc_meansize))
+		g_fp = t(ideal_cell_size*t(clust_geomean)/as.vector(mc_meansize))
+	}
+	else {
+		g_fp = clust_geomean
+	}
 	#normalize each gene
 	fp_reg = 0.1
 	#0.1 is defined here because 0.1*mean_num_of_cells_in_cluster

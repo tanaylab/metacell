@@ -83,6 +83,5 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, coc_id = NULL,
 	lower_marg=c(3,0,0,5)
 	par(mar=lower_marg)
 	image(as.matrix(1:n_mc,nrow=1), col=colors, yaxt='n', xaxt='n')
-
 	dev.off()
 }

@@ -190,7 +190,7 @@ scmat_read_scmat_10x = function(matrix_fn,
 			cells_fn = "/tmp/cells.tsv"
 	}
 	umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
-	genes = fread(genes_fn, header=F, stringsAsFactors = F)
+	genes = as.data.frame(fread(genes_fn, header=F, stringsAsFactors = F))
 
 	colnames(genes) = c('id', 'name')
 	rownames(genes) = genes$id

@@ -134,14 +134,14 @@ scm_new_matrix = function(mat,
 
 mcell_merge_mats = function(id1, id2, new_id)
 {
-	if(!is.charater(id1) | !is.character(id2) | !is.character(new_id)) {
+	if(!is.character(id1) | !is.character(id2) | !is.character(new_id)) {
 		stop("mcell_merge_mats must be called ids into scdb, not other objects")
 	}
 	if(is.null(scdb_mat(id1)) | is.null(scdb_mat(id2))) {
 		stop("mcell_merge_mats called with missing mat ids, ", id1, " ", id2)
 	}
 	scdb_add_mat(new_id,
-					 scm_merge_mats(scdb_mat(id1), scdb_mat(id2), batch2_prefix=id2))
+					 scm_merge_mats(scdb_mat(id1), scdb_mat(id2)))
 }
 
 #' scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
@@ -160,7 +160,20 @@ scm_merge_mats = function(scmat1, scmat2)
 		stop("invalid scmat2 in scm_merge_mat - if you want to merge from the scdb, call mcell_merge_mats")
 	}
 
-	scmat1@cell_metadata = bind_rows(scmat1@cell_metadata, scmat2@cell_metadata)
+	scmat1 = scm_ignore_cells(scmat1, NULL)
+	scmat2 = scm_ignore_cells(scmat2, NULL)
+	md1 = scmat1@cell_metadata
+	md2 = scmat2@cell_metadata
+	md_f1 = colnames(md1)
+	md_f2 = colnames(md2)
+	if(length(setdiff(md_f2,md_f1))>0) {
+		md1[,setdiff(md_f2,md_f1)]=NA
+	}
+	if(length(setdiff(md_f1,md_f2))>0) {
+		md2[,setdiff(md_f1,md_f2)]=NA
+	}
+	scmat1@cell_metadata = rbind(md1, md2)
+#	scmat1@cell_metadata = bind_rows(scmat1@cell_metadata, scmat2@cell_metadata)
 
 	m1 = scmat1@mat
 	m2 = scmat2@mat

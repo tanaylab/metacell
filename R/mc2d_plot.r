@@ -38,6 +38,13 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft")
 		gcol = unique(data.frame(col=key$color, group=key$group))
 		rownames(gcol) = gcol$group
 		gmark = gmark[order(names(gmark))]
+		if(legend_pos == "panel") {
+			dev.off()
+			fig_nm = scfigs_fn(mc2d_id, "2d_proj_legend")
+			png(fig_nm, width = 600, height= length(gmark)*40+400)
+			plot.new()
+			legend_pos = "topleft"
+		}
 		legend(legend_pos,
 				legend=gsub("_", " ", paste0(names(gmark), ": ", gmark)),
 				pch=19, cex=mcp_2d_legend_cex,

@@ -111,7 +111,7 @@ mcell_plot_outlier_heatmap = function(mc_id, mat_id, T_lfc)
 		hc2 = hclust(dist(cor(t(outu_gi))), "ward.D2")
 		fig_nm = scfigs_fn(mc_id, "outlier")
 	
-		h_mat = min(300+length(out_g_nms)*20,2000)
+		h_mat = 300+length(out_g_nms)*16
 		png(fig_nm, w=min(300+20*length(out_i_nms),3000), h=h_mat+100)
 
 		layout(matrix(c(1,2),nrow=2),heights=c(h_mat, 100))
@@ -161,6 +161,7 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 
 	split_dbscan = function(nms) {
 		id = mc@mc[nms[1]]
+		message("split ", id)
 		mc_mat = mat@mat[,nms]
 		mc_mat = scm_downsamp(mc_mat, min(colSums(mc_mat)))
 		e = rowMeans(mc_mat)
@@ -178,8 +179,15 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 		if(length(null_nms) > 0) {
 			message("got ", length(null_nms), " cells w.o enough umis")
 		}
+		if(sum(gs) < 2 | sum(colSums(mc_mat > 3)) < 20) {
+			message("no genes for ", id)
+			clst = rep(1, times=length(nms))
+			names(clst) = nms
+			return(clst)
+		}
 		mc_mat = mc_mat[, filt_nms]
 		
+		message("split 2 id =", id)
 		if(dirichlet) {
 			reg = 0.5
 			L = length(nms)
@@ -192,9 +200,11 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 			dst[is.na(dst)] = t(dst)[is.na(dst)]
 			diag(dst) = 0
 		} else {
-			dst = 1-tgs_cor(log(1+7*as.matrix(mc_mat)))
+			dst = 1-cor(log(1+7*as.matrix(mc_mat)))
 		}
+		message("split 3 id =", id)
 		clst = dbscan(as.dist(dst), eps=quantile(dst,0.1), minPts=5)
+		message("done dbscan", id)
 		clst = clst$cluster
 		names(clst) = filt_nms
 		clst[null_nms] = 0

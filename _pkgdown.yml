@@ -1,0 +1,74 @@
+url: tanaylab.bitbucket.io/metacell
+
+template:
+  params:
+    bootswatch: paper
+
+authors: 
+  Amos tanay:
+    href: compgenomics.weizmann.ac.il/tanay/
+
+navbar:
+  structure:
+    left:
+    - home    
+    - reference        
+    - usage
+    right: github      
+      # - icon: fa-bitbucket-square
+        # href: https://bitbucket.org/tanaylab/metacell
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    usage:
+      text: Usage
+      href: articles/basic_pbmc8k.html
+    articles:
+      text: Vignettes
+      menu:
+      - text: 'PBMC - 8k'
+        href: articles/basic_pbmc8k.html
+    links:
+      - text: Browse source code at
+        href: https://bitbucket.org/tanaylab/metacell
+
+reference:
+  - title: metacell pipeline functions
+    desc: ~
+    contents:  
+    - starts_with('mcell_')
+  - title: scdb functions
+    desc: ~
+    contents:  
+    - starts_with('scdb_')
+  - title: scm functions
+    desc: ~
+    contents:  
+    - starts_with('scm_')
+    - starts_with('scmat_')
+  - title: metacell functions
+    desc: ~
+    contents:  
+    - starts_with('mc_')
+  - title: gene set functions
+    desc: ~
+    contents:  
+    - starts_with('gset_')
+  - title: classes
+    desc: ~
+    contents:  
+    - contains('class')
+    - contains('initialize')
+  - title: utils
+    desc: ~
+    contents:  
+    - '`plot_color_bar`'
+    - '`port_cor`'   
+    - '`allrow_cor`'     
+    - '`rescale_sparse_mat_cols`'     
+    - '`tgs_cor_graph`'     
+    - starts_with('scfigs')

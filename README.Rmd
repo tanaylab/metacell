@@ -1,0 +1,25 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# metacell
+
+The goal of metacell is to ...
+
+## Installation
+
+```{r, eval=FALSE}
+install.packages('metacell', repos=c(getOption('repos'), 'https://tanaylab.bitbucket.io/repo'))
+```
+
+

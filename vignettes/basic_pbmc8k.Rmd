@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Setting up
+
 The metacell package allow import and manipulations of single cell RNA-seq count matrices, gene feature analysis, modeling similarities and inference of a metacell model. In this note we exemplify basic metacell use using the small 8.5k PBMC data from the 10x system.
 
 We start by loading the library:
@@ -51,6 +53,8 @@ scfigs_init("figs/")
 ```
 
 meta cell uses a standardized naming scheme fro the figures, to make it easier to archive and link analysis figures to the db objects. In principles, figures in the figures directory are named after the object data type they refer to (for example, mat for matrices, mc for metacells, and more, see below). The figure name then include also the object name they refer to, and a suffix describing the actual figure type.
+
+# Exploring and filtering the umi matrix 
 
 To get a basic understanding of the new data, we will plot the distribution of umi count per cell:
 
@@ -88,6 +92,8 @@ We will also eliminate in this case small cells, based on examination of the umi
 mcell_mat_ignore_small_cells("test", "test", 800)
 ```
 
+# Selecting genes
+
 We will move on to compute statistics on the distributions of each gene in the data, which is going to be our main tool for selecting informative genes for metacell analysis:
 
 ```{r, eval=TRUE, warning=FALSE}
@@ -112,6 +118,8 @@ mcell_plot_gstats(gstat_id="test", gset_id="test_feats")
 ```
 ![var mean plot](figs/test.varmin.png)
 
+# Building the balanced cell graph
+
 Assuming we are happy with the selected genes (some strategies for studying them will be discussed in another vignette), we will move forward to create a similarity graph (cgraph), using a construction called balanced knn graph:
 
 ```{r, eval=TRUE, warning=FALSE}
@@ -123,6 +131,8 @@ mcell_add_cgraph_from_mat_bknn(mat_id="test",
 ```
 
 This add to the db a new cell graph object named test_graph. the K=100 parameter is important, it defines the initial attempt of the system to assign neighbors for each cell and ultimately can affect the size distribution of derived metacells. Note that constructing the graph can become computationally intensive if going beyond 20-30,000 cells. The system is currently limited by memory, and we have generated graph on 160,000 cells on machines with 0.5TB RAM. For more modest datasets (e.g. few 10x lanes or MARS-seq experiments), things will run very quickly.
+
+# Resampling and generating the co-occurence graph
 
 The next step will use the cgraph to sample five hundred metacell covers, each organizing 75% of the cells into groups that are coherent (have high edge density) in the graph.
 
@@ -148,6 +158,8 @@ mcell_mc_from_coclust_balanced(
 
 We created a metacell object _test_mc_, based on analysis of the coclustring graph. The parameter K determine the number of neighbors we wish to minimally associate with each cell. Alpha=2 is defining how harsh the filtering of co-cluster edges will be prior to running the metacell cover on them - e.g. alpha=2 will eliminate co-cluster relationships whenever one of the neighboring cells have K partners with more than twice as many co-cluster relationships.
 
+# Finding outlier cells
+
 We now have a preliminary metacell object, but it is good practice to make sure all metacells within it are homogeneous. This is done by the outlier scan procedure, which attempt splitting metacells (if their underlying similarity structure allows it), and remove outliers cells whenever there is evidence for a single gene expressed in them much stronger than anticipated from the metacell collective behavior.
 
 ```{r, eval=TRUE, warning=FALSE}
@@ -161,6 +173,8 @@ mcell_mc_split_filt(new_mc_id="test_mc_f",
 The first command generate a heat map summarizing the detected outlier behaviors. This is possible only for dataset with modest size.
 
 ![outliers fig](figs/test_mc.outlier.png)
+
+# Selecting markers and coloring metacells
 
 The filtered metacell object _test_mc_f_ can now be visualized. In order to do this effectively, we usually go through one or two iterations of selecting informative marker genes. The package can select markers for you automatically - by simply looking for genes that are strongly enriched in any of the metacells:
 
@@ -198,7 +212,10 @@ We are now equipped with some basic coloring of metacells, which BTW we can acce
 mc = scdb_mc("test_mc_f")
 table(mc@colors)
 ```
-Or we can use the color to produce a labeled heat map, showing selected genes and their distributions over metacells, with the colored annotation shown at the bottom:
+
+# Creating a heatmap of genes and metacells
+
+We can use the color to produce a labeled heat map, showing selected genes and their distributions over metacells, with the colored annotation shown at the bottom:
 
 ```{r, eval=TRUE, warning=FALSE}
 mcell_mc_plot_marks(mc_id="test_mc_f", gset_id="test_markers", mat_id="test")
@@ -212,6 +229,8 @@ lfp = log2(mc@mc_fp)
 tail(sort(lfp["CD8A",]))
 ```
 
+# Projection metacells and cells in 2D
+
 Heat maps are useful, but sometime hard to interpret, and so we can add to these visualizations that try to explore the similarity structure among metacells (or among cells within metacells). For this we construct a 2D projection, and use it to plot cells and metacell, as well as their key similarities which will be shown as edges connecting metacells. This plot will use the same metacell coloring we established before (and if we will improve it based on additional analysis, this plot can be regenerated): 
 
 ```{r, eval=TRUE, warning=FALSE}
@@ -224,6 +243,8 @@ mcell_mc2d_plot(mc2d_id="test_2dproj")
 Note that we changed the metacell parameters "mcell_mc2d_height/width" to get a reasonably size figure. There are many additional parameters that can be tuned in metacell, some of these will be discussed elsewhere, while other will remain burried in the code and are not meant for routine tuning. We get the following figure:
 
 ![proj2d mean plot](figs/test_2dproj.2d_proj.png)
+
+# Visualizing the MC confusion matrix
 
 (you don't have to complete the following optional stage of the pipeline). While 2D projections are very popular and intiutive (and also misleading) ways to visualize scRNA-seq results, we can also summarize the similarity structure among metacells using a "confusion matrix" which summarize all similairities between metacells, including those that are used as edges in the 2D projection, and those that are not. This can provide sometime ways to capture hierarchical structure or other complex organization among metacells. 
 
@@ -246,4 +267,4 @@ mcell_mc_plot_hierarchy(mc_id="test_mc_f",
 					width=1400, heigh=1000, min_nmc=2)
 ```
 
-![confusion matrix](figs/pbmc_8k_bs500fd.supmc_confu.png)
+![confusion matrix](figs/test_mc_f.supmc_confu.png)

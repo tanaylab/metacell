@@ -20,14 +20,17 @@ Imports:
   Rgraphviz,
   KernSmooth,
   zoo,
-  tgconfig,
   ggplot2,
   cluster,
-  tgstat,
   doMC,
   RCurl,
   igraph,
-  parallel
+  dbscan,
+  entropy,
+  parallel,
+  tgconfig,
+  tgutil,
+  tgstat
 Collate:
 	'mc_apx_qc_cv.r'
   	'mc_hierarchy.r'
@@ -74,10 +77,6 @@ Collate:
 	'utils.r'
 	'scdb.r'
 	'package-metacell.r'
-Remotes:
-  bitbucket::tanaylab/tgconfig@default,
-  bitbucket::tanaylab/tgstat@default,
-  bitbucket::tanaylab/tgutil@default
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

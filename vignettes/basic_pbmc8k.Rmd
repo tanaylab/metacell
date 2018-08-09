@@ -18,6 +18,12 @@ knitr::opts_chunk$set(
 
 The metacell package allow import and manipualtions of single cell RNA-seq count matrices, gene feature analysis, modelling similarities and infeernce of a metacell model. In this note we examplify basic metacell use using the small 8.5k PBMC data from the 10x system.
 
+We start by loading the library:
+
+```{r, eval=TRUE, warning=FALSE}
+library("metacell")
+```
+
 To start using metacell, you first initialize a database. This is not much more than linking the package to directory that store all your objects. In our case we will initialize the DB to the testdb directory:
 
 ```{r, eval=TRUE, warning=FALSE}

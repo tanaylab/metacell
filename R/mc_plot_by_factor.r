@@ -10,6 +10,7 @@
 #' @param hclust_mcs If true, re-order metacells by clustering the heatmap. Otherwise, use original metacells ordering (default)
 #' @param filter_values vector of meta_field values to display
 #'
+#' @export
 
 mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, ord_mcs = NULL, filter_values=NULL)
 {

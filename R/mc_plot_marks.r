@@ -7,6 +7,7 @@
 #' @param lateral_gset_id markers to plot on top (e.g. cell cycle)
 #' @param plot_cells by defulat this is TRUE and data is shown for single cells. If this is false, than metacells fold change values will be plotted
 #'
+#' @export
 
 mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 						fig_fn = NULL, lateral_gset_id = NULL,

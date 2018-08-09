@@ -78,7 +78,7 @@ bad_genes = unique(c(grep("^MT-", nms, v=T), grep("^MTMR", nms, v=T), grep("^MTN
 bad_genes
 ```
 
-We wil next ask the package to ignore the genes in the matrix:
+We will next ask the package to ignore the genes in the matrix:
 
 ```{r, eval=TRUE, warning=FALSE}
 mcell_mat_ignore_genes(new_mat_id="test", mat_id="test", bad_genes, reverse=F) 
@@ -222,7 +222,7 @@ mcell_mc_plot_marks(mc_id="test_mc_f", gset_id="test_markers", mat_id="test")
 ```
 ![heatmap_marks](figs/test_mc_f.cells_heat_marks.png)
 
-Note that the values plotted are color coded log2(fold enrichmnet) value of the metacell over the median of all other metacells. It can be useful to explore these values directly - e.g.:
+Note that the values plotted are color coded log2(fold enrichment) value of the metacell over the median of all other metacells. It can be useful to explore these values directly - e.g.:
 
 ```{r, eval=TRUE, warning=FALSE}
 lfp = log2(mc@mc_fp)
@@ -240,15 +240,15 @@ tgconfig::set_param("mcell_mc2d_width",1000, "metacell")
 mcell_mc2d_plot(mc2d_id="test_2dproj")
 ```
 
-Note that we changed the metacell parameters "mcell_mc2d_height/width" to get a reasonably size figure. There are many additional parameters that can be tuned in metacell, some of these will be discussed elsewhere, while other will remain burried in the code and are not meant for routine tuning. We get the following figure:
+Note that we changed the metacell parameters "mcell_mc2d_height/width" to get a reasonably size figure. There are many additional parameters that can be tuned in metacell, some of these will be discussed elsewhere, while other will remain buried in the code and are not meant for routine tuning. We get the following figure:
 
 ![proj2d mean plot](figs/test_2dproj.2d_proj.png)
 
 # Visualizing the MC confusion matrix
 
-(you don't have to complete the following optional stage of the pipeline). While 2D projections are very popular and intiutive (and also misleading) ways to visualize scRNA-seq results, we can also summarize the similarity structure among metacells using a "confusion matrix" which summarize all similairities between metacells, including those that are used as edges in the 2D projection, and those that are not. This can provide sometime ways to capture hierarchical structure or other complex organization among metacells. 
+(you don't have to complete the following optional stage of the pipeline). While 2D projections are very popular and intuitive (and also misleading) ways to visualize scRNA-seq results, we can also summarize the similarity structure among metacells using a "confusion matrix" which summarize all similarities between metacells, including those that are used as edges in the 2D projection, and those that are not. This can provide sometime ways to capture hierarchical structure or other complex organization among metacells. 
 
-We first create a hierarchical clustering of metacells, based on the number of similairity relations between their cells:
+We first create a hierarchical clustering of metacells, based on the number of similarity relations between their cells:
 
 ```{r, eval=TRUE, warning=FALSE}
 mc_hc = mcell_mc_hclust_confu(mc_id="test_mc_f", 

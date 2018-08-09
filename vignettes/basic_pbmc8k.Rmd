@@ -186,20 +186,64 @@ IL7R | IL7R | navajowhite2 | 3 | 2
 Treg | FOXP3 | magenta | 5 | 1.5
 CD3 | CD3G | lemonchiffon | 1 | 0.7
 
+Applying this table to color metacell is done using the command mc_colorize as shown below. Note that there are more sophisticated ways to color/annotate metacells, and that ultimately there is no substitute to look at gene distributions and read literature about possible functions and regulatory mechanisms.
+
 ```{r, eval=TRUE, warning=FALSE}
 marks_colors = read.table(system.file("extdata", "pbmc_mc_colorize.txt", package="metacell"), sep="\t", h=T, stringsAsFactors=F)
 mc_colorize("test_mc_f", marker_colors=marks_colors)
 ```
+We are now equipped with some basic coloring of metacells, which BTW we can access directly:
+
+```{r, eval=TRUE, warning=FALSE}
+mc = scdb_mc("test_mc_f")
+table(mc@colors)
+```
+Or we can use the color to produce a labeled heat map, showing selected genes and their distributions over metacells, with the colored annotation shown at the bottom:
 
 ```{r, eval=TRUE, warning=FALSE}
 mcell_mc_plot_marks(mc_id="test_mc_f", gset_id="test_markers", mat_id="test")
 ```
 ![heatmap_marks](figs/test_mc_f.cells_heat_marks.png)
 
+Note that the values plotted are color coded log2(fold enrichmnet) value of the metacell over the median of all other metacells. It can be useful to explore these values directly - e.g.:
+
+```{r, eval=TRUE, warning=FALSE}
+lfp = log2(mc@mc_fp)
+tail(sort(lfp["CD8A",]))
+```
+
+Heat maps are useful, but sometime hard to interpret, and so we can add to these visualizations that try to explore the similarity structure among metacells (or among cells within metacells). For this we construct a 2D projection, and use it to plot cells and metacell, as well as their key similarities which will be shown as edges connecting metacells. This plot will use the same metacell coloring we established before (and if we will improve it based on additional analysis, this plot can be regenerated): 
+
 ```{r, eval=TRUE, warning=FALSE}
 mcell_mc2d_force_knn(mc2d_id="test_2dproj",mc_id="test_mc_f", graph_id="test_graph")
+tgconfig::set_param("mcell_mc2d_height",1000, "metacell")
+tgconfig::set_param("mcell_mc2d_width",1000, "metacell")
 mcell_mc2d_plot(mc2d_id="test_2dproj")
 ```
+
+Note that we changed the metacell parameters "mcell_mc2d_height/width" to get a reasonably size figure. There are many additional parameters that can be tuned in metacell, some of these will be discussed elsewhere, while other will remain burried in the code and are not meant for routine tuning. We get the following figure:
+
 ![proj2d mean plot](figs/test_2dproj.2d_proj.png)
 
+(you don't have to complete the following optional stage of the pipeline). While 2D projections are very popular and intiutive (and also misleading) ways to visualize scRNA-seq results, we can also summarize the similarity structure among metacells using a "confusion matrix" which summarize all similairities between metacells, including those that are used as edges in the 2D projection, and those that are not. This can provide sometime ways to capture hierarchical structure or other complex organization among metacells. 
 
+We first create a hierarchical clustering of metacells, based on the number of similairity relations between their cells:
+
+```{r, eval=TRUE, warning=FALSE}
+mc_hc = mcell_mc_hclust_confu(mc_id="test_mc_f", 
+											graph_id="test_graph")
+```
+
+Now we generate clusters of metacells (based on their hierarchy, and we visualize the confusion matrix and these clusters):
+
+```{r, eval=TRUE, warning=FALSE}
+mc_sup = mcell_mc_hierarchy(mc_id="test_mc_f",
+													mc_hc=mc_hc, T_gap=0.04)
+mcell_mc_plot_hierarchy(mc_id="test_mc_f", 
+				   graph_id="test_graph", 
+					mc_order=mc_hc$order, 
+					sup_mc = mc_sup, 
+					width=1400, heigh=1000, min_nmc=2)
+```
+
+![confusion matrix](figs/pbmc_8k_bs500fd.supmc_confu.png)

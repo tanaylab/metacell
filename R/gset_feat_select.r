@@ -75,7 +75,7 @@ mcell_gset_filter_szcor = function(gstat_id, gset_id, T_szcor, force_new=F)
 	if(is.null(gstat)) {
 		stop("missing gstat with id ", gstat_id, " when trying to generate a varmean gene set")
 	}
-	szcor_genes = rownames(gstat)[gstat$sz_cor_norm > T_szcor]
+	szcor_genes = rownames(gstat)[gstat$sz_cor_norm < T_szcor]
 	gset = scdb_gset(gset_id)
 	if(!is.null(gset) & force_new) {
 		scdb_del_gset(gset_id)
@@ -90,4 +90,37 @@ mcell_gset_filter_szcor = function(gstat_id, gset_id, T_szcor, force_new=F)
 		gset_szcor = gset_new_restrict_nms(gset, szcor_genes, desc=sprintf("%s szcor %f", gset@description, T_szcor))
 		scdb_add_gset(gset_id, gset_cov)
 	}
+}
+
+
+mcell_gset_filter_multi = function(gstat_id, gset_id, T_tot, T_top3,T_szcor=NULL, T_vm=NULL,T_niche=NULL, force_new=F,blacklist=c())
+{
+	gstat = scdb_gstat(gstat_id)
+	if(is.null(gstat)) {
+		stop("missing gstat with id ", gstat_id, " when trying to generate a varmean gene set")
+	}
+	
+	if(!is.null(T_szcor)){szcor_genes = rownames(gstat)[gstat$sz_cor_norm < T_szcor]}else{szcor_genes=c()}
+	if(!is.null(T_vm)){vm_genes = rownames(gstat)[gstat$ds_vm_norm > T_vm]}else{vm_genes=c()}
+	if(!is.null(T_niche)){niche_genes = rownames(gstat)[gstat$niche_norm > T_niche]}else{niche_genes=c()}
+	
+	union_genes=union(szcor_genes,vm_genes)
+	union_genes=union(union_genes,niche_genes)
+	
+	cov_genes = rownames(gstat)[gstat$tot > T_tot & gstat$ds_top3 > T_top3]
+	filtered_genes=intersect(cov_genes,union_genes)
+	
+	filtered_genes=setdiff(filtered_genes,blacklist)
+	message("Selected ",length(filtered_genes)," markers")
+	
+	gset = scdb_gset(gset_id)
+	if(!is.null(gset) & force_new) {
+		scdb_del_gset(gset_id)
+		gset = NULL
+	}
+
+	gene_set = rep(1, length(filtered_genes))
+	names(gene_set) = filtered_genes
+	gset = gset_new_gset(gene_set, sprintf("szcor %f, vm %f, niche %f, tot %f, top3 %f",T_szcor,T_vm,T_niche, T_tot, T_top3))
+	scdb_add_gset(gset_id, gset)
 }

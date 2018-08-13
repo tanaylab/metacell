@@ -17,7 +17,7 @@ mcell_add_cgraph_from_distmat= function(d_mat, graph_id, K, balance=F, k_expand=
 
 	if(balance) {
 		x_knn = tgs_knn(max(d_mat)-d_mat, K*k_expand)
-		message("willl build balanced knn graph on ", ncol(d_mat), " cells, this can be a bit heavy for >20,000 cells")
+		message("will build balanced knn graph on ", ncol(d_mat), " cells, this can be a bit heavy for >20,000 cells")
 		gr = tgs_graph(x_knn, K, k_expand, k_beta)
 	} else {
 		x_knn = tgs_knn(max(d_mat)-d_mat, K)

@@ -13,7 +13,7 @@ mcell_add_cgraph_from_mat_bknn = function(mat_id, gset_id, graph_id, K, dsamp=F)
 	k_nonz_exp = get_param("scm_k_nonz_exp")
 	feat = log2(1+k_nonz_exp*as.matrix(feat))
 
-	message("willl build balanced knn graph on ", ncol(feat), " cells and ", nrow(feat), " genes, this can be a bit heavy for >20,000 cells")
+	message("will build balanced knn graph on ", ncol(feat), " cells and ", nrow(feat), " genes, this can be a bit heavy for >20,000 cells")
 	k_alpha = get_param("scm_balance_graph_k_alpha")
 	k_beta = get_param("scm_balance_graph_k_beta")
 	gr = tgs_cor_graph(x=feat, knn=K, k_expand=10, k_alpha=k_alpha, k_beta=k_beta)
@@ -37,7 +37,7 @@ mcell_add_cgraph_from_mat_raw_knn = function(mat_id, gset_id, graph_id, K, dsamp
 	k_nonz_exp = get_param("scm_k_nonz_exp")
 	feat = log2(1+k_nonz_exp*as.matrix(feat))
 
-	message("willl build raw knn graph on ", ncol(feat), " cells and ", nrow(feat), " genes, this can be a bit heavy for >20,000 cells")
+	message("will build raw knn graph on ", ncol(feat), " cells and ", nrow(feat), " genes, this can be a bit heavy for >20,000 cells")
 
 	mcor = tgs_cor(x=feat)
 	x_knn = tgs_knn(mcor, K)

@@ -23,6 +23,8 @@ Imports:
   zoo,
   ggplot2,
   cluster,
+  cowplot,
+  pdist,
   doMC,
   RCurl,
   igraph,

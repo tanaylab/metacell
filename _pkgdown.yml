@@ -11,7 +11,7 @@ authors:
 home:
   links:
   - text: Browse source code
-    href:  http://tanaylab.bitbucket.io/metacell
+    href:  https://bitbucket.org/tanaylab/metacell
 
 navbar:  
   structure:

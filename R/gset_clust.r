@@ -2,7 +2,7 @@
 #'
 #' @param gset_id current gene set object. Only the list of genes will be used
 #' @param mat_id scRNA matrix to use. We assume genes in the set are represented in the matrix, but if force is T we allow filtering of genes by represented matrix entry in addtion to clsutering
-#' @param K how many gene modules to generate (kmeans parameter)
+#' @param K how many gene modules to generate (cutree parameter)
 #' @param force if this is T, we allow clustering usign matrix in which not all genes are represnted. This will override the existing gset will a subset of the genes!
 #' @param (ENV) scm_k_nonz_exp - to define transformation of UMIs
 #'

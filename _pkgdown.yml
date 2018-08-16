@@ -1,22 +1,25 @@
-url: tanaylab.bitbucket.io/metacell
+url: http://tanaylab.bitbucket.io/metacell
 
 template:
   params:
-    bootswatch: paper
+    bootswatch: cosmo
 
 authors: 
-  Amos tanay:
-    href: compgenomics.weizmann.ac.il/tanay/
+  Amos Tanay:
+    href: http://compgenomics.weizmann.ac.il/tanay/
 
-navbar:
+home:
+  links:
+  - text: Browse source code
+    href:  http://tanaylab.bitbucket.io/metacell
+
+navbar:  
   structure:
     left:
     - home    
     - reference        
     - usage
-    right: github      
-      # - icon: fa-bitbucket-square
-        # href: https://bitbucket.org/tanaylab/metacell
+    right: bitbucket            
   components:
     home:
       icon: fa-home fa-lg
@@ -32,8 +35,8 @@ navbar:
       menu:
       - text: 'PBMC - 8k'
         href: articles/basic_pbmc8k.html
-    links:
-      - text: Browse source code at
+    bitbucket:
+      - icon: fa-bitbucket
         href: https://bitbucket.org/tanaylab/metacell
 
 reference:

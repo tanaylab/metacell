@@ -2,7 +2,8 @@ Package: metacell
 Title: Meta cell analysis for single cell RNA-seq data
 Version: 0.3.0
 Authors@R: person("Amos", "Tanay", email = "amos.tanay@weizmann.ac.il", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices by computing partitions of a cell similarity graph into small (~20-200 typically) homogeneous groups of cells which are defined as metacells (MCs). The derived MCs are then used for building different representations of the data, allowing matrix or 2D graph visualization forming a basis for analysis of cell types, subtypes, transcriptional gradients, cell-cycle variation, gene modules and their regulatory models and more. More details on the usage of the MetaCell pipeline is available in the package vignettes, and in papers using it.
+URL: https://bitbucket.org/tanaylab/metacell
 BugReports: https://bitbucket.org/tanaylab/metacell/issues
 Depends: R (>= 3.4.2)
 License: TBD

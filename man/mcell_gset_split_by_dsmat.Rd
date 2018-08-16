@@ -11,7 +11,7 @@ mcell_gset_split_by_dsmat(gset_id, mat_id, K, force = F)
 
 \item{mat_id}{scRNA matrix to use. We assume genes in the set are represented in the matrix, but if force is T we allow filtering of genes by represented matrix entry in addtion to clsutering}
 
-\item{K}{how many gene modules to generate (kmeans parameter)}
+\item{K}{how many gene modules to generate (cutree parameter)}
 
 \item{force}{if this is T, we allow clustering usign matrix in which not all genes are represnted. This will override the existing gset will a subset of the genes!}
 

@@ -1,8 +1,11 @@
-url: http://tanaylab.bitbucket.io/metacell
+url: http://tanaylab.bitbucket.io/metacell-r
 
 template:
   params:
     bootswatch: cosmo
+    docsearch:
+      api_key: ca4e16717bb635cc1f804f6a25717f9b
+      index_name: metacell
 
 authors: 
   Amos Tanay:

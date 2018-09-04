@@ -17,7 +17,7 @@ Examples of applications:
 
 ``` r
 install.packages('BiocManager') 
-BiocManager::install('metacell',  site_repository = 'tanaylab.bitbucket.io/repo')
+BiocManager::install('metacell',  site_repository = 'tanaylab.bitbucket.io/repo', update = FALSE)
 ```
 
 **Note**: Metacell is implemented in R and C++. In particular it uses the Tanay group tgstat library that utilizes shared memory and distributed computing (as well as some specific optional CPU features). The package is tested on linux and macbooks, other setting may require some adaptation or will deliver lower performance. A typical application will require at least 16G RAM. For heavier applications (100K cells) we recommend a dual CPU multi-core workstation with 128GM RAM or more.

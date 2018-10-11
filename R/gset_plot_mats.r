@@ -35,7 +35,7 @@ mcell_plot_gset_cor_mats = function(gset_id, scmat_id, downsamp=T)
 		shades = colorRampPalette(c("darkblue", "blue","white", "red", "yellow"))(1000)
 		breaks = seq(-0.5,0.5,l=1001)
 		vs = pmin(pmax(gcor[s_nms,s_nms],-0.5),0.5)
-		pheatmap::pheatmap(gcor[s_nms, s_nms], col=shades,breaks=breaks)
+		pheatmap::pheatmap(vs, col=shades, breaks=breaks, cluster_rows=n>2, cluster_cols=n>2)
 		dev.off()
 	}
 }

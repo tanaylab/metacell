@@ -123,7 +123,6 @@ mcell_mc_hierarchy = function(mc_id, mc_hc, T_gap)
 			} else {
 				if(length(mcs_out) == 0) {
 					message("zero length mcs out??")
-					browser()
 					stop("boom")
 				}
 				lfp_max_out= lfp[,mcs_out]

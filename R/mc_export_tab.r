@@ -35,7 +35,7 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 	# add required breakdown to features
 	if (!is.null(metadata_fields)) {
 		for (s in metadata_fields) {
-			out_df = rbind(table(sc_cl@scmat@cell_metadata[names(sc_cl@clusts), s], sc_cl@clusts), out_df)
+			out_df = rbind(table(scmat@cell_metadata[names(mc@mc), s], mc@mc), out_df)
 		}
 	}
 	

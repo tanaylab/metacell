@@ -4,12 +4,16 @@
 \alias{mcell_plot_cross_mc}
 \title{Plotting a matrix of co-occurences between two metacell covers of the same dataset}
 \usage{
-mcell_plot_cross_mc(mc_id1, mc_id2)
+mcell_plot_cross_mc(mc_id1, mc_id2, ord_1 = NULL, ord_2 = NULL)
 }
 \arguments{
 \item{mc_id1}{first mc object to use}
 
 \item{mc_id2}{second mc object to use}
+
+\item{ord_1}{optional ordering of first MC set (default is original order)}
+
+\item{ord_2}{optional ordering of second MC set (Default is based on max intersection with the first set)}
 }
 \description{
 Plotting a matrix of co-occurences between two metacell covers of the same dataset

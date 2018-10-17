@@ -83,7 +83,7 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	if(plot_cells) {
 		mat = as.matrix(scmat@mat[c(good_marks, lateral_marks),names(mc@mc)])
 		mat = mat[,cell_ord]
-		totu = colSums(scmat@mat[,names(mc@mc)])
+		totu = colSums(scmat@mat[,cell_ord])
 		mat = t(t(mat)/totu)*mcp_heatmap_ideal_umi
 		lus_1 = log2(1+7*mat)
 		lus = apply(lus_1 - apply(lus_1, 1, median),2, function(x) pmax(x,0))

@@ -6,6 +6,7 @@
 #' @param K number of clusters to generate from the coclust hclust. Look at the coclust plot to detemrine this. But make sure you keep the clusters at reasonable size (e.g. <100) for use as metacells. 
 #' @param force set this to true to overide size limits on hclust
 #'
+#' @export
 mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 {
 	tgs_coclust_hc_type = get_param("scm_coclust_hc_type")
@@ -45,6 +46,9 @@ mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 #' @param max_mc_size maximum mc size (bigger clusters will be dissected)
 #' @param max_clust_size maximum clust size. Bigger chunks will be clustered
 #'
+#' @export
+#'
+
 mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id, 
 		max_clust_size, max_mc_size, min_mc_size, T_weight = 1)
 {
@@ -202,6 +206,7 @@ gen_sub_coclust = function(coc, subc)
 #' @param min_mc_size minimum mc size for graph cov
 #' @param alpha the threshold for filtering edges by their coclust weight is alpha * (Kth highest coclust on either node1 or node2)
 #'
+#' @export
 mcell_mc_from_coclust_balanced = function(mc_id, coc_id, 
 												mat_id, K, min_mc_size, alpha=2)
 {

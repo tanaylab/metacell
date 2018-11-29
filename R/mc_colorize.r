@@ -159,3 +159,31 @@ mc_colorize_sup_hierarchy = function(mc_id, supmc, supmc_key, gene_key=NULL)
 }
 
 
+#' colorize metacell by projecting colors from another metacell on a similar (not identical) set of cells
+#'
+#' @param mc_id metacell id in scdb
+#' @param mc_src_id the metacell to use as a refernece
+#' @param min_color_frac minimal fraction of cells with a given color in order to perform color projection. 
+#'
+#' @export
+mc_colorize_from_ref_mc = function(mc_id, mc_src_id, min_color_frac = 0.5)
+{
+	mc = scdb_mc(mc_id)
+	if(is.null(mc)) {
+		stop("MC-ERR metacell object is not avaialble in scdb, id = ", mc_id)
+	}
+	mc_ref = scdb_mc(mc_src_id)
+	if(is.null(mc)) {
+		stop("MC-ERR metacell reference object is not avaialble in scdb, id = ", mc_src_id)
+	}
+	c_nms = intersect(names(mc@mc), names(mc_ref@mc))
+	match_col = table(mc@mc[c_nms], mc_ref@colors[mc_ref@mc[c_nms]])
+	match_col = match_col/rowSums(match_col)
+	min_f = min_color_frac
+	match_col[match_col < min_f] = 0
+	proj_col = c("white", colnames(match_col))[apply(cbind(rep(min_f, nrow(match_col)), match_col), 1, which.max)]
+
+	mc@colors = proj_col
+	mc@color_key = mc_ref@color_key
+	scdb_add_mc(mc_id, mc)
+}	

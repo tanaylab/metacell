@@ -108,7 +108,7 @@ mcell_mc2d_T_edge: 0.05
 mcell_mc2d_max_confu_deg: 5
 mcell_mc2d_max_fpcor_indeg: NULL
 mcell_mc2d_max_fpcor_outdeg: NULL
-mcell_mc2d_edge_asym: TRUE
+mcell_mc2d_edge_asym: FALSE
 mcell_mc2d_k_expand_inout_factor: NULL
 mcell_mc2d_proj_blur: 0.02
 mcell_mc2d_K_cellproj: 20

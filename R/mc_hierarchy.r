@@ -91,7 +91,7 @@ mcell_mc_hierarchy = function(mc_id, mc_hc, T_gap)
 			parent[right] = i
 			gaps[right] = mc_hc$height[i] - mc_hc$height[right]
 		}
-		message("in node ", i, " l ", left, " r ", right)
+#		message("in node ", i, " l ", left, " r ", right)
 		mcs[[i]] = c(unlist(mc_right), unlist(mc_left))
 		cells[i] = cell_right + cell_left
 	}
@@ -107,7 +107,7 @@ mcell_mc_hierarchy = function(mc_id, mc_hc, T_gap)
 			j = parent[j]	
 		}
 		if(j != -1) { 
-			message("node ", i, " sup ", j)
+#			message("node ", i, " sup ", j)
 #& covered[j] == 0
 			N = cells[j]
 			n = cells[i]
@@ -123,7 +123,6 @@ mcell_mc_hierarchy = function(mc_id, mc_hc, T_gap)
 			} else {
 				if(length(mcs_out) == 0) {
 					message("zero length mcs out??")
-					browser()
 					stop("boom")
 				}
 				lfp_max_out= lfp[,mcs_out]

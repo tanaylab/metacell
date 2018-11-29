@@ -8,6 +8,7 @@
 #' 
 #' @export
 #'
+#' @export
 
 mcell_coclust_from_graph_resamp = function(coc_id, 
 		graph_id, 
@@ -24,7 +25,7 @@ mcell_coclust_from_graph_resamp = function(coc_id,
 	edges = graph@edges
 	colnames(edges) = c("col1", "col2", "weight")
 
-if(1) {
+if(0) {
 orig_levels = levels(edges$col1)
 edges$col1 <- as.character(edges$col1)
 edges$col2 <- as.character(edges$col2)
@@ -35,10 +36,13 @@ edges$col2<-factor(as.character(edges$col2), levels=reduced_levels)
 
 	K = round(nrow(edges)/length(graph@cell_names))
 
-	resamp = tgs_graph_cover_resample(edges, knn = K, min_mc_size, cooling = tgs_clust_cool, burn_in = tgs_clust_burn, p_resamp = p_resamp, n_resamp = n_resamp)
+	resamp = tgs_graph_cover_resample(edges, knn = K, min_mc_size, cooling = tgs_clust_cool, burn_in = tgs_clust_burn, p_resamp = p_resamp, n_resamp = n_resamp, method="full")
 
+#TEMP - fixing a bug with trailing 0 factor values
+	resamp$co_cluster = resamp$co_cluster[
+						as.numeric(resamp$co_cluster$node1)>0,]
 	message("done resampling")
-if(1) {
+if(0) {
 resamp$co_cluster$node1 = factor(as.character(resamp$co_cluster$node1), 
 															levels=orig_levels)
 resamp$co_cluster$node2 = factor(as.character(resamp$co_cluster$node2), 

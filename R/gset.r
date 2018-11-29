@@ -160,7 +160,7 @@ gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, add_non_dsamp=F)
 
 	if(downsamp) {
 		downsample_n = scm_which_downsamp_n(mat)
-		message("will downsample the matrix, N= ", downsample_n, " (and yes - this should have been chached")
+		message("will downsample the matrix, N= ", downsample_n)
 		umis = scm_downsamp(mat@mat, downsample_n)
 		if(add_non_dsamp) {
 			csz = colSums(mat@mat)

@@ -155,7 +155,6 @@ mcell_read_multi_scmat_10x = function(datasets_table_fn, base_dir)
 #'
 #' @export
 #'
-#' @importFrom data.table fread
 #'
 scmat_read_scmat_10x = function(matrix_fn,
 		genes_fn,
@@ -256,7 +255,6 @@ scmat_read_scmat_10x = function(matrix_fn,
 #'
 #' @export
 #'
-#' @importFrom data.table fread
 #'
 scmat_read_scmat_10x_custom = function(matrix_fn,
 		#use_batches = get_param("scm_10x_batches"),

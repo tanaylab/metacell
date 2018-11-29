@@ -26,8 +26,12 @@ mcell_mc_confusion_mat = function(mc_id, graph_id, K, ignore_mismatch = F)
 	T_w = 1-(K+1)/deg
 	edges = graph@edges
 	f = edges$w > T_w
-#factor of edges$mc1 and factor of mc may be different
-	mc_map = mc@mc[as.character(levels(edges$mc1))] 
+#factor of edgesfactor(as.character(resamp$co_cluster$node1),
+
+#	mc_map = mc@mc[as.character(levels(edges$mc1))] 
+#	mc_map = factor(as.character(lresamp$co_cluster$node1 = factor(as.character(resamp$co_cluster$node1), levels=orig_levels)
+	mc_map = rep(NA, length(levels(edges$mc1)))
+	mc_map[factor(names(mc@mc),levels(edges$mc1))] = mc@mc
 	mc1 = mc_map[edges$mc1[f]]
 	mc2 = mc_map[edges$mc2[f]]
 	N = max(mc1, mc2, na.rm=T)

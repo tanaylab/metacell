@@ -1,0 +1,80 @@
+url: http://tanaylab.bitbucket.io/metacell-r
+
+template:
+  params:
+    bootswatch: cosmo
+    docsearch:
+      api_key: ca4e16717bb635cc1f804f6a25717f9b
+      index_name: metacell
+
+authors: 
+  Amos Tanay:
+    href: http://compgenomics.weizmann.ac.il/tanay/
+
+home:
+  links:
+  - text: Browse source code
+    href:  https://bitbucket.org/tanaylab/metacell
+
+navbar:  
+  structure:
+    left:
+    - home    
+    - reference        
+    - usage
+    right: bitbucket            
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    usage:
+      text: Usage
+      href: articles/basic_pbmc8k.html
+    articles:
+      text: Vignettes
+      menu:
+      - text: 'PBMC - 8k'
+        href: articles/basic_pbmc8k.html
+    bitbucket:
+      - icon: fa-bitbucket
+        href: https://bitbucket.org/tanaylab/metacell
+
+reference:
+  - title: metacell pipeline functions
+    desc: ~
+    contents:  
+    - starts_with('mcell_')
+  - title: scdb functions
+    desc: ~
+    contents:  
+    - starts_with('scdb_')
+  - title: scm functions
+    desc: ~
+    contents:  
+    - starts_with('scm_')
+    - starts_with('scmat_')
+  - title: metacell functions
+    desc: ~
+    contents:  
+    - starts_with('mc_')
+  - title: gene set functions
+    desc: ~
+    contents:  
+    - starts_with('gset_')
+  - title: classes
+    desc: ~
+    contents:  
+    - contains('class')
+    - contains('initialize')
+  - title: utils
+    desc: ~
+    contents:  
+    - '`plot_color_bar`'
+    - '`port_cor`'   
+    - '`allrow_cor`'     
+    - '`rescale_sparse_mat_cols`'     
+    - '`tgs_cor_graph`'     
+    - starts_with('scfigs')

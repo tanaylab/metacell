@@ -160,17 +160,22 @@ mc_compute_fp = function(mc, us, norm_by_mc_size=T, min_total_umi=10)
 {
 	f_g_cov = rowSums(us) > min_total_umi
 
-	mc_cores = get_param("mc_cores")
-	doMC::registerDoMC(mc_cores)
-	all_gs = rownames(us[f_g_cov,])
-	n_g = length(all_gs)
-	g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
-	fnc = function(gs) { 
-					.row_stats_by_factor(us[gs,],
-									mc@mc,
-									function(y) {exp(rowMeans(log(1+y)))-1}) }
-
-	clust_geomean = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
+	if(0) {
+		mc_cores = get_param("mc_cores")
+		doMC::registerDoMC(mc_cores)
+		all_gs = rownames(us[f_g_cov,])
+		n_g = length(all_gs)
+		g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
+		fnc = function(gs) { 
+						.row_stats_by_factor(us[gs,],
+										mc@mc,
+										function(y) {exp(rowMeans(log(1+y)))-1}) }
+	
+		clust_geomean = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
+	}
+	clust_geomean = t(tgs_matrix_tapply(us[f_g_cov,], mc@mc, 
+									  function(y) {exp(mean(log(1+y)))-1}))
+	rownames(clust_geomean) = rownames(us)[f_g_cov]
 
 #	clust_geomean = .row_stats_by_factor(us[f_g_cov,],
 #									mc@mc,
@@ -206,23 +211,13 @@ mc_compute_e_gc= function(mc, us, norm_by_mc_meansize=T)
 {
 	f_g_cov = rowSums(us) > 10
 
-	mc_cores = get_param("mc_cores")
-	doMC::registerDoMC(mc_cores)
-	all_gs = rownames(us[f_g_cov,])
-	n_g = length(all_gs)
-	g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
-	fnc = function(gs) { 
-					.row_stats_by_factor(us[gs,],
-									mc@mc,
-									function(y) {exp(rowMeans(log(1+y)))-1}) }
-
-	e_gc = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
+	e_gc = t(tgs_matrix_tapply(us[f_g_cov,], mc@mc, function(y) {exp(mean(log(1+y)))-1}))
+	rownames(e_gc) = rownames(us)[f_g_cov]
 	
 	if (norm_by_mc_meansize) {
 		mc_meansize = tapply(colSums(us), mc@mc, mean)
 		e_gc = t(t(e_gc)/as.vector(mc_meansize))
 	}
-	
 	return(e_gc)
 }
 
@@ -235,15 +230,8 @@ mc_compute_e_gc= function(mc, us, norm_by_mc_meansize=T)
 mc_compute_cov_gc= function(mc, us)
 {
 	f_g_cov = rowSums(us) > 10
-	mc_cores = get_param("mc_cores")
-	doMC::registerDoMC(mc_cores)
-	all_gs = rownames(us[f_g_cov,])
-	n_g = length(all_gs)
-	g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
-	fnc = function(gs) { 
-			.row_stats_by_factor(us[gs,] > 0, mc@mc, rowFunction = rowMeans) }
-
-	cov_gc = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
+	cov_gc = t(tgs_matrix_tapply(us[f_g_cov,], mc@mc, function(x) mean(x>0)))
+	rownames(cov_gc) = rownames(us)[f_g_cov]
 	return(cov_gc)
 }
 

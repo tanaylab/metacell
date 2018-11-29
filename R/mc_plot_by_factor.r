@@ -14,12 +14,12 @@
 #' 
 #' @export
 #'
-mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, filter_values=NULL, hclust_values=T, custom_made_fields=NULL)
+mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, ord_mcs=NULL, filter_values=NULL, hclust_values=T, custom_made_fields=NULL)
 {
 	mcp_heatmap_width = get_param("mcp_heatmap_width")
-  mcp_heatmap_shades = get_param("mcp_heatmap_seq_shades")
-  mcp_metadata_annot_colors = get_param("mcp_metadata_annot_colors")
-  mcp_heatmap_text_cex = get_param("mcp_heatmap_text_cex")
+	mcp_heatmap_shades = get_param("mcp_heatmap_seq_shades")
+   mcp_metadata_annot_colors = get_param("mcp_metadata_annot_colors")
+   mcp_heatmap_text_cex = get_param("mcp_heatmap_text_cex")
 
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -71,11 +71,12 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	par(mar=c(1,1,1,10))
 
 	chc = hclust(dist(t(mc_t_n)), method="ward.D2")
-	rhc = hclust(dist(mc_t_n), method="ward.D2")
-	if (hclust_mcs) {
+	if(!is.null(ord_mcs)) {
+		rord = ord_mcs
+	} else if(hclust_mcs) {
+		rhc = hclust(dist(mc_t_n), method="ward.D2")
 		rord = rhc$order
-	}
-	else {
+	} else {
 		rord = 1:nrow(mc_t_n)
 	}
 	

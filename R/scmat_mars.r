@@ -10,6 +10,7 @@
 mcell_import_multi_mars = function(mat_nm,
 							dataset_table_fn,
 							base_dir,
+							patch_cell_name=F,
 							force=FALSE)
 {
 	if(!scdb_is_valid()) {
@@ -19,7 +20,7 @@ mcell_import_multi_mars = function(mat_nm,
 		return(TRUE)
 	}
 	scdb_add_mat(mat_nm,
-			 mcell_read_multi_scmat_mars(dataset_table_fn, base_dir))
+			 mcell_read_multi_scmat_mars(dataset_table_fn, base_dir, patch_cell_name=patch_cell_name))
 	return(TRUE)
 }
 
@@ -30,7 +31,7 @@ mcell_import_multi_mars = function(mat_nm,
 #'
 #' @export
 
-mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
+mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir, patch_cell_name=F)
 {
 	if(!file.exists(datasets_table_fn)) {
 		stop("MC-ERR: MARS multi_batch index file is missing, fn = ", datasets_table_fn)
@@ -49,7 +50,11 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 		message("will read ", amp_batch)
 
 		umis = fread_rownames(sprintf("%s/%s.txt", base_dir, amp_batch), sep="\t", row.var=NULL)
-		
+		if(patch_cell_name) {
+			cn = paste(amp_batch, colnames(umis), sep=".")
+			colnames(umis) = cn
+		}
+
 		md = as.data.frame(matrix(c('MARS', unlist(dsets[i,])), nrow=ncol(umis), ncol=ncol(dsets)+1, byrow=T, dimnames=list(colnames(umis), c('type', colnames(dsets)))))
 		md = rename(md, batch_set_id=Batch.Set.ID, amp_batch_id=Amp.Batch.ID, seq_batch_id=Seq.Batch.ID)
 
@@ -64,7 +69,6 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir)
 		}
 
 		amat = tgScMat(as.matrix(umis), stat_type = "umi", cell_metadata = md)
-
 		if(is.null(mat)) {
 			mat = amat
 		} else {

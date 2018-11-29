@@ -5,7 +5,8 @@
 \title{Plot mc+cells using pre-defined mc colorization, breakdown by given metadata field (e.g. patient)}
 \usage{
 mcell_mc2d_plot_by_factor(mc2d_id, mat_id, meta_field, single_plot = T,
-  filter_values = NULL, filter_name = NULL, ncols = NULL)
+  filter_values = NULL, filter_name = NULL, ncols = NULL,
+  neto_points = F)
 }
 \arguments{
 \item{mc2d_id}{mc2d object to use for plot}
@@ -21,6 +22,8 @@ mcell_mc2d_plot_by_factor(mc2d_id, mat_id, meta_field, single_plot = T,
 \item{filter_name}{name to add to plots (NULL)}
 
 \item{ncols}{number of panels in column (if single_plot is true), automatically calculate if NULL}
+
+\item{neto_points}{plot without a box and a title (relevant if single_plot=F)}
 }
 \description{
 Plot mc+cells using pre-defined mc colorization, breakdown by given metadata field (e.g. patient)

@@ -9,9 +9,12 @@
 #' @param norm_by_factor Normalize cell counts by factor (default) or by metacell
 #' @param hclust_mcs If true, re-order metacells by clustering the heatmap. Otherwise, use original metacells ordering (default)
 #' @param filter_values vector of meta_field values to display
+#' @param hclust_values Hierarchical cluster of value in value-mc matrix
+#' @param custom_made_fields project specific metadata fields, that the code handles specifically.
+#' 
+#' @export
 #'
-
-mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, filter_values=NULL, hclust_values=T)
+mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL, meta_field_annotate_by=NULL, meta_field_min_count=0, norm_by_factor=T, hclust_mcs=F, filter_values=NULL, hclust_values=T, custom_made_fields=NULL)
 {
 	mcp_heatmap_width = get_param("mcp_heatmap_width")
   mcp_heatmap_shades = get_param("mcp_heatmap_seq_shades")
@@ -62,7 +65,7 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	
 	.plot_start(fig_fn, w=mcp_heatmap_width,h=100 + ncol(mc_t) * 15)
 
-	n_ann = 1 + ifelse(is.null(meta_field_annotate_by), 0, length(meta_field_annotate_by))
+	n_ann = 1 + ifelse(is.null(meta_field_annotate_by), 0, length(meta_field_annotate_by)) + length(custom_made_fields)
   layout(matrix(c(rep(n_ann+3, n_ann), n_ann+1, 1:n_ann, n_ann+2), nrow=2, byrow=T), heights = c(2, ncol(mc_t)), widths = c(rep(1, n_ann), n_ann * 16))
 
 	par(mar=c(1,1,1,10))
@@ -89,12 +92,12 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 		if (length(missing_fields) > 0) {
 			stop(sprintf("Columns %s not found in metadata of mat_id %s", paste0(missing_fields, collapse=", "), mat_id))
 		}
-	  uniq_md = unique(scmat@cell_metadata[names(mc@mc), c(meta_field, meta_field_annotate_by)])
+	  uniq_md = unique(scmat@cell_metadata[names(mc@mc), c(meta_field, meta_field_annotate_by, custom_made_fields)])
 	  if (nrow(uniq_md) != length(unique(uniq_md[, meta_field]))) {
 	    stop(sprintf("annotation fields (%s) are not unique for metadata field %s", paste0(meta_field_annotate_by, collapse=", "), meta_field))
 	  }
 	  rownames(uniq_md) = uniq_md[, meta_field]
-	  mf_ann = cbind(mf_ann, uniq_md[rownames(mf_ann), meta_field_annotate_by])
+	  mf_ann = cbind(mf_ann, uniq_md[rownames(mf_ann), c(meta_field_annotate_by, custom_made_fields)])
 	  mf_ann[is.na(mf_ann)] = "N/A"
 	  mf_ann[mf_ann == ""] = "N/A"
 
@@ -109,6 +112,12 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	  mtext(annot, 1, line=0.5, cex = mcp_heatmap_text_cex, las=2)
 	}
 
+	if ("Patient CD3+ % from CD45+" %in% custom_made_fields) {
+		f_nm = "Patient CD3+ % from CD45+"
+		image(t(as.numeric(mf_ann[, f_nm])), zlim=c(0, 100), col=colorRampPalette(RColorBrewer::brewer.pal(n=9, 'OrRd'))(101), xaxt='n', yaxt='n', xlab="", ylab="")
+		mtext("% CD3", 1, line=0.5, cex = mcp_heatmap_text_cex, las=2)	
+	}
+	
 	n_cells_zlim = c(0, 100 * ceiling(max(mf_ann$n_cells)/100))
 	par(mar=c(10,0.5,0.5,0.5))
 	image(t(mf_ann$n_cells), zlim=n_cells_zlim, col=colorRampPalette(RColorBrewer::brewer.pal(n=9, 'Blues'))(101), xaxt='n', yaxt='n', xlab="", ylab="")
@@ -134,13 +143,19 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 
 	plot_color_bar(vals=seq(n_cells_zlim[1], n_cells_zlim[2], length=101), cols=colorRampPalette(RColorBrewer::brewer.pal(n=9, 'Blues'))(101), title="# cells", show_vals_ind=c(1, 101), fig_fn=gsub(".png", "_color_bar_n_cells.png", fig_fn))
 
+	if ("Patient CD3+ % from CD45+" %in% custom_made_fields) {
+		plot_color_bar(vals=seq(0, 100, length=101), cols=colorRampPalette(RColorBrewer::brewer.pal(n=9, 'OrRd'))(101), title="% CD3", show_vals_ind=c(1, 101), fig_fn=gsub(".png", "_color_bar_frac_CD3.png", fig_fn))
+		
+	}
+	plot_color_bar(vals=seq(n_cells_zlim[1], n_cells_zlim[2], length=101), cols=colorRampPalette(RColorBrewer::brewer.pal(n=9, 'Blues'))(101), title="# cells", show_vals_ind=c(1, 101), fig_fn=gsub(".png", "_color_bar_n_cells.png", fig_fn))
+	
 	for (annot in meta_field_annotate_by) {
 		if (is.null(mcp_metadata_annot_colors[[annot]])) {
 			stop(sprintf("Missing value-color mapping entry for %s in parameter mcp_metadata_annot_colors", annot))
 		}
 	  annot_vals = rev(unlist(mcp_metadata_annot_colors[[annot]]))
 	  annot_vals = annot_vals[ names(annot_vals) %in% mf_ann[, annot] ]
-	  plot_color_bar(vals=names(annot_vals), cols=annot_vals, title=annot, fig_fn=gsub(".png", paste0("_color_bar_", annot, ".png"), fig_fn))
+	  plot_color_bar(vals=names(annot_vals), cols=annot_vals, title=annot, fig_fn=gsub(".png", paste0("_color_bar_", gsub(" ", "_", gsub("[%+]", "", annot)), ".png"), fig_fn))
 	}
 	
 }

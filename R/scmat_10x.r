@@ -2,7 +2,7 @@
 #' Load a matrix from a 10x multi-batch dataset. The scdb version of mcell_read_multi_scmat_10x
 #'
 #' @param mat_nm - the name of the new matrix in scdb
-#' @param dataset_table_fn - path of the key table.
+#' @param dataset_table_fn - The index file of the 10x multi batch dataset. Fileds include: Batch.Set.ID, mat_fn, genes_fn, cells_fn. The first field must be specifieid for each row. The others may be NA, in which case the import process will search for base_dir/Batch.Set.ID/matrix.mtx, genes.tsv, barcodes.tsv.
 #' @param base_dir - directory where raw 10x files are located (dataset table points to subdirectories of this)
 #' @param force - if true, will import from 10x files even when the matrix is present in the DB
 #'

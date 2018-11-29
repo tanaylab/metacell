@@ -4,7 +4,8 @@
 \alias{mcell_mc_split_by_color_group}
 \title{Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>}
 \usage{
-mcell_mc_split_by_color_group(mc_id, mat_id, min_cells_per_sub_mc = 500)
+mcell_mc_split_by_color_group(mc_id, mat_id, min_cells_per_sub_mc = 500,
+  col2grp = NULL)
 }
 \arguments{
 \item{mc_id}{input mc object}
@@ -12,6 +13,8 @@ mcell_mc_split_by_color_group(mc_id, mat_id, min_cells_per_sub_mc = 500)
 \item{mat_id}{mat object corresponsing to mc_id}
 
 \item{min_cells_per_sub_mc}{minimum number of cells per group required to create a new metacell}
+
+\item{col2grp}{mapping of mc colors to groups, by default, use the color_key slot}
 }
 \description{
 Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>

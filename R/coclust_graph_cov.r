@@ -5,6 +5,8 @@
 #' @param mat_id a matrix object id
 #' @param min_mc_size target minimum metacell size. This is only an approximation and smaller MC may be returned by the algorithm
 #' @param resamp_n number of resampling iterations
+#' 
+#' @export
 #'
 
 mcell_coclust_from_graph_resamp = function(coc_id, 

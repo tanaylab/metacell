@@ -102,10 +102,14 @@ scm_downsamp = function(umis, n)
 # fread_rownames <- function(..., row.var='rowname', set_rownames = F) {
 # 	params <- list(...)
 # 	header <- strsplit(readLines(params[[1]], n=1, warn=FALSE), '\t', fixed=TRUE)[[1]]
-#
-# 	params$header = F; params$skip = 1; params$col.names = c(row.var, header)
-#
+# 
+# 	params$header = F
+# 	params$skip = 1
+# 	params$col.names = c(row.var, header)
+# 	params$data.table = F
+# 	
 # 	mat = do.call(fread,params)
+# 	
 # 	if (set_rownames) {
 # 		rownames(mat) = mat[,1]
 # 		mat = mat[,-1]

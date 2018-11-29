@@ -4,12 +4,14 @@
 \alias{mc_compute_e_gc}
 \title{Compute metacell absolute mean umi per cell}
 \usage{
-mc_compute_e_gc(mc, us)
+mc_compute_e_gc(mc, us, norm_by_mc_meansize = T)
 }
 \arguments{
 \item{mc}{a metacell object}
 
 \item{us}{umi matrix}
+
+\item{norm_by_mc_meansize}{normalize metacells by mean total cell umis}
 }
 \description{
 This compute the genometric mean of the number of umis per cells for each metacell

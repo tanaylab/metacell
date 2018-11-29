@@ -5,7 +5,7 @@
 \title{plot a marker heat map give a metacell object}
 \usage{
 mcell_mc_plot_marks(mc_id, gset_id, mat_id = mc_id, fig_fn = NULL,
-  lateral_gset_id = NULL, plot_cells = T)
+  lateral_gset_id = NULL, plot_cells = T, mc_ord = NULL)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}

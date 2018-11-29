@@ -7,6 +7,8 @@
 #' @param metadata_fields  metadata field names to be used as factors and breakdown over mcs
 #'
 #' @return Nothing. But save a table in the figure directory that can be loaded to excel
+#' 
+#' @export
 #'
 mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 											T_gene_tot = 50,
@@ -30,8 +32,8 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 	
 	# add #cells per clust, mean #umis (~ cell size) and assigned group (if exist)
 	if (nrow(mc@color_key) > 0) {
-		col2group = mc@color_key$group
-		names(col2group) = mc@color_key$color
+		col2group = as.character(mc@color_key$group)
+		names(col2group) = as.character(mc@color_key$color)
 		
 		groups = col2group[mc@colors]
 	}	

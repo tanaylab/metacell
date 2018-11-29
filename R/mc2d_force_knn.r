@@ -8,6 +8,10 @@
 #' @export
 mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F)
 {
+	mc = scdb_mc(mc_id)
+	if (is.null(mc)) {
+		stop(sprintf("mc %s not found"), mc_id)
+	}
 	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch)
 	mc_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
 	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, mc_xy)

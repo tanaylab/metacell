@@ -4,12 +4,16 @@
 \alias{mc_compute_fp}
 \title{Compute metacell gene footprint}
 \usage{
-mc_compute_fp(mc, us)
+mc_compute_fp(mc, us, norm_by_mc_size = T, min_total_umi = 10)
 }
 \arguments{
 \item{mc}{a metacell object}
 
 \item{us}{umi matrix}
+
+\item{norm_by_mc_size}{normalize by mean total umis and then multiply by median mean mc size (or at least 1000). This means umis per 1000 molecules.}
+
+\item{min_total_umi}{consider genes with at least min_total_umi total umis}
 }
 \description{
 The footprint is defined as the size-normalized geometric mena of the number of umis per metacells, dvided by the median over all metacells.

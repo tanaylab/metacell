@@ -152,10 +152,13 @@ mc_set_outlier_mc = function(mc, mc_ids)
 #'
 #' @param mc a metacell object
 #' @param us umi matrix
+#' @param norm_by_mc_size normalize by mean total umis and then multiply by median mean mc size (or at least 1000). This means umis per 1000 molecules.
+#' @param min_total_umi consider genes with at least min_total_umi total umis 
+#'
 #' @export
-mc_compute_fp = function(mc, us, norm_by_mc_size=T)
+mc_compute_fp = function(mc, us, norm_by_mc_size=T, min_total_umi=10)
 {
-	f_g_cov = rowSums(us) > 10
+	f_g_cov = rowSums(us) > min_total_umi
 
 	mc_cores = get_param("mc_cores")
 	doMC::registerDoMC(mc_cores)
@@ -197,8 +200,9 @@ mc_compute_fp = function(mc, us, norm_by_mc_size=T)
 #'
 #' @param mc a metacell object
 #' @param us umi matrix
+#' @param norm_by_mc_meansize normalize metacells by mean total cell umis
 #' @export
-mc_compute_e_gc= function(mc, us)
+mc_compute_e_gc= function(mc, us, norm_by_mc_meansize=T)
 {
 	f_g_cov = rowSums(us) > 10
 
@@ -213,10 +217,12 @@ mc_compute_e_gc= function(mc, us)
 									function(y) {exp(rowMeans(log(1+y)))-1}) }
 
 	e_gc = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
-	mc_meansize = tapply(colSums(us), mc@mc, mean)
-
-	e_gc = t(t(e_gc)/as.vector(mc_meansize))
-
+	
+	if (norm_by_mc_meansize) {
+		mc_meansize = tapply(colSums(us), mc@mc, mean)
+		e_gc = t(t(e_gc)/as.vector(mc_meansize))
+	}
+	
 	return(e_gc)
 }
 
@@ -334,7 +340,7 @@ mc_reorder = function(mc, ord)
 #' @param gene_right gene for reordering toward the right side (null by default)
 #' @param gset_blist_id id of gene set to blacklist while ordering (e.g. cell cycle genes)
 #'
-#'
+#' @export
 
 mcell_mc_reorder_hc = function(mc_id,
 							gene_left = NULL, gene_right = NULL,
@@ -423,10 +429,11 @@ mcell_mc_match_graph = function(mc_id, graph_id)
 #' @param mc_id input mc object
 #' @param mat_id mat object corresponsing to mc_id
 #' @param min_cells_per_sub_mc minimum number of cells per group required to create a new metacell 
+#' @param col2grp mapping of mc colors to groups, by default, use the color_key slot 
 #'
 #' @export
 #'
-mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500)
+mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500, col2grp=NULL)
 {
 	mat = scdb_mat(mat_id)
 	if(is.null(mat)) {
@@ -437,10 +444,14 @@ mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500
 	if(is.null(mc)) {
 		stop("MC-ERR: missing mc_id when splitting by color group = ", mc_id)
 	}
-	col2grp =  unique(mc@color_key[, c('group', 'color')])
-	rownames(col2grp) = col2grp$color
 	
-	cg = split(names(mc@mc), col2grp[mc@colors[mc@mc], 'group'])
+	if (is.null(col2grp)) {
+		ucolkey =  unique(mc@color_key[, c('group', 'color')])
+		col2grp = ucolkey$group
+		names(col2grp) = ucolkey$color
+	}
+	
+	cg = split(names(mc@mc), col2grp[mc@colors[mc@mc]])
 	for (gr in names(cg)) {
 		nms = cg[[gr]]
 		if (length(nms) >= min_cells_per_sub_mc) {
@@ -454,6 +465,7 @@ mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500
 			new_id = paste(mc_id, "submc", gr, sep="_")
 			
 			mcell_mat_ignore_cells(new_id, mat_id, nms, reverse=T)
+			mcell_add_gene_stat(new_id, new_id)
 			
 			mcell_new_mc(mc_id = new_id, 
 									 mc = dst_mc, 

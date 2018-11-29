@@ -14,6 +14,7 @@ mc_cores: 16
 # figs output parameters
 mc_plot_device: png
 mc_plot_ppi: 72
+mc_plot_pointsize: 12
 
 #########################################
 # scdb: loading and saving scrdb objects
@@ -32,6 +33,9 @@ scm_mars_wells2cells_fn: null
 scm_mars_wells2cells_batch_field: Amp_batch_ID
 scm_mars_wells2cells_cell_field: Well_ID
 scm_mars_wells2cells_well_field: well_coordinates
+
+# number of UMIs to downsamp when computing gstat. Takes qunatile on cells if null (default)
+scm_n_downsamp_gstat: null
 
 #the "zero expansion parameter" that we used to transform  umi as log(1+ku)
 scm_k_nonz_exp: 7
@@ -77,24 +81,21 @@ mcp_heatmap_fp_shades: &diverge_colspec
 - "#B2182B"
 - "#67001F"
 
-# white, RColorBrewer::brewer.pal(n=9, 'YlOrRd'), black
+# white, white, RColorBrewer::brewer.pal(n=4, 'YlOrRd'), purple, black
 mcp_heatmap_seq_shades:
 - "white"
-- "#FFFFCC"
-- "#FFEDA0"
-- "#FED976"
-- "#FEB24C"
+- "#FFFFB2"
+- "#FECC5C"
 - "#FD8D3C"
-- "#FC4E2A"
 - "#E31A1C"
-- "#BD0026"
-- "#800026"
+- "purple"
 - "black"
 
 mcp_heatmap_text_cex: 1
 mcp_heatmap_alt_side_text: FALSE
 mcp_heatmap_latgene_color: red
 mcp_heatmap_lwd: 0
+mcp_ord_cells_by_color_first: false
 
 mcp_metadata_annot_colors: null
 

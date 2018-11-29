@@ -7,7 +7,7 @@
 mcell_mc_plot_by_factor(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL,
   meta_field_annotate_by = NULL, meta_field_min_count = 0,
   norm_by_factor = T, hclust_mcs = F, filter_values = NULL,
-  hclust_values = T)
+  hclust_values = T, custom_made_fields = NULL)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}
@@ -27,6 +27,10 @@ mcell_mc_plot_by_factor(mc_id, meta_field, mat_id = mc_id, fig_fn = NULL,
 \item{hclust_mcs}{If true, re-order metacells by clustering the heatmap. Otherwise, use original metacells ordering (default)}
 
 \item{filter_values}{vector of meta_field values to display}
+
+\item{hclust_values}{Hierarchical cluster of value in value-mc matrix}
+
+\item{custom_made_fields}{project specific metadata fields, that the code handles specifically.}
 }
 \description{
 plot a heatmap of number of cells per metacell and metadata factor (e.g. patient, condition, sample etc.)

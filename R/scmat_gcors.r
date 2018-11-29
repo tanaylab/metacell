@@ -30,6 +30,7 @@ mcell_mat_rpt_cor_anchors = function(mat_id, gene_anchors, gene_anti = c(), cor_
 	
 	mat_ds = scm_downsamp(umis, downsample_n)
 	mat_ds = mat_ds[rowSums(mat_ds)>10,]
+
 	csize = colSums(mat@mat[,colnames(mat_ds)])
 	gcors = data.frame(sz_cor = apply(mat_ds, 1, cor, csize))
 	for(g in gene_anchors) {

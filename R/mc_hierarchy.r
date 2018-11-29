@@ -159,13 +159,16 @@ mcell_mc_hierarchy = function(mc_id, mc_hc, T_gap)
 #' @param mc_order the mc ordering (e.g., hc$order using the output of mcell_mc_hclust_confu)
 #' @param sup_mcs the list you get from mcell_mc_hierarchy (for now)
 #' @param width width of figure in pixels
-#' @param heigh heigh of figure in pixels
-#' @param fig_fn  figure name (NULL will create a figure named XX_supmc_confu in the figure directory)
+#' @param height height of figure in pixels
+#' @param fig_fn figure name (NULL will create a figure named [mc_id]_supmc_confu in the figure directory)
 #' @param min_nmc minimal number of mc in supmc set, smaller gruops will not be plotted
+#' @param shades heatmap color palette 
+#' @param plot_grid plot vertical grid in the heatmap
+#' @param show_mc_ids plot mc ids below the heatmap
 #'
 #' @export
 
-mcell_mc_plot_hierarchy = function(mc_id, graph_id, mc_order, sup_mcs, width, height, fig_fn=NULL, min_nmc=2)
+mcell_mc_plot_hierarchy = function(mc_id, graph_id, mc_order, sup_mcs, width, height, fig_fn=NULL, min_nmc=2, shades = colorRampPalette(c("white", "pink", "red", "black", "brown", "orange")), plot_grid=T, show_mc_ids=F)
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -226,7 +229,7 @@ mcell_mc_plot_hierarchy = function(mc_id, graph_id, mc_order, sup_mcs, width, he
 	marks = marks[f_sup]
 	gap_marks = gap_marks[f_sup]
 
-	png(fig_fn, w=width, h=height)
+	.plot_start(fig_fn, w=width, h=height)
 
 	layout(matrix(c(1,2,3), ncol=1), heights=c(10,10,0.5))
 
@@ -234,18 +237,24 @@ mcell_mc_plot_hierarchy = function(mc_id, graph_id, mc_order, sup_mcs, width, he
 	image(fps[mc_order, f_sup], col=c("white", "lightgray", "blue"), xaxt='n', yaxt='n')
 	mtext(marks, side = 2, at=seq(0,1,length.out=length(marks)), las=2, cex=1)
 	mtext(gap_marks, side = 4, at=seq(0,1,len=length(marks)), las=2, cex=1)
-	abline(v=(-0.5+grids)/(n_mc-1), lwd=0.5)
+	if (plot_grid) {
+		abline(v=(-0.5+grids)/(n_mc-1), lwd=0.5)
+	}
 
-	shades = colorRampPalette(c("white", "pink", "red", "black", "brown", "orange"))
 	par(mar=c(0,30,0,40))
 	confu_nodiag = confu_n
 	diag(confu_nodiag) = 0
 	confu_n = pmin(confu_n, max(confu_nodiag))
 	confu_n = pmin(confu_n, quantile(confu_n, 1-3/nrow(confu_n)))
 	image(confu_n,col=shades(1000),xaxt='n', yaxt='n')
-	abline(v=(-0.5+grids)/(n_mc-1), lwd=0.5)
-
+	if (plot_grid) {
+		abline(v=(-0.5+grids)/(n_mc-1), lwd=0.5)
+	}
+	par(mar=c(5,30,0,40))
 	image(as.matrix(1:n_mc,nrow=1), col=colors, yaxt='n', xaxt='n')
 
+	if (show_mc_ids) {
+		mtext(colnames(confu_n), side=1, at=seq(0, 1, len=ncol(confu_n)), las=2, line=1, cex=0.7)
+	}
 	dev.off()
 }

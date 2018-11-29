@@ -10,7 +10,7 @@ mcell_import_multi_scmat_10x(mat_nm, dataset_table_fn, base_dir,
 \arguments{
 \item{mat_nm}{- the name of the new matrix in scdb}
 
-\item{dataset_table_fn}{- path of the key table.}
+\item{dataset_table_fn}{- The index file of the 10x multi batch dataset. Fileds include: Batch.Set.ID, mat_fn, genes_fn, cells_fn. The first field must be specifieid for each row. The others may be NA, in which case the import process will search for base_dir/Batch.Set.ID/matrix.mtx, genes.tsv, barcodes.tsv.}
 
 \item{base_dir}{- directory where raw 10x files are located (dataset table points to subdirectories of this)}
 

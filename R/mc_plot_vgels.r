@@ -4,12 +4,13 @@
 #' @param gene_nm gene of interest
 #' @param reorder_preset list of mc colors to define the "lanes"
 #' @param reorder should metacell types be sorted by gene intesity?
+#' @param plot_title display gene name as plot's title
 #'
 #' @export
 
 mcell_mc_plot_vgels = function(mc_id, gene_nms,
 							reorder_preset=NULL, reorder=F, fig_fn = NULL,
-							lane_w=50, height=350)
+							lane_w=50, height=350, plot_title=F)
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -50,17 +51,18 @@ mcell_mc_plot_vgels = function(mc_id, gene_nms,
 		ybot_up = min_lfp - (max_lfp-min_lfp)/70
 		min_y = min_lfp - (max_lfp-min_lfp)/80
 
-		plot(0,0, type='n', xlim=c(0,length(col_order)), ylim=c(min_y, max_lfp), xaxt='n', ylab=NA, xlab=NA)
+		plot(0,0, type='n', xlim=c(0,length(col_order)), ylim=c(min_y, max_lfp), xaxt='n', ylab=NA, xlab=NA, main=ifelse(plot_title, gene_nm, ""))
 		step = 0
 		for(c in col_order) {
 			shades = colorRampPalette(c("white", c))(402)[201:402]
 			f_mc = mc@colors==c
-			x = rank(runif(sum(f_mc))/1000+lfp[f_mc])/sum(f_mc)
+			x = rank(runif(sum(f_mc))/1000+lfp[f_mc])/(sum(f_mc)+1)
 			points(step+x, lfp[f_mc], pch=21, bg=shades[1+floor(x*200)], cex=1.5,lwd=0.5)
 			step = step+1
 		}
 		grids = seq(0,length(col_order),l=length(col_order)+1)
 		abline(v=grids, lwd=0.5)
+		abline(h=0, lwd=0.5, lty=2)
 		rect(xleft=grids[-1]-1, ybottom=ybot, xright=grids[-1],ytop=ybot_up, col=col_order)
 #		image(as.matrix(1:length(col_order),nrow=1), col=col_order, yaxt='n', xaxt='n')
 		dev.off()	

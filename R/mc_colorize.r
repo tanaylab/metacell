@@ -130,7 +130,6 @@ mc_colorize_sup_hierarchy = function(mc_id, supmc, supmc_key, gene_key=NULL)
 		mc@colors[mcs] = key$color[i]
 	}
 	color_key = data.frame(gene=rep("",times=nrow(key)), group=as.character(key$name), color=as.character(key$color))
-	browser()
 	if(!is.null(gene_key)) {
 		if(!file.exists(gene_key)) {
 			stop("Gene color key file ", gene_key, " does not exist")

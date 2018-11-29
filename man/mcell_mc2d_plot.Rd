@@ -9,6 +9,8 @@ mcell_mc2d_plot(mc2d_id, legend_pos = "topleft", plot_edges = T)
 \arguments{
 \item{mc2d_id}{mc2d object to plot}
 
+\item{legend_pos}{position of legend}
+
 \item{plot_edges}{plot edges between metacells (true by default)}
 }
 \description{

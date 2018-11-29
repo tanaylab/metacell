@@ -7,6 +7,8 @@ The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices 
 
 Method: Baran et al. 2018 ([bioarxiv](https://www.biorxiv.org/content/early/2018/10/08/437665)).
 
+Functions reference and usage vignettes are available in the package [homepage](https://tanaylab.bitbucket.io/metacell-r/index.html).
+
 Examples of applications:
 
 -   [Giladi et al., Nat Cell Biol 2018](http://www.nature.com/articles/s41556-018-0121-4) (Mouse hematopoiesis scRNA-seq)

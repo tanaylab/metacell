@@ -253,8 +253,8 @@ mcell_mc_plot_hierarchy(mc_id="aque_mc_f",
                         graph_id="aque_graph", 
                         mc_order=mc_hc$order, 
                         sup_mc = mc_sup, 
-                        width=1400, 
-                        height=1000, 
+                        width=2800, 
+                        height=2000, 
                         min_nmc=2)
 ```
 

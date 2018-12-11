@@ -106,19 +106,19 @@ mcell_read_multi_scmat_10x = function(datasets_table_fn, base_dir)
 		if(is.na(mat_fn)) {
 			mat_fn = sprintf("%s/%s/matrix.mtx", base_dir, dnm)
 		} else {
-			mat_fn = sptrinf("%s/%s", base_dir, mat_fn)
+			mat_fn = sprintf("%s/%s", base_dir, mat_fn)
 		}
 		genes_fn = dsets$genes_fn[i]
 		if(is.na(genes_fn)) {
 			genes_fn = sprintf("%s/%s/genes.tsv", base_dir, dnm)
 		} else {
-			genes_fn = sptrinf("%s/%s", base_dir, genes_fn)
+			genes_fn = sprintf("%s/%s", base_dir, genes_fn)
 		}
 		cells_fn = dsets$cells_fn[i]
 		if(is.na(cells_fn)) {
 			cells_fn = sprintf("%s/%s/barcodes.tsv", base_dir, dnm)
 		} else {
-			cells_fn = sptrinf("%s/%s", base_dir, cells_fn)
+			cells_fn = sprintf("%s/%s", base_dir, cells_fn)
 		}
 		amat = scmat_read_scmat_10x(matrix_fn = mat_fn,
 										genes_fn = genes_fn,

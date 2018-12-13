@@ -1,0 +1,170 @@
+---
+title: "Supervised filtering of feature genes: guided tutorial on 8K PBMCs"
+author: "Yaniv Lubling"
+date: "2018-10-10"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Supervised filtering of feature genes: guided tutorial on 8K PBMCs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This note walks through the common scenario of disabling specific gene modules from affecting the partitioning of cells into metacells. In many applications we would want to mask technical effects of stress (e.g. heat shock) from affecting the partitioning, or to mask cell cycle related genes in order to get metacells that represent cell types/states and not stages at the cell cycle.
+
+We'll start with finding genes that are correlated to a few cell cycle and stress halmark genes, then generate gene correlation heatmaps that will help to further filter the genes, and lastly show how to create metacells that are not affected by these genes. 
+
+We use here the small 8K PBMC dataset that is used in the **Running metacell analysis: guided tutorial on 8K PBMCs** vignette, please make sure to run that vignette before executing this one, since we'll use several objects produced there.
+
+## Setting up
+
+We start by loading the library and initializating the database and the figures directories:
+```{r, eval=TRUE, warning=FALSE}
+library("metacell")
+
+scdb_init("testdb/", force_reinit=T)
+
+figs_dir = "figs"
+scfigs_init(figs_dir)
+```
+
+## Creating the gene correlation matrix
+
+We're going to generate a gene-gene correlation matrix using the umi matrix generated in the **Running metacell analysis: guided tutorial on 8K PBMCs** vignette. The genes will then be filtered by thresholding their correlation with the user supplied genes (termed anchor genes). In this vignette we'll build a set of cell cycle and stress related genes. So let's define these gene anchors, and some additional variables:
+```{r, eval=TRUE, warning=FALSE}
+genes_anchors = c('MKI67', 'PCNA', 'TOP2A', 'TXN', 'HSP90AB1', 'FOS')
+tab_fn = paste(figs_dir, "lateral_gmods.txt", sep="/")
+gset_nm = "lateral"
+```
+*tab_fn* is the output file name of the correlation matrix, and *gset_nm* is the id of the gene set that will be generated.
+
+Now we'll call the function that computes the gene-gene correlation matrix:
+```{r, eval=TRUE, warning=FALSE}
+mcell_mat_rpt_cor_anchors(mat_id="test", gene_anchors = genes_anchors, cor_thresh = 0.1, gene_anti = c(), tab_fn = tab_fn, sz_cor_thresh = 0.2)
+```
+The function computes the correlations of all genes in the umi matrix with the gene anchors after downsampling the umi counts. It then filters genes that their correlation to the anchor genes is above *cor_thresh*. Genes can also be filtered based on their correlation to a set of negative control genes, that can be specified in the *gene_anti* parameter. In this case, genes that their top correlated gene is a negative control and not one of the anchor genes are discarded. 
+If the *sz_cor_thresh* is not *NA*, genes with correlation to the cells total umi counts above *sz_cor_thresh* are also selected. In our case, we expect some cell cycle genes to be correlated with cell size, so we specify a positive threshold.
+
+Let's read the filtered gene correlation matrix and examine it:
+```{r, eval=TRUE, warning=FALSE}
+gcor_mat = read.table(tab_fn, header=T)
+head(gcor_mat)
+print(dim(gcor_mat))
+```
+
+The row names are genes, and the columns are the correlation to the total umi counts (*sz_cor*), the correlations to the anchor genes and their maximal one (*max*). Since we didn't specify negative anchor genes in this example the maximal correlation to the negative anchors is zero (*max_neg*).
+
+Now we'll add a gene set to the database, comprised of the genes in the filtered matrix:
+```{r, eval=TRUE, warning=FALSE}
+foc_genes = apply(gcor_mat[, genes_anchors], 1, which.max)
+
+gset = gset_new_gset(sets = foc_genes, desc = "Cell cycle and stress correlated genes")
+print(gset)
+
+scdb_add_gset(gset_nm, gset)
+```
+Note that we constructed a membership vector with genes as names and the number of the top correlated anchor gene as the value. This is optional, we could have created a gene set with all genes in the same set (e.g. 1). It is important to add the gene set to the database for the next steps. We use *gset_nm* as the gene set id.
+
+## Fine clustering and filtering of the gene set
+
+To further examine the gene set we got, we'll cluster the genes. First, we'll create a sub-matrix from the umi matrix that will contain only the genes in the gene set:
+```{r, eval=TRUE, warning=FALSE}
+sub_mat_id = paste("test", gset_nm, sep="_")
+mcell_mat_ignore_genes(new_mat_id = sub_mat_id, mat_id = "test", ig_genes = names(foc_genes), reverse = T)
+```
+
+Now we'll cluster the genes on the downsampled sub-matrix, using hierarchical clustering and cutting the tree to 20 clusters:
+```{r, eval=TRUE, warning=FALSE}
+mcell_gset_split_by_dsmat(gset_id = gset_nm, mat_id = sub_mat_id, K = 20)
+```
+The number of clusters should be proportional to the number of genes we cluster, as we want to get homogeneous clusters of coodinated genes.
+
+The cluster membership information is updated in the gene set. Let's re-load it and have a look:
+```{r, eval=TRUE, warning=FALSE}
+gset = scdb_gset(gset_nm)
+print(gset)
+```
+
+However, it is much more convenient to look at the correlation heatmaps of these clusters, so let's generate those:
+```{r, eval=TRUE, warning=FALSE}
+mcell_plot_gset_cor_mats(gset_id = gset_nm, scmat_id = sub_mat_id)
+```
+The plots are generated under a subdirectory of the figures directory named *gset_nm*.gset_cors.
+Common practice is to examine them and select the clusters that we want to keep. In our example, In this case we would probably keep clusters 3, 5, 10, 14, 16 and 17 in the gene set:
+
+```{r, echo = FALSE}
+knitr::include_graphics(paste0("figs/", gset_nm, ".gset_cors/", c(3, 5, 10, 14, 16, 17), ".png"))
+```
+
+
+The rest of the clusters contain mostly genes that are correlated to cell size but not related to the cell cycle.
+
+To create the final filtered gene set, we'll keep only the clusters we've selected in the gene set, and we'll save the filtered gene set in the database:
+```{r, eval=TRUE, warning=FALSE}
+mcell_gset_remove_clusts(gset_id = gset_nm, filt_clusts = c(3, 5, 10, 14, 16, 17), new_id = paste0(gset_nm, "_filtered"), reverse=T)
+
+lateral_gset_id = paste0(gset_nm, "_filtered")
+lateral_gset = scdb_gset(lateral_gset_id)
+print(lateral_gset)
+```
+
+## Generating metacells while blacklisting our lateral gene set
+
+This section will follow the exact same steps performed in the **Running metacell analysis: guided tutorial on 8K PBMCs** vignette in order to generate the K-nn graph, the co-clustering matrix and the metacells, with the small change of disabling the lateral genes from affecting the process.
+
+We start by removing the lateral genes from the list of feature genes: 
+```{r, eval=TRUE, warning=FALSE}
+marker_gset = scdb_gset("test_feats")	
+marker_gset = gset_new_restrict_gset(gset = marker_gset, filt_gset = lateral_gset, inverse = T, desc = "cgraph gene markers w/o lateral genes")
+scdb_add_gset("test_feats_filtered", marker_gset)
+```
+
+We'll now generate the graph using the filtered list of feature genes:
+```{r, eval=TRUE, warning=FALSE}
+mcell_add_cgraph_from_mat_bknn(mat_id="test", 
+                gset_id = "test_feats_filtered", 
+                graph_id="test_graph_filtered",
+                K=100,
+                dsamp=T)
+```
+And now simply following the steps of the **Running metacell analysis: guided tutorial on 8K PBMCs** vignette from the K-nn graph until the colored metacell object:
+```{r, eval=TRUE, warning=FALSE}
+mcell_coclust_from_graph_resamp(
+                coc_id="test_coc500_filtered", 
+                graph_id="test_graph_filtered",
+                min_mc_size=20, 
+                p_resamp=0.75, n_resamp=500)
+
+mcell_mc_from_coclust_balanced(
+                coc_id="test_coc500_filtered", 
+                mat_id= "test",
+                mc_id= "test_filtered_mc", 
+                K=30, min_mc_size=30, alpha=2)
+
+mcell_mc_split_filt(new_mc_id="test_filtered_mc_f", 
+            mc_id="test_filtered_mc", 
+            mat_id="test",
+            T_lfc=3, plot_mats=F)
+
+marks_colors = read.table(system.file("extdata", "pbmc_mc_colorize.txt", package="metacell"), sep="\t", h=T, stringsAsFactors=F)
+mc_colorize("test_filtered_mc_f", marker_colors=marks_colors)
+
+```
+
+It is convenient not to restrict the selection of genes that will be displayed in the heatmap of genes and metacells, but to mark the lateral genes that did not affect the partitioning of cells to metacells:
+```{r, eval=TRUE, warning=FALSE}
+mcell_gset_from_mc_markers(gset_id="test_filtered_markers", mc_id="test_filtered_mc_f", blacklist_gset_id=lateral_gset_id)
+mcell_gset_from_mc_markers(gset_id="test_filtered_markers_lat", mc_id="test_filtered_mc_f", filt_gset_id=lateral_gset_id)
+	
+mcell_mc_plot_marks(mc_id="test_filtered_mc_f", gset_id="test_filtered_markers", mat_id="test", lateral_gset="test_filtered_markers_lat")
+```
+![heatmap_marks](figs/test_filtered_mc_f.cells_heat_marks.png)
+The marker genes in the *test_filtered_markers* gene set do not contain any lateral gene (shown in black in the heatmap), and the *test_filtered_markers_lat* gene set contain the lateral genes that were selected as markers (shown in red).

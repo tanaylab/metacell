@@ -146,7 +146,7 @@ scm_min_cell_umis: 500
 scm_batch_meta_attr: "Batch"
 
 # gene blacklist regexps (will remove matching genes from the umi matrix)
-scm_gene_blacklist_names: !expr numeric(0)
+scm_gene_blacklist_names: null
 
 # batch QC report: field name to to stratify cells by
 scm_cells_breakdown_field: null
@@ -175,10 +175,10 @@ scm_outlier_gene_on_count: 200
 scc_marker_min_var_mean: 0.2
 
 ## max normalized size correlation
-scc_marker_sz_cor_norm_max: !expr -Inf
+scc_marker_sz_cor_norm_max: -1
 
 ## min niche score
-scc_marker_niche_T: !expr Inf
+scc_marker_niche_T: 10000
 
 ## min total gene UMIs
 scc_marker_min_tot: null
@@ -187,10 +187,10 @@ scc_marker_min_tot: null
 scc_marker_top3_T: null
 
 ## gene marker blacklist regexps
-scc_marker_blacklist_names: !expr character(0)
+scc_marker_blacklist_names: null
 
 ## gene marker blacklist genes (added to genes matching scc_marker_blacklist_names)
-scc_marker_blacklist_genes: !expr character(0)
+scc_marker_blacklist_genes: null
 
 # Defining markers for a-priori filtering of cells
 scc_marker_for_blacklist_cells: null
@@ -242,7 +242,7 @@ scc_min_self_confusion: null
 scc_min_confusion_score: 0.15
 
 # removing cluster outliers: threshold on genes and cluster (log) fold-change
-scc_clust_outliers_t_lfc: !expr log2(10)
+scc_clust_outliers_t_lfc: 3.5
 
 # removing cluster outliers: total gene umi count, thershold on which genes to consider
 scc_clust_outliers_min_gene_count: 8
@@ -254,7 +254,7 @@ scc_filter_ambient_Z_max: 2
 scc_clust_fp_fn: clust_fp.txt
 
 # cells metadata fields to summarize cells in clusters by (file per field), to be used as scc_clust_fp_fn header
-scc_clust_fp_metadata_fields: !expr numeric(0)
+scc_clust_fp_metadata_fields: null
 
 ## bootstrap parameters ##
 

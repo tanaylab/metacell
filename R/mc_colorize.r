@@ -6,10 +6,10 @@
 #' @param override if this is true, all colors are going to be set to white unless some marker match is found
 #'
 #' @export
-mc_colorize = function(new_mc_id, mc_id, marker_colors = NULL, override = T)
+mc_colorize = function(new_mc_id, mc_id = new_mc_id, marker_colors = NULL, override = T)
 {
 	sequential_coloring = get_param("mcp_colorize_by_seq_priority")
-	
+
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
 		stop("MC-ERR metacell object is not avaialble in scdb, id = ", mc_id)
@@ -43,7 +43,7 @@ mc_colorize = function(new_mc_id, mc_id, marker_colors = NULL, override = T)
 			curr_marker_colors = marker_colors[marker_colors$priority == p, ]
 			marker_fold = mc@mc_fp[curr_marker_colors$gene,]
 			marker_fold = ifelse(marker_fold > curr_marker_colors$T_fold, marker_fold, NA)
-			
+
 			if (nrow(curr_marker_colors) == 1) {
 				passed = is.na(cl_colors) & !is.na(marker_fold)
 				hit = rep(1, sum(passed))
@@ -52,7 +52,7 @@ mc_colorize = function(new_mc_id, mc_id, marker_colors = NULL, override = T)
 				passed = is.na(cl_colors) & colSums(!is.na(marker_fold)) > 0
 				hit = apply(marker_fold[, passed], 2, which.max)
 			}
-			
+
 			cl_colors[passed] = curr_marker_colors[hit, 'color']
 		}
 	} else {
@@ -71,7 +71,7 @@ mc_colorize = function(new_mc_id, mc_id, marker_colors = NULL, override = T)
 
 		cl_colors[nonz] = marker_colors[hit, "color"]
 	}
-	
+
 	if(!override) {
 		cl_colors[is.na(cl_colors)] = mc@colors[is.na(cl_colors)]
 	}
@@ -120,7 +120,7 @@ mc_colorize_sup_hierarchy = function(mc_id, supmc, supmc_key, gene_key=NULL)
 		stop("Sup mc key file ", supmc_key, " does not exist")
 	}
 	key = read.table(supmc_key, h=T, sep="\t", stringsAsFactors=F)
-	
+
 	if(class(key)[1] != "data.frame"
 	| length(intersect(c("supid", "color", "name"), colnames(key))) != 3) {
 		stop("MC-ERR sup id color key must be a data frame with fields supid, color, name")
@@ -146,7 +146,7 @@ mc_colorize_sup_hierarchy = function(mc_id, supmc, supmc_key, gene_key=NULL)
 				mcs = which(lfp[gene,]>T_fold)
 				if(length(mcs)>0) {
 					mc@colors[mcs] = gkey$color[i]
-					color_key = rbind(as.matrix(color_key), 
+					color_key = rbind(as.matrix(color_key),
 										matrix(c(gene=gene, group=gkey$name[i], color=gkey$color[i]),nrow=1))
 				}
 			}
@@ -163,7 +163,7 @@ mc_colorize_sup_hierarchy = function(mc_id, supmc, supmc_key, gene_key=NULL)
 #'
 #' @param mc_id metacell id in scdb
 #' @param mc_src_id the metacell to use as a refernece
-#' @param min_color_frac minimal fraction of cells with a given color in order to perform color projection. 
+#' @param min_color_frac minimal fraction of cells with a given color in order to perform color projection.
 #'
 #' @export
 mc_colorize_from_ref_mc = function(mc_id, mc_src_id, min_color_frac = 0.5)
@@ -186,4 +186,4 @@ mc_colorize_from_ref_mc = function(mc_id, mc_src_id, min_color_frac = 0.5)
 	mc@colors = proj_col
 	mc@color_key = mc_ref@color_key
 	scdb_add_mc(mc_id, mc)
-}	
+}

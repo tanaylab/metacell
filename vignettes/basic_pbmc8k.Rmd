@@ -266,7 +266,7 @@ mcell_mc_plot_hierarchy(mc_id="test_mc_f",
 				   graph_id="test_graph", 
 					mc_order=mc_hc$order, 
 					sup_mc = mc_sup, 
-					width=1400, heigh=1000, min_nmc=2)
+					width=2800, heigh=2000, min_nmc=2)
 ```
 
 ![confusion matrix](figs/test_mc_f.supmc_confu.png)

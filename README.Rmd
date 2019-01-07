@@ -25,13 +25,13 @@ Functions reference and usage vignettes are available in the package [homepage](
 
 Examples of applications:
 
+* [Li et al., Cell 2018](https://www.sciencedirect.com/science/article/pii/S009286741831568X) (scRNA-seq of immune cells from human melanoma tumors)
 * [Giladi et al., Nat Cell Biol 2018](http://www.nature.com/articles/s41556-018-0121-4) (Mouse hematopoiesis scRNA-seq)
 * [Sebe-pedros et al., NEE 2018](https://www.nature.com/articles/s41559-018-0575-6) (whole organisms scRNA-seq)
 * [Sebe-pedros et al., Cell 2018](https://www.cell.com/cell/abstract/S0092-8674(18)30596-8) (whole organism scRNA-seq)
 * [Bornstein et al., Nature 2018](https://www.nature.com/articles/s41586-018-0346-1) (thymic stroma scRNA-seq)
 * [Cohen et al., Cell 2018](https://www.cell.com/cell/fulltext/S0092-8674(18)31181-4) (lung scRNA-seq)
 
-R Package [homepage](https://tanaylab.bitbucket.io/metacell-r/index.html).
 
 #### Installation
 

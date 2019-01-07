@@ -4,8 +4,8 @@
 \alias{mcell_mc_plot_confusion}
 \title{plot a metacel confusion matrix}
 \usage{
-mcell_mc_plot_confusion(mc_id, graph_id, coc_id = NULL, use_orig_order = F,
-  mc_order = NULL, fig_fn = NULL)
+mcell_mc_plot_confusion(mc_id, graph_id, coc_id = NULL,
+  use_orig_order = F, mc_order = NULL, fig_fn = NULL)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}

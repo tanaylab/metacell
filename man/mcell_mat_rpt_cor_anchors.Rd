@@ -4,8 +4,9 @@
 \alias{mcell_mat_rpt_cor_anchors}
 \title{Find and report naive gene gene correlation over umi matrix}
 \usage{
-mcell_mat_rpt_cor_anchors(mat_id, gene_anchors, gene_anti = c(), cor_thresh,
-  tab_fn, sz_cor_thresh = NA, downsample_n = NA, cells = NULL)
+mcell_mat_rpt_cor_anchors(mat_id, gene_anchors, gene_anti = c(),
+  cor_thresh, tab_fn, sz_cor_thresh = NA, downsample_n = NA,
+  cells = NULL)
 }
 \arguments{
 \item{mat_id}{matrix to use}

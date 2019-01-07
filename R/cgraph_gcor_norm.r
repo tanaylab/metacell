@@ -12,6 +12,8 @@
 
 mcell_cgraph_norm_gcor = function(cgraph_id, mat_id, K=-1, min_gtot=1000)
 {
+	old_seed = .set_seed(get_param("mc_rseed"))
+
 	cgraph = scdb_cgraph(cgraph_id)
 	if(is.null(cgraph)) {
 		stop("missing cgraph for gene cor normalization, id = ", cgraph_id)
@@ -45,5 +47,7 @@ mcell_cgraph_norm_gcor = function(cgraph_id, mat_id, K=-1, min_gtot=1000)
 	gcor = tgs_cor(as.matrix(t(mat_ds[f_gene,])), spearman = T)
 	r_mat[is.na(r_mat)] = 0
 	r_gcor = tgs_cor(t(r_mat), spearman = T)
+
+	.restore_seed(old_seed)
 	return(list(gcor=gcor, r_gcor=r_gcor))
 }

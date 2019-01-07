@@ -66,11 +66,10 @@ mcell_add_gene_stat = function(mat_id, gstat_id, force=F)
 #'
 scm_gene_stat = function(mat_id,
                          niche_quantile = 0.2, #TODO: change to 0.1?
-                         rseed=321, 
 								 downsample_n = NULL,
 								 K_std_n = 1000)
 {
-  oldseed = .set_seed(rseed)
+  old_seed = .set_seed(get_param("mc_rseed"))
 
 #currently converting to non-sparse. Let's see if this need to be optimized
   scmat = scdb_mat(mat_id)
@@ -196,7 +195,7 @@ scm_gene_stat = function(mat_id,
 	                      "ds_top1", "ds_top2", "ds_top3",
 	                      "ds_mean", "ds_var", "ds_log_varmean","ds_vm_norm", "ds_is_on_count", "downsample_n")]
 
-	.restore_seed(oldseed)
+	.restore_seed(old_seed)
 	cat("..done\n")
 
 	return(gene_stat)

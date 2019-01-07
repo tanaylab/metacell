@@ -4,7 +4,8 @@
 \alias{mcell_plot_umis_per_cell}
 \title{Plot histogram of total number of umis per cell in the umis matrix}
 \usage{
-mcell_plot_umis_per_cell(mat_id, min_umis_cutoff = NA, bin_for_cutoff = 50)
+mcell_plot_umis_per_cell(mat_id, min_umis_cutoff = NA,
+  bin_for_cutoff = 50)
 }
 \arguments{
 \item{mat_id}{id of the mat to use}

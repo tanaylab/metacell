@@ -8,6 +8,8 @@
 #'
 mcell_wgtmc_pred_corr = function(mc_id, mat_id, graph_id, do_log = F, focus_cells=NULL)
 {
+	old_seed = .set_seed(get_param("mc_rseed"))
+
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
 		stop("MC-ERR: mc id ", mc_id, " is missing when compute mc prediction QC")
@@ -70,6 +72,9 @@ mcell_wgtmc_pred_corr = function(mc_id, mat_id, graph_id, do_log = F, focus_cell
 #	save(preds, stat, file="mc_preds.Rda")
 	preds = preds[,colSums(is.na(preds))==0]  #ignoring rare case of 0 connectivity within the train set
 	pcor = allrow_cor(stat[,colnames(preds)], preds)
+	
+	.restore_seed(old_seed)
+
 	return(pcor)	
 }
 

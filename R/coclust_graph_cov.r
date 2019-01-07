@@ -14,6 +14,8 @@ mcell_coclust_from_graph_resamp = function(coc_id,
 		graph_id, 
 		min_mc_size, p_resamp, n_resamp)
 {
+	old_seed = .set_seed(get_param("mc_rseed"))
+
 	tgs_clust_cool = get_param("scm_tgs_clust_cool")
 	tgs_clust_burn = get_param("scm_tgs_clust_burn_in")
 
@@ -51,4 +53,6 @@ resamp$co_cluster$node2 = factor(as.character(resamp$co_cluster$node2),
 
 	scdb_add_coclust(coc_id, 
 			tgCoClust(graph_id=graph_id, coclust = resamp$co_cluster, n_samp=resamp$samples))
+
+	.restore_seed(old_seed)
 }

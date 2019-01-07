@@ -5,7 +5,8 @@
 \alias{initialize,tgMC2D-method}
 \title{Construct a meta cell 2D embedding}
 \usage{
-\S4method{initialize}{tgMC2D}(.Object, mc_id, mc_x, mc_y, sc_x, sc_y, graph)
+\S4method{initialize}{tgMC2D}(.Object, mc_id, mc_x, mc_y, sc_x, sc_y,
+  graph)
 }
 \arguments{
 \item{mc_x}{x coordinates of metacells}

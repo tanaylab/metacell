@@ -16,6 +16,9 @@ mc_plot_device: png
 mc_plot_ppi: 72
 mc_plot_pointsize: 12
 
+# Random seed to set before every non deterministic function
+mc_rseed: 42
+
 #########################################
 # scdb: loading and saving scrdb objects
 #########################################

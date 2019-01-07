@@ -7,7 +7,7 @@
 #' @param metadata_fields  metadata field names to be used as factors and breakdown over mcs
 #'
 #' @return Nothing. But save a table in the figure directory that can be loaded to excel
-#' 
+#'
 #' @export
 #'
 mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
@@ -25,41 +25,45 @@ mcell_mc_export_tab = function(mc_id, gstat_id = NULL, mat_id = NULL,
 	if(is.null(gstat)) {
 		stop("MC-ERR non existing gstat id ", gstat_id, " when trying to export fp table")
 	}
-		
+
 	if(is.null(scmat)) {
 		stop("MC-ERR non existing mat id ", mat_id, " when trying to export fp table")
 	}
-	
+
 	# add #cells per clust, mean #umis (~ cell size) and assigned group (if exist)
 	if (nrow(mc@color_key) > 0) {
 		col2group = as.character(mc@color_key$group)
 		names(col2group) = as.character(mc@color_key$color)
-		
+
 		groups = col2group[mc@colors]
-	}	
+	}
 	else {
 		groups = rep(NA, max(mc@mc))
 	}
-	
+
 	out_df = rbind(tapply(colSums(scmat@mat[, names(mc@mc)]), mc@mc, mean), table(mc@mc), groups, seq_along(groups))
+	out_df = cbind(rep("", nrow(out_df)), out_df)
 	rownames(out_df) = c('mean_umis', 'n_cells', 'group', 'mc_id')
 
 	# add required breakdown to features
 	if (!is.null(metadata_fields)) {
 		for (s in metadata_fields) {
-			out_df = rbind(table(scmat@cell_metadata[names(mc@mc), s], mc@mc), out_df)
+		    new_df = table(scmat@cell_metadata[names(mc@mc), s], mc@mc)
+		    new_df = cbind(rep(s, nrow(new_df)), new_df)
+			out_df = rbind(new_df, out_df)
 		}
 	}
-	
+
 	fp_max = apply(mc@mc_fp, 1, max)
 	fp_tot = gstat[intersect(rownames(mc@mc_fp), rownames(gstat)), "tot"]
-	
+
 	# genes to export
-	f = fp_max > T_fold & fp_tot > T_gene_tot 
-	
+	f = fp_max > T_fold & fp_tot > T_gene_tot
+
 	# actual clust_fp
-	out_df = rbind(out_df, round(log2(mc@mc_fp[f,]), 2))
-	
+	out_df = rbind(out_df, cbind(rep("", sum(f)), round(log2(mc@mc_fp[f,]), 2)))
+
+	out_df = cbind(out_df[, 1], rownames(out_df), out_df[, -1])
 	tab_clust_fp_fn = sprintf("%s/%s.log2_mc_fp.txt", .scfigs_base, mc_id)
-	write.table(out_df, tab_clust_fp_fn,	sep = "\t", quote = F)
+	write.table(out_df, tab_clust_fp_fn, sep = "\t", quote = F, row.names = F, col.names = F)
 }

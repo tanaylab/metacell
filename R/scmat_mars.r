@@ -122,7 +122,6 @@ scm_add_mars_facs_data = function(mat_id, base_dir, amp_batch_ids = NULL)
 	if (is.null(scmat)) {
 		stop(sprintf("MC-ERR: trying to add FACS data to an undefined mat object %s", mat_id))
 	}
-	
   wells2cells_fn = get_param("scm_mars_wells2cells_fn")
   if (is.null(wells2cells_fn) | !file.exists(wells2cells_fn)) {
     stop("MC-ERR: Missing wells2cells file when adding MARS FACS data")

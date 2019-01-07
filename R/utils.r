@@ -29,6 +29,8 @@
 #'
 scm_downsamp = function(umis, n)
 {
+	old_seed = .set_seed(get_param("mc_rseed"))
+	
 	umis = umis[,colSums(umis)>= n]
 	m = nrow(umis)
 	.downsamp_one=function(v,n, replace = F){
@@ -55,6 +57,9 @@ scm_downsamp = function(umis, n)
 	}
 	res <- plyr::alply(1:max_bin, 1, sub_dsamp, .parallel=TRUE)
 	umis_ds = do.call(cbind, res)
+
+	.restore_seed(old_seed)
+
 	return(umis_ds)
 }
 
@@ -66,7 +71,7 @@ scm_downsamp = function(umis, n)
 	else {
 		oldseed = NULL
 	}
-	message("will set seed")
+	#message("will set seed")
 	set.seed(seed=rseed)
 
 	return(oldseed)

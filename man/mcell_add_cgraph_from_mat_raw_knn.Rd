@@ -4,7 +4,8 @@
 \alias{mcell_add_cgraph_from_mat_raw_knn}
 \title{Build a cell graph using raw knn graph on given gene features}
 \usage{
-mcell_add_cgraph_from_mat_raw_knn(mat_id, gset_id, graph_id, K, dsamp = F)
+mcell_add_cgraph_from_mat_raw_knn(mat_id, gset_id, graph_id, K,
+  dsamp = F)
 }
 \arguments{
 \item{mat_id}{matrix object id}

@@ -4,8 +4,8 @@
 \alias{mcell_add_mars_facs_data}
 \title{Creates a new matrix object from a given one by adding FACS index sorting data to matrix metadata table}
 \usage{
-mcell_add_mars_facs_data(new_mat_id, mat_id, base_dir, amp_batch_ids = NULL,
-  force = T)
+mcell_add_mars_facs_data(new_mat_id, mat_id, base_dir,
+  amp_batch_ids = NULL, force = T)
 }
 \arguments{
 \item{new_mat_id}{- id of the new matrix in scdb}

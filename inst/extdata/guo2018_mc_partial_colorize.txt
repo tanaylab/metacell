@@ -1,0 +1,6 @@
+group	gene	color	priority	T_fold
+Treg	FOXP3	magenta	1	2.25
+Tfh	CXCL13	darkolivegreen	1	16
+Naive	TCF7	navajowhite2	1	2
+Prolif	TOP2A	lightblue	1	2
+

@@ -7,7 +7,7 @@ template:
       api_key: ca4e16717bb635cc1f804f6a25717f9b
       index_name: metacell
 
-authors: 
+authors:
   Amos Tanay:
     href: http://compgenomics.weizmann.ac.il/tanay/
 
@@ -16,13 +16,13 @@ home:
   - text: Browse source code
     href:  https://bitbucket.org/tanaylab/metacell
 
-navbar:  
+navbar:
   structure:
     left:
-    - home    
-    - reference        
+    - home
+    - reference
     - usage
-    right: bitbucket            
+    right: bitbucket
   components:
     home:
       icon: fa-home fa-lg
@@ -34,10 +34,16 @@ navbar:
       text: Usage
       href: articles/basic_pbmc8k.html
     articles:
-      text: Vignettes
+      text: Articles
       menu:
-      - text: 'PBMC - 8k'
+      - text: 'Running metacell analysis: guided tutorial on 8K PBMCs'
         href: articles/basic_pbmc8k.html
+      - text: 'Supervised filtering of feature genes: guided tutorial on 8K PBMCs'
+        href: articles/geneset_by_anchor_pbmc8k.html
+      - text: Annotation of metacells
+        href: articles/metacell_annotation.html
+      - text: Analyzing whole-organism scRNA-seq data with metacell
+        href: articles/amphimedon.html
     bitbucket:
       - icon: fa-bitbucket
         href: https://bitbucket.org/tanaylab/metacell
@@ -45,36 +51,36 @@ navbar:
 reference:
   - title: metacell pipeline functions
     desc: ~
-    contents:  
+    contents:
     - starts_with('mcell_')
   - title: scdb functions
     desc: ~
-    contents:  
+    contents:
     - starts_with('scdb_')
   - title: scm functions
     desc: ~
-    contents:  
+    contents:
     - starts_with('scm_')
     - starts_with('scmat_')
   - title: metacell functions
     desc: ~
-    contents:  
+    contents:
     - starts_with('mc_')
   - title: gene set functions
     desc: ~
-    contents:  
+    contents:
     - starts_with('gset_')
   - title: classes
     desc: ~
-    contents:  
+    contents:
     - contains('class')
     - contains('initialize')
   - title: utils
     desc: ~
-    contents:  
+    contents:
     - '`plot_color_bar`'
-    - '`port_cor`'   
-    - '`allrow_cor`'     
-    - '`rescale_sparse_mat_cols`'     
-    - '`tgs_cor_graph`'     
+    - '`port_cor`'
+    - '`allrow_cor`'
+    - '`rescale_sparse_mat_cols`'
+    - '`tgs_cor_graph`'
     - starts_with('scfigs')

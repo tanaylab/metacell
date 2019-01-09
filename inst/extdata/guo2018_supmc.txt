@@ -1,0 +1,10 @@
+supid	color	name
+2	"#107538"	Tfh
+4	"#59b56f"	tumor-Treg
+8	"#a3ffb9"	blood-Treg
+17	"#b3d4f0"	naive-TCF7
+27	"#6d8eaa"	naive-CXCR6
+34	"#cee6b9"	CD4-cyto
+37	"#fdb913"	CD8-cyto
+40	"#a76eaf"	CD8-dysf
+51	"#d29bc6"	CD8-GZMK

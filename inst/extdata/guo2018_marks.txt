@@ -1,0 +1,5 @@
+name	gene	color	T_fold
+CD8-dysf	TUBA1B	"#a76eaf"	2
+CD8-MAIT	SLC4A10	"#ead37a"	1
+CD8-dysf-KLRC4	KLRC4	"#6b3273"	3
+naive-TCF7	XIST	"#b3d4f0"	1

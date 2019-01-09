@@ -1,0 +1,279 @@
+---
+title: "Annotation of metacells"
+author: "Yaniv Lubling"
+date: "2018-12-26"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Annotation of metacells}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This vignette demonstrates  several ways to annotate metacells. It uses the genes relative enrichment of the metacells and the cross-metacell similarity matrix (confusion matrix) to identify metacells of a certain cell-type or cell state. The dataset used in this vignette is single-cell RNA-seq of T cells from lung cancer patients, from the [Guo et al, Nat Med. 2018](https://www.ncbi.nlm.nih.gov/pubmed/29942094) paper. 
+
+Annotation of metacells is done by assigning a color to each metacell in the @colors vector in the metacell object. Information on the colors is stored in the @color_key data frame. It contains the columns 'group' (name of the type/state assigned to the metacell) and 'color', and might contain additional columns, depending on the method used to annotate the metacells, as will be shown below.
+
+## Setting up
+
+The metacells partitioning we use here was generated from the transcript per million reads (TPM) input table Guo et al. supply. For more details see the guo2018.r script at [Li_et_al_Cell_2018_Melanoma_scRNA](https://bitbucket.org/tanaylab/li_et_al_cell_2018_melanoma_scrna/src/default/) code repository.
+We'll first download the input objects, specifically the unannotated metacell object.
+```{r, eval=TRUE, warning=FALSE}
+download.file("http://www.wisdom.weizmann.ac.il/~lubling/metac_data/metacell_annotation/lung_db.tar.gz", destfile = "lung_db.tar.gz")
+system("tar xfz lung_db.tar.gz")
+file.remove("lung_db.tar.gz")
+```
+
+Now let's load the metacell package and define the output directories:
+```{r, eval=TRUE, warning=FALSE}
+library(metacell)
+library(dplyr)
+
+scdb_init("lung_db", force_reinit=T)
+
+dir.create("lung_figs", showWarnings = F)
+scfigs_init("lung_figs")
+```
+
+For the sake of code clarity, lets define variables for the main metacell object IDs we'll soon use:
+```{r, eval=TRUE, warning=FALSE}
+mc_non_ann_id   = "guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean_nonAnn"
+mc_id           = "guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean"
+graph_id        = "guo2018_tpm_scaled_filt_Tumor_Normal_Blood"
+mat_id          = graph_id
+lateral_gset_id = "guo2018_lateral"
+
+```
+
+## Initial exploration of the metacells
+
+It is often useful to start with semi-random coloring of metacells by assignment of sequentail colors to metacells. Since metacells are ordered by default, similar metacells will tend to have similar colors by this process. We'll first make a copy of the non-annotated input metacell object, in order not to overwrite it (we'll need it later on). Coloring is done by *mc_colorize default* function. The user can override the default color specturm used by supplying her own color spectrum (typically the output of *colorRampPalette*) to the *spectrum* parameter.
+
+The function assigned colors in the @colors slot, yet the @color_key data frame is empty, since these colors are arbitrary and are not associated with any annotation.
+```{r, eval=TRUE, warning=FALSE}
+mc_non_ann = scdb_mc(mc_non_ann_id)
+scdb_add_mc(mc_id, mc_non_ann)
+
+mc_colorize_default(mc_id)
+mc = scdb_mc(mc_id)
+
+print(mc@colors)
+print(mc@color_key)
+```
+
+A concevenient way to explore the metacells is to generate a heatmap of gene enrichments on single cells or metacells. The input data is the genes relative footprint values across metacells over the median metacell footprint (the table under the @mc_fp slot). We'll usually use the log2 value of these ratios, and will term the matrix of log ratios *lfp* in this vignette. 
+
+We'll first select which genes to present with *mcell_gset_from_mc_markers*. Its basic usage expects an input metacell id (mc_id) and the name of the gene set to store the genes in (gset_id). This function screens for highly varying genes (max absolute lfp value above the config parameter *scm_mc_mark_min_gene_fold*, 1.5 by default) and selects the top N varying genes per metacell (N is defined in the *scm_mc_mark_k_per_clust* parameter, 5 by default). The union of the genes selected per metacell defines the output gene set.
+```{r, eval=TRUE, warning=FALSE}
+mcell_gset_from_mc_markers(gset_id = mc_id, mc_id = mc_id)
+```
+
+Now we'll generate the heatmap, supplying the metacell id and the gene set id of the genes to show, and since we plot the cells (and not the metacells), also the mat id (from which the raw UMI counts are taken). The main configuration parameters that control the heatmap are *mcp_heatmap_height* and *mcp_heatmap_width* (figure height and width in pixels), *mcp_heatmap_text_cex* (text size, passed as cex param to *text* function) and *mcp_heatmap_alt_side_text* (logical, if true, plot odd gene names to the right and even to the left of the heatmap).
+```{r, eval=TRUE, warning=FALSE}
+mcell_mc_plot_marks(mc_id = mc_id, gset_id = mc_id, mat_id = mat_id, plot_cells=T)
+```
+```{r, echo=FALSE, fig.cap="Varying genes footprint on single-cells, ordered by metacells", out.width = '100%'}
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.cells_heat_marks.png")
+```
+
+Lateral genes are enriched in several metacells regardless of the cell type or state. The obious example for such lateral gene program is cell cycle related genes. We often filter lateral genes from being features that affect the creation of metacells. When plotting gene-metacell heatmap, we can filter lateral genes from the displayed genes by supplying the lateral gene set id to the *blacklist_gset_id* parameter in *mcell_gset_from_mc_markers*. However, we might still want to see the expression of these genes across metacells in the heatmap, yet without letting them affect the ordering of metacells in the heatmap. To do so we generate 2 gene sets - both of highly variable genes across metacells, the first without and the second with only lateral genes. The first will be supplied to the gset_id param in *mcell_mc_plot_marks* and the second to the *lateral_gset_id* param. In this data, the lateral gene set contains cell cycle, IFNa response and stress related genes. The lateral genes are marked in red and are shown on at the top of the heatmap.
+```{r, eval=TRUE, warning=FALSE}
+# prevent the lateral genes from being in the gene set
+mcell_gset_from_mc_markers(gset_id = mc_id, mc_id = mc_id, blacklist_gset_id = lateral_gset_id)
+
+# select variable genes from the lateral gene set
+mcell_gset_from_mc_markers(gset_id = paste0(mc_id, "_lateral"), mc_id = mc_id, filt_gset_id = lateral_gset_id)
+		
+mcell_mc_plot_marks(mc_id = mc_id, gset_id = mc_id, mat_id = mat_id, fig_fn = scfigs_fn(mc_id, "cells_heat_marks_lat"), lateral_gset_id = paste0(mc_id, "_lateral"), plot_cells=T)
+
+```
+```{r, echo=FALSE, fig.cap="Varying genes footrprint on single-cells, ordered by metacells, lateral genes on top in red", out.width = '100%'}
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.cells_heat_marks_lat.png")
+```
+
+Another quick and popular way to get a feeling on metacell similarity (and grouping) is to generate a 2D projection of cells and metacells, where the coordinates of each metacell and the edges between metacells are dictated by inter-metacell similarity.
+*mcell_mc2d_force_knn* builds the metacell 2D projection (mc2d object) and *mcell_mc2d_plot* generates the plot. The relevant configuration parameters affecting the plot are *mcell_mc2d_height* and *mcell_mc2d_width* (dimension in pixels), *mcell_mc2d_plot_key* (logical, whether to show the legend), *mcell_mc2d_cex* and *mcell_mc2d_legend_cex* (cells and legend size). 
+```{r, eval=TRUE, warning=FALSE}
+mcell_mc2d_force_knn(mc2d_id = mc_id, mc_id = mc_id, graph_id = graph_id)
+mcell_mc2d_plot(mc2d_id = mc_id, plot_edges = TRUE)	
+```
+```{r, echo=FALSE, fig.cap="Single-cell and metacells 2D projection", out.width = '100%'}
+file.copy("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj.png", "lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_default_col.png")
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_default_col.png")
+```
+
+
+## Metacells gene enrichment table
+As discussed above, the central way to characterize metacells is via the metacell gene enrichment table (termed here *lfp*, values in log2 ratio over median gene expression across metacells). We can generate a heatmap of the lfp, marking lateral genes in red and disabling them from affecting the metacells order (columns) as we did before when plotting a heatmap of genes and single-cells:
+```{r, eval=TRUE, warning=FALSE}
+mcell_mc_plot_marks(mc_id = mc_id, gset_id = mc_id, mat_id = mat_id, fig_fn = scfigs_fn(mc_id, "mc_heat_marks_lat"), lateral_gset_id = paste0(mc_id, "_lateral"), plot_cells=F)
+```
+```{r, echo=FALSE, fig.cap="Varying genes footrprint on metacells, ordered by metecalls, blacklisted genes on top in red", out.width = '100%'}
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.mc_heat_marks_lat.png")
+```
+
+It is also useful to do scatter plots for specific genes. In the example below, we're interested if the data contain Treg cells, so we plot CTLA4 vs CD4, and indeed there is a group of metacells enriched in both genes.
+```{r, eval=TRUE, warning=FALSE, fig.width=5, fig.height=5}
+lfp = log2(mc@mc_fp)
+
+plt = function(gene1, gene2, lfp, colors) 
+{
+	plot(lfp[gene1, ], lfp[gene2, ], pch=21, cex=3, bg=colors, xlab=gene1, ylab=gene2)
+	text(lfp[gene1, ], lfp[gene2, ], colnames(lfp))
+	
+}
+plt(gene1 = 'CD4', gene2 = 'CTLA4', lfp = lfp, colors = mc@colors)
+
+```
+
+It is also useful to browse the lfp table itself. *mcell_mc_export_tab* exports the lfp table to a tab-delimited file. It filters genes with maximal lfp value above the *T_fold* parameter. The function reports the metacell size (n_cells) and mean UMIs per metacell (mean_umis), which is a proxy for the cell size. The group field contains the annotation of the metacell (this will be informative after the metacell coloring functions we'll present below). The metadata field names (columns in the mat object @cell_metadata table) can be supplied to the *metadata_fields* parameter. The function would then breakdown cells in each metacell on the values of the metadata field. Very useful to characterize the metacells if our data has informative metadata features.
+```{r, eval=TRUE, warning=FALSE, output="asis"}
+mcell_mc_export_tab(mc_id = mc_id, gstat_id = mat_id, mat_id = mat_id, T_fold=2, metadata_fields=c('Patient', 'CD8_gate', 'Sex', 'Stage', 'Histology'))
+lfp_tab = read.table(scfigs_fn(mc_id, "log2_mc_fp", ext = "txt"), header=F, sep="\t", stringsAsFactors = F)
+knitr::kable(lfp_tab[1:40, 1:6])
+```
+
+It is convenient to browse this table with MS Excel or a similar tool, and to color the gene's lfp values and the different metadata header rows (seperately, because of their different range), using the 'condistional formatting' options. The screenshot below shows  a formatted lfp table. It is immediate to classify metacells as CD4 or CD8, to see patient specific metacells or pan-patient metacells etc. It is also useful to freeze the header rows and the gene names and then to sort the table content according to the metacell we're interseted in (in the screenshot below it's metacell #23), to quickly see its enriched genes. Since the metacells are clustered, it also makes the group of similar metacells pop-up very clearly. 
+```{r, echo=FALSE, fig.cap="Example of formatted lfp table", out.width = '100%'}
+knitr::include_graphics("lung_db/lfp_screenshot.png")
+```
+
+## Manual annotation by thresholding gene enrichment
+In many cases we'll have some prior knowledge on the cell types we expect to be represented by the metacells. Scatter plots of lfp values of selected genes can highlight these metacells. For instance, the plots below show metacells enriched in IL2RA and FOXP3, which are probably Tregs, CD4+ metacells that strongly express CXCL13, which probably represent Tfh cells, a single proliferating metacell enriched with TOP2A, and naive T cells, expressiong IL7R and TCF7. We can set a threshold on the lfp value of these genes (marked with dashed line) to assign an annotation to these metacells:
+```{r, eval=TRUE, warning=FALSE, fig.width=5, fig.height=5}
+genes1 = c('IL2RA', 'CD4', 'IL7R', 'CD8A')
+genes2 = c('FOXP3', 'CXCL13', 'TCF7', 'TOP2A')
+cutoffs = log2(c(2.25, 16, 2, 2))
+par(mfrow=c(2,2))
+par(mar=c(4,4,1,1))
+for (i in seq_along(genes1)) {
+	plt(gene1 = genes1[i], gene2 = genes2[i], lfp = lfp, colors = mc@colors)
+	abline(h=cutoffs[i], lty=2)
+}
+
+```
+
+We define the annotations with their thresholds on genes in a tab-delimited file:
+```{r, eval=TRUE, warning=FALSE}
+marks_colors = read.table(system.file("extdata", "guo2018_mc_partial_colorize.txt", package = "metacell"), sep="\t", h=T, stringsAsFactors=F)
+knitr::kable(marks_colors)
+```
+
+The annotation name and its color are filled in the *group* and *color* columns. Threshold on each *gene* are in the *T_fold* column. Note that these are applied on the @mc_fp table, so should be fold change and not log2 fold-change. Each annotation can have several genes to define it, each with its own threshold. A metacell can match several rules, so the assigment might be ambigious. The *priority* value aims to address this. In the default mode, the lfp value of all genes passing their *T_fold* thresholds is multiplied by the gene priority and the gene with the maximal outcome is selected. If working in sequential coloring mode (setting configuration parameter *mcp_colorize_by_seq_priority* to be TRUE), genes are grouped by priority, and metacells are assigned to groups iteratively, starting with the genes in the first (smallest) priority, and only assigning groups to unassigned metacells in each iteration. 
+
+We use *mc_colorize* to annotate the metacelks with our gene rules, and plot the 2D projection to appreciate the result. Note that the @color_key table contains annotations, the plot has a legend. You can control its position with the *legend_pos* parameter (and control whether to show the legend at all with the logical configuration parameter *mcell_mc2d_plot_key*):
+```{r, eval=TRUE, warning=FALSE}
+mc_colorize(new_mc_id = mc_id, mc_id = mc_non_ann_id, marker_colors=marks_colors)
+
+mcell_mc2d_plot(mc2d_id = mc_id)
+```
+```{r, echo=FALSE, fig.cap="Single-cell and metacells 2D projection", out.width = '100%'}
+file.copy("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj.png", "lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_col1.png")
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_col1.png")
+```
+
+## Systematic annotation of metacells
+A more comprehensive and systematic approach to annotate metacells uses the metacells 'confusion matrix', a metacell pairwise similarity matrix, summarizing the K-nn graph connectivity between all cells in each pair of metacells. We start by hierarchically clustering the metacells (columns) of the confusion matrix:
+```{r, eval=TRUE, warning=FALSE}
+mc_hc = mcell_mc_hclust_confu(mc_id = mc_id, graph_id = graph_id)
+```
+
+Next, we generate clusters of metacells (super-metacells, or sup_mc for convenience) based on this hierarchy with *mcell_mc_hierarchy*. These clusters are nodes in the hierarchical tree of metacells that their branch length is longer then *T_gap*. We visualize the confusion matrix and these clusters with *mcell_mc_plot_hierarchy*. Only sup_mcs with more than *min_nmc* metacells in them are plotted. The confusion matrix is shown at the bottom, and the top panel encodes the cluster hierarchy by showing the subtree of each sup_mc in blue, and the sibling subtree in gray. 
+```{r, eval=TRUE, warning=FALSE}
+mc_sup = mcell_mc_hierarchy(mc_id = mc_id, mc_hc = mc_hc, T_gap = 0.04)
+
+mcell_mc_plot_hierarchy(mc_id = mc_id, graph_id = graph_id, 
+                        mc_order = mc_hc$order, 
+                        sup_mc = mc_sup, 
+                        width = 1200, height = 2400, 
+                        min_nmc=2, show_mc_ids = T)
+
+```
+```{r, echo=FALSE, fig.cap="Clustered metacells confusion matrix", out.width = '100%'}
+file.copy("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu.png", "lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu_no_col.png")
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu_no_col.png", )
+```
+
+There are several lists of enriched genes for each subtree. Let's examine all the information supplied on a subree. For instance, subtree number 4 (which is clearly comprised of Treg metacells): 
+```{r, eval=TRUE, warning=FALSE}
+print(mc_sup[[4]])
+```
+* *mcs*       - the ids of metacells in the subtree (those marked in blue)
+* *sup_mcs*   - the ids of metacells in the subtree and in the sibling subtree (those marked in blue and gray)
+* *x_ord*     - mean rank of the subtree metacells in the confusion matrix
+* *marks*     - averaging lfp over *mcs*, showing the top 20 genes
+* *min_marks* - taking the minimal lfp value per gene over *mcs*, showing the top 20 genes
+* *marks_gap* - showing the genes with maximal difference between the average lfp over *mcs* and average lfp over metacells in the sibling subtree
+*marks_gap_anti* - similar to *marks_gap* but showing genes with minimal difference (e.g. enriched in the sibling subtree)
+
+Top 5 *marks* genes are shown in the plot to the left of the sup_mc row, top 5 *marks_gap* are shown to the right, followed (after a 'pipe' sign) by the top 5 *marks_gap_anti* genes.
+
+The annotation task based on this sup_mcs becomes the task of tagging sup-mcs, by browsing the figure and the more detailed sup_mc object, such that all metacells are covered by a tagged sup_mc. Annotation can also flow from bottom up, for instance, if we're insterseted in annotating CD8+ ZNF683+ enriched metacells: let's first see the lfp enrichment of both genes:
+```{r, eval=TRUE, warning=FALSE, fig.width=5, fig.height=5}
+plt(gene1 = 'CD8A', gene2 = 'ZNF683', lfp = lfp, colors = mc@colors)
+```
+
+We see that there are 3 metacells with ZNF683 lfp values above 2.5, but where are these metacells within the sup_mc tree? 
+We define here a simple helper function named *query_sup_by_mcs*, that gets a list of metacells and reports the sup_mcs that contain them (the id of the sup_mc, number of queried metacells, number of queried metacells inside the sup_mc and the sup_mc size). We usually aim to find the minimal sup_mc that contains most of the metacells we're interested in, in this case, sup_mc 42 seems like a reasonable choice:
+```{r, eval=TRUE, warning=FALSE}
+query_sup_by_mcs = function(sup, mcs) 
+{
+	do.call('rbind', lapply(1:length(sup), function(i) { csup = sup[[i]]; data.frame(id=i, n_mcs=length(mcs), n_in=length(intersect(mcs, csup$mcs)), sup_size=length(csup$mcs)) })) %>% filter(n_in > 0) %>% arrange(sup_size)
+}
+query_sup_by_mcs(mc_sup, which(lfp['ZNF683', ] > 2.5))
+
+print(mc_sup[[42]])
+```
+
+The list of annotated sup_mcs should be in a tab-delimited table containing the id of the sup_mc, its name and color, as shown below. Note that the order of entries matters - the annotation function process this table sequentially, so the newest entry overrides previous ones (if a metacell below to several sup_mcs in the table). It is actually useful in some cases, where you first define a large group of metacells and then pick from within it a smaller group and re-annotate it.
+```{r, eval=TRUE, warning=FALSE}
+supmc_tab = read.table(system.file("extdata", "guo2018_supmc.txt", package = "metacell"), sep="\t", h=T, stringsAsFactors=F)
+knitr::kable(supmc_tab)
+```
+
+Sometimes the sup_mcs will not cover all the metacells. Usually this is the case if we have rare cell types represented by a single metacell. For instance Mucosal associated invariant T cell (MAIT) cells in our data here:
+```{r, eval=TRUE, warning=FALSE, fig.width=5, fig.height=5}
+plt(gene1 = 'SLC4A10', gene2 = 'KLRB1', lfp = lfp, colors = mc@colors)
+
+```
+We can annotate these metacells by defining thresholds on genes. Note that the *T_fold* threshold in this case is compared to the log2 lfp value. Processing of this table is also sequetial, so if a metacell matches several rules, the last one overwrites any of the previous rules, and coloring by this table will also override any coloring done based on the sup_mcs table. 
+```{r, eval=TRUE, warning=FALSE}
+knitr::kable(read.table(system.file("extdata", "guo2018_marks.txt", package = "metacell"), sep="\t", h=T, stringsAsFactors=F))
+```
+
+Once both these tables are defined, we can colorize (e.g. annotate) metacells with them using the *mc_colorize_sup_hierarchy* function:
+```{r, eval=TRUE, warning=FALSE}
+mc_colorize_sup_hierarchy(mc_id = mc_id,
+                          supmc = mc_sup,
+                          supmc_key = system.file("extdata", "guo2018_supmc.txt", package = "metacell"),
+                          gene_key= system.file("extdata", "guo2018_marks.txt", package = "metacell"))
+
+
+# generate metacell clusters heatmap
+mcell_mc_plot_hierarchy(mc_id = mc_id,
+												graph_id = graph_id,
+												mc_order = mc_hc$order,
+												sup_mc = mc_sup,
+												width=1200, height=2400, min_nmc=2, show_mc_ids= T)
+
+```
+```{r, echo=FALSE, fig.cap="Clustered metacells confusion matrix", out.width = '100%'}
+file.copy("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu.png", "lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu_col.png")
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu_col.png")
+```
+And the updated 2D projection would look like this:
+```{r, echo=FALSE, fig.cap="Single-cell and metacells 2D projection", out.width = '100%'}
+mcell_mc2d_plot(mc2d_id = mc_id, plot_edges = TRUE)	
+```
+```{r, echo=FALSE, fig.cap="Single-cell and metacells 2D projection", out.width = '100%'}
+file.copy("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj.png", "lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_final_col.png")
+knitr::include_graphics("lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_final_col.png")
+```

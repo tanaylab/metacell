@@ -22,6 +22,7 @@ navbar:
     - home
     - reference
     - usage
+    - articles
     right: bitbucket
   components:
     home:
@@ -34,16 +35,19 @@ navbar:
       text: Usage
       href: articles/basic_pbmc8k.html
     articles:
-      text: Articles
+      text: Vignettes
       menu:
+      - text: Core
       - text: 'Running metacell analysis: guided tutorial on 8K PBMCs'
-        href: articles/basic_pbmc8k.html
+        href: articles/1-basic_pbmc8k.html
       - text: 'Supervised filtering of feature genes: guided tutorial on 8K PBMCs'
-        href: articles/geneset_by_anchor_pbmc8k.html
+        href: articles/2-geneset_by_anchor_pbmc8k.html
       - text: Annotation of metacells
-        href: articles/metacell_annotation.html
+        href: articles/3-metacell_annotation.html
+      - text: ----
+      - text: Misc
       - text: Analyzing whole-organism scRNA-seq data with metacell
-        href: articles/amphimedon.html
+        href: articles/4-amphimedon.html
     bitbucket:
       - icon: fa-bitbucket
         href: https://bitbucket.org/tanaylab/metacell

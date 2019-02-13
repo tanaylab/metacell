@@ -410,3 +410,47 @@ setMethod(
 		}
 )
 
+#' Export a mat object (umi matrix and metadata table) to a SingleCellExperiment object
+#'
+#' @param mat_id id of the mat object to export
+#'
+#' @return SingleCellExpriment instance
+#' @export
+#'
+scm_export_mat_to_sce = function(mat_id, add_log_counts=F, scale_to=1e4)
+{
+    mat = scdb_mat(mat_id)
+    if (is.null(mat)) {
+        error(sprintf("In scm_export_mat_to_seurat, could not find metacell mat %s", mat_id))
+    }
+
+    # Adjusted from Seurat Convert functions
+    sce <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = mat@mat, logcounts = log(1+ scale_to * t(t(mat@mat) / colSums(mat@mat)))))
+
+    SummarizedExperiment::colData(sce) <- S4Vectors::DataFrame(mat@cell_metadata[mat@cells, ])
+
+    sce
+}
+
+#' Import a umi count matrix with metadata per cell from a SingleCellExperiment objectto a scmat object  to a SingleCellExperiment object
+#'
+#' @param sce Input SingleCellExperiment to export
+#' @param counts_slot name of the umi matrix slot
+#'
+#' @return tgScMat
+#' @export
+#'
+scm_import_sce_to_mat = function(sce, counts_slot = "counts")
+{
+    # Adjusted from Seurat Convert functions
+    umis <- tryCatch(
+        expr = SummarizedExperiment::assay(sce, counts_slot),
+        error = function(e) {
+            stop(paste0("No data in provided assay - ", counts_slot))
+        }
+    )
+
+    md <- as.data.frame(SummarizedExperiment::colData(sce))
+
+    scm_new_matrix(umis, md)
+}

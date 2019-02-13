@@ -1,0 +1,44 @@
+---
+title: "Interoperability with other scRNA formats"
+author: "Yaniv Lubling"
+date: "13-02-2019"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Interoperability with other scRNA formats}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Metacell supports conversion of the umi matrix object to/from Bioconductor's [SingleCellExperiment](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) object (a format that can be imported into Seurat). 
+
+## Convert a metacell umi matrix object to a SingleCellExperiment object
+The export function creates a SingleCellExperiment object and stores in it the raw umi counts and the metadata data.frame. The function expects the ID of the mat object to be exported:
+```{r, eval=FALSE}
+sce = scm_export_mat_to_sce(mat_id)
+```
+
+If you wish to import the SingleCellExperiment object into Seurat you should also export the log-normalized umi matrix (and then specify the number of umis to scale each cell to before taking the log).
+```{r, eval=FALSE}
+sce = scm_export_mat_to_sce(mat_id, add_log_counts=TRUE, scale_to=10000)
+
+# To convert the sce into a Seurat object (Seurat v2.0):
+# library(Seurat)
+# seurat_obj = Convert(sce, to="seurat")
+```
+
+## Convert a SingleCellExperiment object into a metacell umi matrix one
+The import function expects a SingleCellExperiment object with the raw umi counts in an assay named "counts" (can be changed by the *counts_slot* parameter) and it also imports the cells metadata table:
+```{r, eval=FALSE}
+mat = scm_import_sce_to_mat(sce)
+
+# The sce object can be converted from a Seurat object:
+# libray(Seurat)
+# sce = Convert(seurat_obj, "sce")
+```

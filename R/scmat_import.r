@@ -44,7 +44,7 @@ mcell_import_scmat_tsv = function(mat_nm, fn, genes_fn = NULL, meta_fn = NULL, d
 
 		   dup_genes = gname[gname %in% non_unique_genes]
 
-			umis2s = apply(umis2, 2, function(x) { 
+			umis2s = apply(umis2, 2, function(x) {
 					tapply(x, INDEX=dup_genes, FUN=sum) } )
 
 			umis = rbind(umis1, umis2s)
@@ -68,9 +68,9 @@ mcell_import_scmat_tsv = function(mat_nm, fn, genes_fn = NULL, meta_fn = NULL, d
 		dsets = data.frame(batch_set_id = dset_nm,
 							 	 amp_batch_id = dset_nm,
 							    seq_batch_id = dset_nm)
-		md = matrix(c('import', dset_nm, dset_nm, dset_nm), 
-				nrow=ncol(umis), ncol=4, byrow=T, 
-				dimnames=list(colnames(umis), 
+		md = matrix(c('import', dset_nm, dset_nm, dset_nm),
+				nrow=ncol(umis), ncol=4, byrow=T,
+				dimnames=list(colnames(umis),
 							c('type', 'batch_set_id', 'amp_batch_id', 'seq_batch_id')))
 		md = as.data.frame(md)
 	}

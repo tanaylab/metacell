@@ -48,6 +48,7 @@ scm_feature_type: all
 
 scm_balance_graph_k_alpha: 10
 scm_balance_graph_k_beta: 3
+scm_balance_graph_k_expand: 10
 
 scm_tgs_clust_cool: 1.05
 scm_tgs_clust_burn_in: 10

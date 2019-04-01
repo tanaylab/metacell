@@ -39,15 +39,17 @@ navbar:
       menu:
       - text: Core
       - text: 'Running metacell analysis: guided tutorial on 8K PBMCs'
-        href: articles/1-basic_pbmc8k.html
+        href: articles/a-basic_pbmc8k.html
       - text: 'Supervised filtering of feature genes: guided tutorial on 8K PBMCs'
-        href: articles/2-geneset_by_anchor_pbmc8k.html
+        href: articles/b-geneset_by_anchor_pbmc8k.html
       - text: Annotation of metacells
-        href: articles/3-metacell_annotation.html
+        href: articles/c-metacell_annotation.html
       - text: ----
       - text: Misc
       - text: Analyzing whole-organism scRNA-seq data with metacell
-        href: articles/4-amphimedon.html
+        href: articles/d-amphimedon.html
+      - text: UMI matrix conversion to standard formats
+        text: articles/e-data_convert.html
     bitbucket:
       - icon: fa-bitbucket
         href: https://bitbucket.org/tanaylab/metacell

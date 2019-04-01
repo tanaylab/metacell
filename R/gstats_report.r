@@ -6,7 +6,7 @@
 #'
 #' @export
 #'
-mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL)
+mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL, max_vm=4)
 {
 	gstat = scdb_gstat(gstat_id)
 	if(is.null(gstat)) {
@@ -35,7 +35,7 @@ mcell_plot_gstats = function(gstat_id, gset_id = NULL, fig_dir = NULL)
 		top3_fn = sprintf("%s/%s_top3.png", fig_dir, gstat_id)
 	}
 	png(vm_fn, w=1200, h=1200, pointsize=7, res=300)
-	vm = pmin(gstat$ds_log_varmean, 4)
+	vm = pmin(gstat$ds_log_varmean, ifelse(is.null(max_vm), max(gstat$ds_log_varmean), max_vm))
 	names(vm) = rownames(gstat)
    plot(log2(gstat$ds_mean), gstat$ds_log_varmean, cex=0.8, pch=19,
 		 ylim = c(min(vm), max(vm)+0.25),

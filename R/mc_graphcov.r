@@ -8,6 +8,8 @@
 
 mcell_add_mc_from_graph = function(mc_id, graph_id, mat_id, min_mc_size)
 {
+    old_seed = .set_seed(get_param("mc_rseed"))
+
 	tgs_clust_cool = get_param("scm_tgs_clust_cool")
 	tgs_clust_burn = get_param("scm_tgs_clust_burn_in")
 
@@ -32,5 +34,8 @@ mcell_add_mc_from_graph = function(mc_id, graph_id, mat_id, min_mc_size)
 	cell_names = colnames(mat@mat)
 	scdb_add_mc(mc_id, tgMCCov(mc, outliers, mat))
 	message("reordering metacells by hclust and most variable two markers")
+
+	.restore_seed(old_seed)
+
 	mcell_mc_reorder_hc(mc_id)
 }

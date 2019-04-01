@@ -3,7 +3,7 @@
 #' @param mc_id Id of new metacell object
 #' @param coc_id cocluster object to use
 #' @param mat_id mat object to use when building the mc object
-#' @param K number of clusters to generate from the coclust hclust. Look at the coclust plot to detemrine this. But make sure you keep the clusters at reasonable size (e.g. <100) for use as metacells. 
+#' @param K number of clusters to generate from the coclust hclust. Look at the coclust plot to detemrine this. But make sure you keep the clusters at reasonable size (e.g. <100) for use as metacells.
 #' @param force set this to true to overide size limits on hclust
 #'
 #' @export
@@ -49,10 +49,10 @@ mcell_mc_from_coclust_hc = function(mc_id, coc_id, mat_id, K, force=F)
 #' @export
 #'
 
-mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id, 
+mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 		max_clust_size, max_mc_size, min_mc_size, T_weight = 1)
 {
-	
+
 #	tgs_coclust_hc_type= get_param("scm_coclust_hc_type")
 
 	coc = scdb_coclust(coc_id)
@@ -94,7 +94,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 					sub_coc = gen_sub_coclust(h_coc[[cl_i]],sub_clust)
 					new_h_coc = append(new_h_coc, sub_coc)
 				}
-				
+
 				#break using louvain
 				if(length(sub_clust) > 1) {
 					recent_zoom = TRUE
@@ -133,7 +133,7 @@ mcell_mc_from_coclust_louv_sub = function(mc_id, coc_id, mat_id,
 		h_coc = new_h_coc
 	}
 
-	clust = rep(as.numeric(names(h_mc)), times=lapply(h_mc, length))	
+	clust = rep(as.numeric(names(h_mc)), times=lapply(h_mc, length))
 	names(clust) = colnames(mat@mat)[unlist(h_mc)]
 	scdb_add_mc(mc_id, tgMCCov(clust, outliers, mat))
 	message("reordering metacells by hclust and most variable two markers")
@@ -149,13 +149,15 @@ coc_dissect_louvain = function(coclust, nodes)
 	g_cc = graph_from_data_frame(d=coclust, directed=F)
 	message("will cluster w louvain")
 	a = cluster_louvain(g_cc)
-	
+
 	clusts = split(nodes, a$membership)
 	return(clusts)
 }
 
 coc_dissect_mc = function(coclust, nodes, min_mc_size)
 {
+    old_seed = .set_seed(get_param("mc_rseed"))
+
 	tgs_clust_cool = get_param("scm_tgs_clust_cool")
 	tgs_clust_burn = get_param("scm_tgs_clust_burn_in")
 
@@ -169,17 +171,20 @@ coc_dissect_mc = function(coclust, nodes, min_mc_size)
 	redges$col2= edges$col1
 	edges = rbind(edges,redges)
 
-	node_clust = tgs_graph_cover(edges, min_mc_size, 
+	node_clust = tgs_graph_cover(edges, min_mc_size,
 					cooling = tgs_clust_cool, burn_in = tgs_clust_burn)
 	rownames(node_clust) = node_clust$node
 	clusts = split(nodes, node_clust$cluster[nodes])
+
+	.restore_seed(old_seed)
+
 	return(clusts)
 }
 
 gen_sub_coclust = function(coc, subc)
 {
 	message("dissect ", nrow(coc), " edges ")
-	clust = rep(as.numeric(names(subc)), times=lapply(subc, length))	
+	clust = rep(as.numeric(names(subc)), times=lapply(subc, length))
 	clust_map = rep(NA, max(unlist(subc)))
 	clust_map[unlist(subc)] = clust
 	c1 = clust_map[coc$node1]
@@ -197,20 +202,21 @@ gen_sub_coclust = function(coc, subc)
 }
 
 #' build a metacell cover from co-clust data through filtering un-balanced edges
-#' and running graph cover 
+#' and running graph cover
 #'
 #' @param mc_id Id of new metacell object
 #' @param coc_id cocluster object to use
 #' @param mat_id mat object to use when building the mc object
-#' @param K - this will 
+#' @param K - this will
 #' @param min_mc_size minimum mc size for graph cov
 #' @param alpha the threshold for filtering edges by their coclust weight is alpha * (Kth highest coclust on either node1 or node2)
 #'
 #' @export
-mcell_mc_from_coclust_balanced = function(mc_id, coc_id, 
+mcell_mc_from_coclust_balanced = function(mc_id, coc_id,
 												mat_id, K, min_mc_size, alpha=2)
 {
-	
+    old_seed = .set_seed(get_param("mc_rseed"))
+
 	tgs_clust_cool = get_param("scm_tgs_clust_cool")
 	tgs_clust_burn = get_param("scm_tgs_clust_burn_in")
 
@@ -238,7 +244,7 @@ mcell_mc_from_coclust_balanced = function(mc_id, coc_id,
 	redges$col2= edges$col1
 	edges = rbind(edges,redges)
 
-	node_clust = tgs_graph_cover(edges, min_mc_size, 
+	node_clust = tgs_graph_cover(edges, min_mc_size,
 					cooling = tgs_clust_cool, burn_in = tgs_clust_burn)
 
 	f_outlier = (node_clust$cluster == 0)
@@ -250,5 +256,8 @@ mcell_mc_from_coclust_balanced = function(mc_id, coc_id,
 	cell_names = colnames(mat@mat)
 	scdb_add_mc(mc_id, tgMCCov(mc, outliers, mat))
 	message("reordering metacells by hclust and most variable two markers")
+
+	.restore_seed(old_seed)
+
 	mcell_mc_reorder_hc(mc_id)
 }

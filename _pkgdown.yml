@@ -49,7 +49,7 @@ navbar:
       - text: Analyzing whole-organism scRNA-seq data with metacell
         href: articles/d-amphimedon.html
       - text: UMI matrix conversion to standard formats
-        text: articles/e-data_convert.html
+        href: articles/e-data_convert.html
     bitbucket:
       - icon: fa-bitbucket
         href: https://bitbucket.org/tanaylab/metacell

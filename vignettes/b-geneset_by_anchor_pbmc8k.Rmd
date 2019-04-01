@@ -99,11 +99,12 @@ mcell_plot_gset_cor_mats(gset_id = gset_nm, scmat_id = sub_mat_id)
 ```
 The plots are generated under a subdirectory of the figures directory named *gset_nm*.gset_cors.
 Common practice is to examine them and select the clusters that we want to keep. In our example, In this case we would probably keep clusters 3, 5, 10, 14, 16 and 17 in the gene set:
-
-```{r, echo = FALSE}
-knitr::include_graphics(paste0("figs/", gset_nm, ".gset_cors/", c(3, 5, 10, 14, 16, 17), ".png"))
-```
-
+![clus3](figs/lateral.gset_cors/3.png)
+![clus5](figs/lateral.gset_cors/5.png)
+![clus10](figs/lateral.gset_cors/10.png)
+![clus14](figs/lateral.gset_cors/14.png)
+![clus16](figs/lateral.gset_cors/16.png)
+![clus17](figs/lateral.gset_cors/17.png)
 
 The rest of the clusters contain mostly genes that are correlated to cell size but not related to the cell cycle.
 

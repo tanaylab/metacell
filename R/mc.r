@@ -128,6 +128,7 @@ mc_set_outlier_mc = function(mc, mc_ids)
 	mc@mc_fp = mc@mc_fp[,drop_f]
 	colnames(mc@mc_fp) = 1:newN
 	mc@e_gc = mc@e_gc[,drop_f]
+	colnames(mc@e_gc) = 1:newN
 	mc@cov_gc = mc@cov_gc[,drop_f]
 	colnames(mc@cov_gc) = 1:newN
 
@@ -153,7 +154,7 @@ mc_set_outlier_mc = function(mc, mc_ids)
 #' @param mc a metacell object
 #' @param us umi matrix
 #' @param norm_by_mc_size normalize by mean total umis and then multiply by median mean mc size (or at least 1000). This means umis per 1000 molecules.
-#' @param min_total_umi consider genes with at least min_total_umi total umis 
+#' @param min_total_umi consider genes with at least min_total_umi total umis
 #'
 #' @export
 mc_compute_fp = function(mc, us, norm_by_mc_size=T, min_total_umi=10)
@@ -166,14 +167,14 @@ mc_compute_fp = function(mc, us, norm_by_mc_size=T, min_total_umi=10)
 		all_gs = rownames(us[f_g_cov,])
 		n_g = length(all_gs)
 		g_splts = split(all_gs, 1+floor(mc_cores*(1:n_g)/(n_g+1)))
-		fnc = function(gs) { 
+		fnc = function(gs) {
 						.row_stats_by_factor(us[gs,],
 										mc@mc,
 										function(y) {exp(rowMeans(log(1+y)))-1}) }
-	
+
 		clust_geomean = do.call(rbind, mclapply(g_splts, fnc, mc.cores = mc_cores))
 	}
-	clust_geomean = t(tgs_matrix_tapply(us[f_g_cov,], mc@mc, 
+	clust_geomean = t(tgs_matrix_tapply(us[f_g_cov,], mc@mc,
 									  function(y) {exp(mean(log(1+y)))-1}))
 	rownames(clust_geomean) = rownames(us)[f_g_cov]
 
@@ -213,7 +214,7 @@ mc_compute_e_gc= function(mc, us, norm_by_mc_meansize=T)
 
 	e_gc = t(tgs_matrix_tapply(us[f_g_cov,], mc@mc, function(y) {exp(mean(log(1+y)))-1}))
 	rownames(e_gc) = rownames(us)[f_g_cov]
-	
+
 	if (norm_by_mc_meansize) {
 		mc_meansize = tapply(colSums(us), mc@mc, mean)
 		e_gc = t(t(e_gc)/as.vector(mc_meansize))
@@ -416,8 +417,8 @@ mcell_mc_match_graph = function(mc_id, graph_id)
 #'
 #' @param mc_id input mc object
 #' @param mat_id mat object corresponsing to mc_id
-#' @param min_cells_per_sub_mc minimum number of cells per group required to create a new metacell 
-#' @param col2grp mapping of mc colors to groups, by default, use the color_key slot 
+#' @param min_cells_per_sub_mc minimum number of cells per group required to create a new metacell
+#' @param col2grp mapping of mc colors to groups, by default, use the color_key slot
 #'
 #' @export
 #'
@@ -427,18 +428,18 @@ mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500
 	if(is.null(mat)) {
 		stop("MC-ERR: missing mat_id when splitting by color group = ", mat_id)
 	}
-	
+
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
 		stop("MC-ERR: missing mc_id when splitting by color group = ", mc_id)
 	}
-	
+
 	if (is.null(col2grp)) {
 		ucolkey =  unique(mc@color_key[, c('group', 'color')])
 		col2grp = ucolkey$group
 		names(col2grp) = ucolkey$color
 	}
-	
+
 	cg = split(names(mc@mc), col2grp[mc@colors[mc@mc]])
 	for (gr in names(cg)) {
 		nms = cg[[gr]]
@@ -446,17 +447,17 @@ mcell_mc_split_by_color_group = function(mc_id, mat_id, min_cells_per_sub_mc=500
 			message(sprintf("splitting %s, creating %s_submc_%s with %d cells", mc_id, mc_id, gr, length(nms)))
 			mc_map = 1:length(unique(mc@mc[nms]))
 			names(mc_map) = names(table(mc@mc[nms]))
-		
+
 			dst_mc = mc_map[as.character(mc@mc[nms])]
 			names(dst_mc) = nms
-			
+
 			new_id = paste(mc_id, "submc", gr, sep="_")
-			
+
 			mcell_mat_ignore_cells(new_id, mat_id, nms, reverse=T)
 			mcell_add_gene_stat(new_id, new_id)
-			
-			mcell_new_mc(mc_id = new_id, 
-									 mc = dst_mc, 
+
+			mcell_new_mc(mc_id = new_id,
+									 mc = dst_mc,
 									 outliers = character(0), #setdiff(c(mc@outliers, names(mc@mc)), nms),
 									 scmat = scdb_mat(new_id))
 		}

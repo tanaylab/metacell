@@ -216,7 +216,7 @@ mc_compute_e_gc= function(mc, us, norm_by_mc_meansize=T)
 	rownames(e_gc) = rownames(us)[f_g_cov]
 
 	if (norm_by_mc_meansize) {
-		mc_meansize = tapply(colSums(us), mc@mc, mean)
+    		mc_meansize = tapply(colSums(us), mc@mc, mean)
 		e_gc = t(t(e_gc)/as.vector(mc_meansize))
 	}
 	return(e_gc)

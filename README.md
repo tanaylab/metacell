@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/196806305.svg)](https://zenodo.org/badge/latestdoi/196806305)
+
 # metacell
 
 The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices 

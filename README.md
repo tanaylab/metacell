@@ -1,11 +1,3 @@
----
-output:
-  md_document:
-    variant: markdown_github
----
-
-
-
 # metacell
 
 The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices 

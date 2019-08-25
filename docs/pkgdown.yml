@@ -1,0 +1,13 @@
+pandoc: 1.19.2.1
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  a-basic_pbmc8k: a-basic_pbmc8k.html
+  b-geneset_by_anchor_pbmc8k: b-geneset_by_anchor_pbmc8k.html
+  c-metacell_annotation: c-metacell_annotation.html
+  d-amphimedon: d-amphimedon.html
+  e-data_convert: e-data_convert.html
+urls:
+  reference: http://tanaylab.bitbucket.io/metacell-r/reference
+  article: http://tanaylab.bitbucket.io/metacell-r/articles
+

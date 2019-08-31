@@ -1,11 +1,8 @@
-url: http://tanaylab.bitbucket.io/metacell-r
+url: http://tanaylab.github.io/metacell-r
 
 template:
   params:
     bootswatch: cosmo
-    docsearch:
-      api_key: ca4e16717bb635cc1f804f6a25717f9b
-      index_name: metacell
 
 authors:
   Amos Tanay:
@@ -14,7 +11,7 @@ authors:
 home:
   links:
   - text: Browse source code
-    href:  https://bitbucket.org/tanaylab/metacell
+    href:  https://github.com/tanaylab/metacell
 
 navbar:
   structure:
@@ -23,7 +20,7 @@ navbar:
     - reference
     - usage
     - articles
-    right: bitbucket
+    right: github
   components:
     home:
       icon: fa-home fa-lg
@@ -50,9 +47,9 @@ navbar:
         href: articles/d-amphimedon.html
       - text: UMI matrix conversion to standard formats
         href: articles/e-data_convert.html
-    bitbucket:
-      - icon: fa-bitbucket
-        href: https://bitbucket.org/tanaylab/metacell
+    github:
+      - icon: fa-github
+        href: https://github.com/tanaylab/metacell
 
 reference:
   - title: metacell pipeline functions

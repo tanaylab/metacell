@@ -21,7 +21,7 @@ by computing partitions of a cell similarity graph into small (~20-200 typically
 
 Method: Baran et al. 2018 ([bioarxiv](https://www.biorxiv.org/content/early/2018/10/08/437665)).
 
-Functions reference and usage vignettes are available in the package [homepage](https://tanaylab.bitbucket.io/metacell-r/index.html).
+Functions reference and usage vignettes are available in the package [homepage](https://tanaylab.github.io/metacell).
 
 Examples of applications:
 

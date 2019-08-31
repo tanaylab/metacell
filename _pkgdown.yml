@@ -8,11 +8,6 @@ authors:
   Amos Tanay:
     href: http://compgenomics.weizmann.ac.il/tanay/
 
-home:
-  links:
-  - text: Browse source code
-    href:  https://github.com/tanaylab/metacell
-
 navbar:
   structure:
     left:
@@ -30,7 +25,7 @@ navbar:
       href: reference/index.html
     usage:
       text: Usage
-      href: articles/basic_pbmc8k.html
+      href: articles/a-basic_pbmc8k.html
     articles:
       text: Vignettes
       menu:

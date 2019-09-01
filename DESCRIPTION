@@ -33,10 +33,9 @@ Imports:
   dbscan,
   entropy,
   parallel,
-  tgconfig,
-  tgutil (>= 0.0.3),
   tgstat,
-  SingleCellExperiment
+  tgutil,
+  tgconfig  
 Collate:
   	'mc_plot_confusion.r'
 	'cgraph_gcor_norm.r'
@@ -84,6 +83,8 @@ Collate:
     'mc_hierarchy.r'
     'mc_plot_vgels.r'
     'scmat_import.r'
+Remotes: tanaylab/tgstat, tanaylab/tgutil, tanaylab/tgconfig
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    SingleCellExperiment
 VignetteBuilder: knitr

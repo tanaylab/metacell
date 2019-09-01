@@ -11,6 +11,9 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+[![DOI](https://zenodo.org/badge/196806305.svg)](https://zenodo.org/badge/latestdoi/196806305)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 # metacell
 

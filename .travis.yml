@@ -5,7 +5,7 @@ r: bioc-release
 warnings_are_errors: false
 cache: packages
 install:
-- R -e 'remotes::install_github("tanaylab/metacell")'
+- R -e 'install.packages("remotes"); remotes::install_github("tanaylab/metacell")'
 script:
 - R CMD build .
 before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'

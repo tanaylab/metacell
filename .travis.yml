@@ -4,6 +4,8 @@ language: R
 r: bioc-release
 warnings_are_errors: false
 cache: packages
+r_build_args: "--no-build-vignettes"
+r_check_args: "--no-build-vignettes"
 before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
 deploy:
   provider: script

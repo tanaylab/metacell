@@ -1,5 +1,4 @@
-[![DOI](https://zenodo.org/badge/196806305.svg)](https://zenodo.org/badge/latestdoi/196806305)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/196806305.svg)](https://zenodo.org/badge/latestdoi/196806305) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 metacell
 ========
@@ -8,7 +7,7 @@ The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices 
 
 #### References:
 
-Method: Baran et al. 2018 ([bioarxiv](https://www.biorxiv.org/content/early/2018/10/08/437665)).
+Method: Baran et al. 2018 ([Genome Biology](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1812-2), [bioarxiv](https://www.biorxiv.org/content/early/2018/10/08/437665)).
 
 Functions reference and usage vignettes are available in the package [homepage](https://tanaylab.github.io/metacell).
 
@@ -24,8 +23,8 @@ Examples of applications:
 #### Installation
 
 ``` r
-install.packages('BiocManager') 
-BiocManager::install('metacell',  site_repository = 'tanaylab.bitbucket.io/repo', update = FALSE)
+if (!require("BiocManager")) install.packages('BiocManager') 
+BiocManager::install('metacell',  site_repository = 'tanaylab.github.io/repo', update = FALSE)
 ```
 
 **Note**: Metacell is implemented in R and C++. In particular it uses the Tanay group tgstat library that utilizes shared memory and distributed computing (as well as some specific optional CPU features). The package is tested on linux and macbooks, and is currently not compatible on Windows. A typical application will require at least 16G RAM. For heavier applications (100K cells) we recommend a dual CPU multi-core workstation with 128GM RAM or more.

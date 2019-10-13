@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Running metacell analysis: guided tutorial on 8K PBMCs • metacell</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Running metacell analysis: guided tutorial on 8K PBMCs">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -46,7 +47,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../articles/basic_pbmc8k.html">Usage</a>
+  <a href="../articles/a-basic_pbmc8k.html">Usage</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -55,7 +56,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="dropdown-header">Core</li>
+    <li>
       <a href="../articles/a-basic_pbmc8k.html">Running metacell analysis: guided tutorial on 8K PBMCs</a>
     </li>
     <li>
@@ -64,11 +66,13 @@
     <li>
       <a href="../articles/c-metacell_annotation.html">Annotation of metacells</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Misc</li>
     <li>
       <a href="../articles/d-amphimedon.html">Analyzing whole-organism scRNA-seq data with metacell</a>
     </li>
     <li>
-      <a href="../articles/e-data_convert.html">Interoperability with other scRNA formats</a>
+      <a href="../articles/e-data_convert.html">UMI matrix conversion to standard formats</a>
     </li>
   </ul>
 </li>
@@ -86,15 +90,16 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Running metacell analysis: guided tutorial on 8K PBMCs</h1>
                         <h4 class="author">A Tanay</h4>
             
-            <h4 class="date">2019-08-31</h4>
+            <h4 class="date">2019-10-13</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/tanaylab/metacell/blob/master/vignettes/a-basic_pbmc8k.Rmd"><code>vignettes/a-basic_pbmc8k.Rmd</code></a></small>
       <div class="hidden name"><code>a-basic_pbmc8k.Rmd</code></div>
 
     </div>
@@ -106,21 +111,23 @@
 <a href="#setting-up" class="anchor"></a>Setting up</h2>
 <p>In this note we demonstrate the basic MetaCell use on the small 8K PBMC data freely available from 10X Genomics. The guide includes import and manipulations of single cell RNA-seq count matrices, extraction of features genes, modeling cell-cell similarities and inference of a MetaCell model.</p>
 <p>We start by loading the library:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"metacell"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"metacell"</span>)</code></pre></div>
 <p>To start using MetaCell, you first initialize a database. This is not much more than linking the package to directory that stores all your objects. In our case we will initialize the database to the testdb directory:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.exists</a></span>(<span class="st">"testdb"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(<span class="st">"testdb/"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span>(<span class="st">"testdb"</span>)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"testdb/"</span>)
 <span class="kw"><a href="../reference/scdb_init.html">scdb_init</a></span>(<span class="st">"testdb/"</span>, <span class="dt">force_reinit=</span>T)
 <span class="co">#&gt; initializing scdb to testdb/</span></code></pre></div>
 <p>force_reinit=T instruct the system to override existing database objects. This can be important if you are running in cycles and would like to update your objects. Otherwise, the database reuses loaded objects to save time on reading and initializing them from the disk.</p>
 <p>Let’s load a matrix to the system. We will import a 10x data set that is stored in the package datain directory, using a sparse matrix format generated by the 10x pipeline:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_import_scmat_10x.html">mcell_import_scmat_10x</a></span>(<span class="st">"test"</span>, <span class="dt">base_dir=</span><span class="st">"http://www.wisdom.weizmann.ac.il/~atanay/metac_data/pbmc_8k/"</span>)
+<span class="co">#&gt; remote mode</span>
+<span class="co">#&gt; summing up total of 0 paralog genes into 0 unique genes</span>
 <span class="co">#&gt; [1] TRUE</span>
 mat =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"test"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(mat<span class="op">@</span>mat))
-<span class="co">#&gt; [1] 28826  8276</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mat<span class="op">@</span>mat))
+<span class="co">#&gt; [1] 29040  8364</span></code></pre></div>
 <p>The <em>scdb_mat()</em> command is returns a matrix object, which has one slot containing the count matrix - <a href="mailto:mat@mat">mat@mat</a>, as well as additional features we will mention below.</p>
 <p>Before starting to analyze the data, we link the package to a figure directory:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.exists</a></span>(<span class="st">"figs"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(<span class="st">"figs/"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span>(<span class="st">"figs"</span>)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"figs/"</span>)
 <span class="kw"><a href="../reference/scfigs_init.html">scfigs_init</a></span>(<span class="st">"figs/"</span>)</code></pre></div>
 <p>MetaCell uses a standardized naming scheme for the figures, to make it easier to archive and link analysis figures to the database objects. In principle, figures in the figures directory are named after the object data type they refer to (for example, mat for matrices, mc for metacells, and more, see below). The figure name then includes also the object name they refer to, and a suffix describing the actual figure type.</p>
 </div>
@@ -129,19 +136,19 @@ mat =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.ht
 <a href="#exploring-and-filtering-the-umi-matrix" class="anchor"></a>Exploring and filtering the UMI matrix</h2>
 <p>To get a basic understanding of the new data, we will plot the distribution of UMI count per cell (the plot is thresholded at 800 UMIs by default):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_plot_umis_per_cell.html">mcell_plot_umis_per_cell</a></span>(<span class="st">"test"</span>)
-<span class="co">#&gt; [1] 800</span></code></pre></div>
+<span class="co">#&gt; [1] 300</span></code></pre></div>
 <div class="figure">
 <img src="figs/test.total_umi_distr.png" alt="Umi distribution plot"><p class="caption">Umi distribution plot</p>
 </div>
 <p>We want to clean some known issues from the matrix before starting to work with it. We generate a list of mitochondrial genes that typically mark cells as being stressed or dying, as well as immunoglobulin genes that may represent strong clonal signatures in plasma cells, rather than cellular identity.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mat =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"test"</span>)
-nms =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(mat<span class="op">@</span>mat), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(mat<span class="op">@</span>ignore_gmat))
-ig_genes =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^IGJ"</span>, nms, <span class="dt">v=</span>T), 
-                <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^IGH"</span>,nms,<span class="dt">v=</span>T),
-                <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^IGK"</span>, nms, <span class="dt">v=</span>T), 
-                <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^IGL"</span>, nms, <span class="dt">v=</span>T))
+nms =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(mat<span class="op">@</span>mat), <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(mat<span class="op">@</span>ignore_gmat))
+ig_genes =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^IGJ"</span>, nms, <span class="dt">v=</span>T), 
+                <span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^IGH"</span>,nms,<span class="dt">v=</span>T),
+                <span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^IGK"</span>, nms, <span class="dt">v=</span>T), 
+                <span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^IGL"</span>, nms, <span class="dt">v=</span>T))
 
-bad_genes =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^MT-"</span>, nms, <span class="dt">v=</span>T), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^MTMR"</span>, nms, <span class="dt">v=</span>T), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span>(<span class="st">"^MTND"</span>, nms, <span class="dt">v=</span>T),<span class="st">"NEAT1"</span>,<span class="st">"TMSB4X"</span>, <span class="st">"TMSB10"</span>, ig_genes))
+bad_genes =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^MT-"</span>, nms, <span class="dt">v=</span>T), <span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^MTMR"</span>, nms, <span class="dt">v=</span>T), <span class="kw"><a href="https://rdrr.io/r/base/grep.html">grep</a></span>(<span class="st">"^MTND"</span>, nms, <span class="dt">v=</span>T),<span class="st">"NEAT1"</span>,<span class="st">"TMSB4X"</span>, <span class="st">"TMSB10"</span>, ig_genes))
 
 bad_genes
 <span class="co">#&gt;   [1] "MT-ATP6"      "MT-ATP8"      "MT-CO1"       "MT-CO2"      </span>
@@ -255,7 +262,7 @@ bad_genes
                 <span class="dt">min_mc_size=</span><span class="dv">20</span>, 
                 <span class="dt">p_resamp=</span><span class="fl">0.75</span>, <span class="dt">n_resamp=</span><span class="dv">500</span>)
 <span class="co">#&gt; running bootstrap to generate cocluster</span>
-<span class="co">#&gt; 0%...7%...15%...24%...33%...42%...53%...62%...71%...81%...91%...100%</span>
+<span class="co">#&gt; 0%...25%...36%...48%...58%...70%...82%...92%...100%</span>
 <span class="co">#&gt; done resampling</span></code></pre></div>
 <p>The metacell size distribution of the resampled partitions will be largely determined by the K parameter used for computing the cgraph. The resampling process may take a while if the graphs are very large. You can modify n_resamp to generate fewer resamples.</p>
 <p>The resampling procedure creates a new coclust object in the database named <em>test_coc500</em>, and stores the number of times each pair of cells ended up being part of the same metacell. The co-clustering statistics are used to generate a new similarity graph, based on which accurate calling of the final set of metacells is done:</p>
@@ -406,11 +413,11 @@ bad_genes
 </tbody>
 </table>
 <p>Applying this table to color metacells is done using the command mc_colorize as shown below. Note that there are more sophisticated ways to color/annotate metacells, and that the model’s understanding and annotation can often greatly benefit from looking at gene distributions and reading literature about possible functions and regulatory mechanisms.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">marks_colors =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"pbmc_mc_colorize.txt"</span>, <span class="dt">package=</span><span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">marks_colors =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"pbmc_mc_colorize.txt"</span>, <span class="dt">package=</span><span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
 <span class="kw"><a href="../reference/mc_colorize.html">mc_colorize</a></span>(<span class="st">"test_mc_f"</span>, <span class="dt">marker_colors=</span>marks_colors)</code></pre></div>
 <p>We are now equipped with some basic coloring of metacells, which can also be accessed directly:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mc =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mc.html">scdb_mc</a></span>(<span class="st">"test_mc_f"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(mc<span class="op">@</span>colors)
+<span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(mc<span class="op">@</span>colors)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     chartreuse     chocolate3          cyan2 darkolivegreen  darkseagreen3 </span>
 <span class="co">#&gt;              1              2              1              2             15 </span>
@@ -428,8 +435,8 @@ bad_genes
 <img src="figs/test_mc_f.cells_heat_marks.png" alt="heatmap_marks"><p class="caption">heatmap_marks</p>
 </div>
 <p>Note that the values plotted are color coded log2(fold enrichment) value of the metacell over the median of all other metacells. It can be useful to explore these values directly - e.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lfp =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(mc<span class="op">@</span>mc_fp)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">tail</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sort">sort</a></span>(lfp[<span class="st">"CD8A"</span>,]))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lfp =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(mc<span class="op">@</span>mc_fp)
+<span class="kw"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(lfp[<span class="st">"CD8A"</span>,]))
 <span class="co">#&gt;       76       49       50       51       71       70 </span>
 <span class="co">#&gt; 1.902010 1.905822 1.923560 1.942664 2.139639 2.307356</span></code></pre></div>
 </div>
@@ -439,8 +446,8 @@ bad_genes
 <p>Heat maps are useful but sometimes hard to interprets, and so we may want to visualize the similarity structure among metacells (or among cells within metacells). To this end we construct a 2D projection of the metacells, and use it to plot the metacells and key similarities between them (shown as connecting edges), as well as the cells. This plot will use the same metacell coloring we established before (and in case we improve the coloring based on additional analysis, the plot can be regenerated):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc2d_force_knn.html">mcell_mc2d_force_knn</a></span>(<span class="dt">mc2d_id=</span><span class="st">"test_2dproj"</span>,<span class="dt">mc_id=</span><span class="st">"test_mc_f"</span>, <span class="dt">graph_id=</span><span class="st">"test_graph"</span>)
 <span class="co">#&gt; comp mc graph using the graph test_graph and K 20</span>
-tgconfig<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/tgconfig/topics/set_param">set_param</a></span>(<span class="st">"mcell_mc2d_height"</span>,<span class="dv">1000</span>, <span class="st">"metacell"</span>)
-tgconfig<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/tgconfig/topics/set_param">set_param</a></span>(<span class="st">"mcell_mc2d_width"</span>,<span class="dv">1000</span>, <span class="st">"metacell"</span>)
+tgconfig<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tgconfig/man/set_param.html">set_param</a></span>(<span class="st">"mcell_mc2d_height"</span>,<span class="dv">1000</span>, <span class="st">"metacell"</span>)
+tgconfig<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tgconfig/man/set_param.html">set_param</a></span>(<span class="st">"mcell_mc2d_width"</span>,<span class="dv">1000</span>, <span class="st">"metacell"</span>)
 <span class="kw"><a href="../reference/mcell_mc2d_plot.html">mcell_mc2d_plot</a></span>(<span class="dt">mc2d_id=</span><span class="st">"test_2dproj"</span>)
 <span class="co">#&gt; png </span>
 <span class="co">#&gt;   2</span></code></pre></div>
@@ -473,6 +480,7 @@ tgconfig<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -494,17 +502,20 @@ tgconfig<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/">Amos Tanay</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Supervised filtering of feature genes: guided tutorial on 8K PBMCs • metacell</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Supervised filtering of feature genes: guided tutorial on 8K PBMCs">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -46,7 +47,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../articles/basic_pbmc8k.html">Usage</a>
+  <a href="../articles/a-basic_pbmc8k.html">Usage</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -55,7 +56,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="dropdown-header">Core</li>
+    <li>
       <a href="../articles/a-basic_pbmc8k.html">Running metacell analysis: guided tutorial on 8K PBMCs</a>
     </li>
     <li>
@@ -64,11 +66,13 @@
     <li>
       <a href="../articles/c-metacell_annotation.html">Annotation of metacells</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Misc</li>
     <li>
       <a href="../articles/d-amphimedon.html">Analyzing whole-organism scRNA-seq data with metacell</a>
     </li>
     <li>
-      <a href="../articles/e-data_convert.html">Interoperability with other scRNA formats</a>
+      <a href="../articles/e-data_convert.html">UMI matrix conversion to standard formats</a>
     </li>
   </ul>
 </li>
@@ -86,6 +90,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -94,7 +99,7 @@
             
             <h4 class="date">2018-10-10</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/tanaylab/metacell/blob/master/vignettes/b-geneset_by_anchor_pbmc8k.Rmd"><code>vignettes/b-geneset_by_anchor_pbmc8k.Rmd</code></a></small>
       <div class="hidden name"><code>b-geneset_by_anchor_pbmc8k.Rmd</code></div>
 
     </div>
@@ -112,7 +117,7 @@
 <h2 class="hasAnchor">
 <a href="#setting-up" class="anchor"></a>Setting up</h2>
 <p>We start by loading the library and initializating the database and the figures directories:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"metacell"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"metacell"</span>)
 
 <span class="kw"><a href="../reference/scdb_init.html">scdb_init</a></span>(<span class="st">"testdb/"</span>, <span class="dt">force_reinit=</span>T)
 <span class="co">#&gt; initializing scdb to testdb/</span>
@@ -124,16 +129,16 @@ figs_dir =<span class="st"> "figs"</span>
 <h2 class="hasAnchor">
 <a href="#creating-the-gene-correlation-matrix" class="anchor"></a>Creating the gene correlation matrix</h2>
 <p>We’re going to generate a gene-gene correlation matrix using the umi matrix generated in the <strong>Running metacell analysis: guided tutorial on 8K PBMCs</strong> vignette. The genes will then be filtered by thresholding their correlation with the user supplied genes (termed anchor genes). In this vignette we’ll build a set of cell cycle and stress related genes. So let’s define these gene anchors, and some additional variables:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genes_anchors =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'MKI67'</span>, <span class="st">'PCNA'</span>, <span class="st">'TOP2A'</span>, <span class="st">'TXN'</span>, <span class="st">'HSP90AB1'</span>, <span class="st">'FOS'</span>)
-tab_fn =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(figs_dir, <span class="st">"lateral_gmods.txt"</span>, <span class="dt">sep=</span><span class="st">"/"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genes_anchors =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'MKI67'</span>, <span class="st">'PCNA'</span>, <span class="st">'TOP2A'</span>, <span class="st">'TXN'</span>, <span class="st">'HSP90AB1'</span>, <span class="st">'FOS'</span>)
+tab_fn =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(figs_dir, <span class="st">"lateral_gmods.txt"</span>, <span class="dt">sep=</span><span class="st">"/"</span>)
 gset_nm =<span class="st"> "lateral"</span></code></pre></div>
 <p><em>tab_fn</em> is the output file name of the correlation matrix, and <em>gset_nm</em> is the id of the gene set that will be generated.</p>
 <p>Now we’ll call the function that computes the gene-gene correlation matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mat_rpt_cor_anchors.html">mcell_mat_rpt_cor_anchors</a></span>(<span class="dt">mat_id=</span><span class="st">"test"</span>, <span class="dt">gene_anchors =</span> genes_anchors, <span class="dt">cor_thresh =</span> <span class="fl">0.1</span>, <span class="dt">gene_anti =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(), <span class="dt">tab_fn =</span> tab_fn, <span class="dt">sz_cor_thresh =</span> <span class="fl">0.2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mat_rpt_cor_anchors.html">mcell_mat_rpt_cor_anchors</a></span>(<span class="dt">mat_id=</span><span class="st">"test"</span>, <span class="dt">gene_anchors =</span> genes_anchors, <span class="dt">cor_thresh =</span> <span class="fl">0.1</span>, <span class="dt">gene_anti =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(), <span class="dt">tab_fn =</span> tab_fn, <span class="dt">sz_cor_thresh =</span> <span class="fl">0.2</span>)</code></pre></div>
 <p>The function computes the correlations of all genes in the umi matrix with the gene anchors after downsampling the umi counts. It then filters genes that their correlation to the anchor genes is above <em>cor_thresh</em>. Genes can also be filtered based on their correlation to a set of negative control genes, that can be specified in the <em>gene_anti</em> parameter. In this case, genes that their top correlated gene is a negative control and not one of the anchor genes are discarded. If the <em>sz_cor_thresh</em> is not <em>NA</em>, genes with correlation to the cells total umi counts above <em>sz_cor_thresh</em> are also selected. In our case, we expect some cell cycle genes to be correlated with cell size, so we specify a positive threshold.</p>
 <p>Let’s read the filtered gene correlation matrix and examine it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gcor_mat =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(tab_fn, <span class="dt">header=</span>T)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(gcor_mat)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gcor_mat =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(tab_fn, <span class="dt">header=</span>T)
+<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(gcor_mat)
 <span class="co">#&gt;                  sz_cor        MKI67          PCNA        TOP2A        TXN</span>
 <span class="co">#&gt; ABCB9       0.002267035  0.113515805  0.0077224535  0.060206640 0.01030069</span>
 <span class="co">#&gt; ABHD5      -0.004551788 -0.006990550 -0.0052722943 -0.007749114 0.04990038</span>
@@ -148,14 +153,14 @@ gset_nm =<span class="st"> "lateral"</span></code></pre></div>
 <span class="co">#&gt; ACSL1      -0.049008246  0.1054241285 0.1054241       0</span>
 <span class="co">#&gt; ACTB       -0.068296466  0.1408468643 0.1542673       0</span>
 <span class="co">#&gt; ACTG1       0.030165625 -0.0957211702 0.1103003       0</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(gcor_mat))
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(gcor_mat))
 <span class="co">#&gt; [1] 582   9</span></code></pre></div>
 <p>The row names are genes, and the columns are the correlation to the total umi counts (<em>sz_cor</em>), the correlations to the anchor genes and their maximal one (<em>max</em>). Since we didn’t specify negative anchor genes in this example the maximal correlation to the negative anchors is zero (<em>max_neg</em>).</p>
 <p>Now we’ll add a gene set to the database, comprised of the genes in the filtered matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foc_genes =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply</a></span>(gcor_mat[, genes_anchors], <span class="dv">1</span>, which.max)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foc_genes =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(gcor_mat[, genes_anchors], <span class="dv">1</span>, which.max)
 
 gset =<span class="st"> </span><span class="kw"><a href="../reference/gset_new_gset.html">gset_new_gset</a></span>(<span class="dt">sets =</span> foc_genes, <span class="dt">desc =</span> <span class="st">"Cell cycle and stress correlated genes"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gset)
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(gset)
 <span class="co">#&gt; An object of class "tgGeneSets"</span>
 <span class="co">#&gt; Slot "description":</span>
 <span class="co">#&gt; [1] "Cell cycle and stress correlated genes"</span>
@@ -406,8 +411,8 @@ gset =<span class="st"> </span><span class="kw"><a href="../reference/gset_new_g
 <h2 class="hasAnchor">
 <a href="#fine-clustering-and-filtering-of-the-gene-set" class="anchor"></a>Fine clustering and filtering of the gene set</h2>
 <p>To further examine the gene set we got, we’ll cluster the genes. First, we’ll create a sub-matrix from the umi matrix that will contain only the genes in the gene set:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sub_mat_id =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="st">"test"</span>, gset_nm, <span class="dt">sep=</span><span class="st">"_"</span>)
-<span class="kw"><a href="../reference/mcell_mat_ignore_genes.html">mcell_mat_ignore_genes</a></span>(<span class="dt">new_mat_id =</span> sub_mat_id, <span class="dt">mat_id =</span> <span class="st">"test"</span>, <span class="dt">ig_genes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(foc_genes), <span class="dt">reverse =</span> T)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sub_mat_id =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"test"</span>, gset_nm, <span class="dt">sep=</span><span class="st">"_"</span>)
+<span class="kw"><a href="../reference/mcell_mat_ignore_genes.html">mcell_mat_ignore_genes</a></span>(<span class="dt">new_mat_id =</span> sub_mat_id, <span class="dt">mat_id =</span> <span class="st">"test"</span>, <span class="dt">ig_genes =</span> <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(foc_genes), <span class="dt">reverse =</span> T)</code></pre></div>
 <p>Now we’ll cluster the genes on the downsampled sub-matrix, using hierarchical clustering and cutting the tree to 20 clusters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_gset_split_by_dsmat.html">mcell_gset_split_by_dsmat</a></span>(<span class="dt">gset_id =</span> gset_nm, <span class="dt">mat_id =</span> sub_mat_id, <span class="dt">K =</span> <span class="dv">20</span>)
 <span class="co">#&gt; will downsample the matrix, N= 750</span>
@@ -415,7 +420,7 @@ gset =<span class="st"> </span><span class="kw"><a href="../reference/gset_new_g
 <p>The number of clusters should be proportional to the number of genes we cluster, as we want to get homogeneous clusters of coodinated genes.</p>
 <p>The cluster membership information is updated in the gene set. Let’s re-load it and have a look:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gset =<span class="st"> </span><span class="kw"><a href="../reference/scdb_gset.html">scdb_gset</a></span>(gset_nm)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gset)
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(gset)
 <span class="co">#&gt; An object of class "tgGeneSets"</span>
 <span class="co">#&gt; Slot "description":</span>
 <span class="co">#&gt; [1] "Cell cycle and stress correlated genes hc K=20"</span>
@@ -664,11 +669,11 @@ gset =<span class="st"> </span><span class="kw"><a href="../reference/gset_new_g
 <p>The plots are generated under a subdirectory of the figures directory named <em>gset_nm</em>.gset_cors. Common practice is to examine them and select the clusters that we want to keep. In our example, In this case we would probably keep clusters 3, 5, 10, 14, 16 and 17 in the gene set: <img src="figs/lateral.gset_cors/3.png" alt="clus3"><img src="figs/lateral.gset_cors/5.png" alt="clus5"><img src="figs/lateral.gset_cors/10.png" alt="clus10"><img src="figs/lateral.gset_cors/14.png" alt="clus14"><img src="figs/lateral.gset_cors/16.png" alt="clus16"><img src="figs/lateral.gset_cors/17.png" alt="clus17"></p>
 <p>The rest of the clusters contain mostly genes that are correlated to cell size but not related to the cell cycle.</p>
 <p>To create the final filtered gene set, we’ll keep only the clusters we’ve selected in the gene set, and we’ll save the filtered gene set in the database:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_gset_remove_clusts.html">mcell_gset_remove_clusts</a></span>(<span class="dt">gset_id =</span> gset_nm, <span class="dt">filt_clusts =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">17</span>), <span class="dt">new_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(gset_nm, <span class="st">"_filtered"</span>), <span class="dt">reverse=</span>T)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_gset_remove_clusts.html">mcell_gset_remove_clusts</a></span>(<span class="dt">gset_id =</span> gset_nm, <span class="dt">filt_clusts =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">17</span>), <span class="dt">new_id =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(gset_nm, <span class="st">"_filtered"</span>), <span class="dt">reverse=</span>T)
 
-lateral_gset_id =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(gset_nm, <span class="st">"_filtered"</span>)
+lateral_gset_id =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(gset_nm, <span class="st">"_filtered"</span>)
 lateral_gset =<span class="st"> </span><span class="kw"><a href="../reference/scdb_gset.html">scdb_gset</a></span>(lateral_gset_id)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(lateral_gset)
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(lateral_gset)
 <span class="co">#&gt; An object of class "tgGeneSets"</span>
 <span class="co">#&gt; Slot "description":</span>
 <span class="co">#&gt; [1] "Cell cycle and stress correlated genes hc K=20 cl_filt"</span>
@@ -744,7 +749,7 @@ marker_gset =<span class="st"> </span><span class="kw"><a href="../reference/gse
                 <span class="dt">min_mc_size=</span><span class="dv">20</span>, 
                 <span class="dt">p_resamp=</span><span class="fl">0.75</span>, <span class="dt">n_resamp=</span><span class="dv">500</span>)
 <span class="co">#&gt; running bootstrap to generate cocluster</span>
-<span class="co">#&gt; 0%...30%...44%...57%...70%...83%...100%</span>
+<span class="co">#&gt; 0%...28%...40%...53%...65%...78%...91%...100%</span>
 <span class="co">#&gt; done resampling</span>
 
 <span class="kw"><a href="../reference/mcell_mc_from_coclust_balanced.html">mcell_mc_from_coclust_balanced</a></span>(
@@ -772,7 +777,7 @@ marker_gset =<span class="st"> </span><span class="kw"><a href="../reference/gse
 <span class="co">#&gt; compute absolute ps</span>
 <span class="co">#&gt; compute coverage ps</span>
 
-marks_colors =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"pbmc_mc_colorize.txt"</span>, <span class="dt">package=</span><span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
+marks_colors =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"pbmc_mc_colorize.txt"</span>, <span class="dt">package=</span><span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
 <span class="kw"><a href="../reference/mc_colorize.html">mc_colorize</a></span>(<span class="st">"test_filtered_mc_f"</span>, <span class="dt">marker_colors=</span>marks_colors)</code></pre></div>
 <p>It is convenient not to restrict the selection of genes that will be displayed in the heatmap of genes and metacells, but to mark the lateral genes that did not affect the partitioning of cells to metacells:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_gset_from_mc_markers.html">mcell_gset_from_mc_markers</a></span>(<span class="dt">gset_id=</span><span class="st">"test_filtered_markers"</span>, <span class="dt">mc_id=</span><span class="st">"test_filtered_mc_f"</span>, <span class="dt">blacklist_gset_id=</span>lateral_gset_id)
@@ -784,6 +789,7 @@ marks_colors =<span class="st"> </span><span class="kw"><a href="https://www.rdo
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -800,17 +806,20 @@ marks_colors =<span class="st"> </span><span class="kw"><a href="https://www.rdo
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/">Amos Tanay</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Annotation of metacells • metacell</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Annotation of metacells">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -46,7 +47,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../articles/basic_pbmc8k.html">Usage</a>
+  <a href="../articles/a-basic_pbmc8k.html">Usage</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -55,7 +56,8 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
+<li class="dropdown-header">Core</li>
+    <li>
       <a href="../articles/a-basic_pbmc8k.html">Running metacell analysis: guided tutorial on 8K PBMCs</a>
     </li>
     <li>
@@ -64,11 +66,13 @@
     <li>
       <a href="../articles/c-metacell_annotation.html">Annotation of metacells</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Misc</li>
     <li>
       <a href="../articles/d-amphimedon.html">Analyzing whole-organism scRNA-seq data with metacell</a>
     </li>
     <li>
-      <a href="../articles/e-data_convert.html">Interoperability with other scRNA formats</a>
+      <a href="../articles/e-data_convert.html">UMI matrix conversion to standard formats</a>
     </li>
   </ul>
 </li>
@@ -86,6 +90,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -94,7 +99,7 @@
             
             <h4 class="date">2018-12-26</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/tanaylab/metacell/blob/master/vignettes/c-metacell_annotation.Rmd"><code>vignettes/c-metacell_annotation.Rmd</code></a></small>
       <div class="hidden name"><code>c-metacell_annotation.Rmd</code></div>
 
     </div>
@@ -111,8 +116,8 @@
 <h2 class="hasAnchor">
 <a href="#setting-up" class="anchor"></a>Setting up</h2>
 <p>The metacells partitioning we use here was generated from the transcript per million reads (TPM) input table Guo et al. supply. For more details see the guo2018.r script at <a href="https://bitbucket.org/tanaylab/li_et_al_cell_2018_melanoma_scrna/src/default/">Li_et_al_Cell_2018_Melanoma_scRNA</a> code repository. We’ll first download the input objects, specifically the unannotated metacell object. #<code>{r, eval=TRUE, warning=FALSE} #download.file("http://www.wisdom.weizmann.ac.il/~lubling/metac_data/metacell_annotation/lung_db.tar.gz", destfile = #"lung_db.tar.gz") #system("tar xfz lung_db.tar.gz") #file.remove("lung_db.tar.gz") #</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(<span class="st">"lung_db"</span>, <span class="dt">showWarnings =</span> F)
-<span class="cf">for</span> (f <span class="cf">in</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"cgraph.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda"</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"lung_db"</span>, <span class="dt">showWarnings =</span> F)
+<span class="cf">for</span> (f <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cgraph.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda"</span>,
             <span class="st">"coclust.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda"</span>,
             <span class="st">"gset.guo2018_lateral.Rda"</span>,
             <span class="st">"gstat.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda"</span>,
@@ -120,11 +125,11 @@
             <span class="st">"mat.guo2018_tpm_scaled_filt_guo2018_lateral.Rda"</span>,
             <span class="st">"mat.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda"</span>,
             <span class="st">"mc.guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean_nonAnn.Rda"</span>)) {
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/download.file">download.file</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~lubling/metac_data/metacell_annotation/"</span>, f), <span class="dt">destfile=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"lung_db/"</span>, f))
+    <span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~lubling/metac_data/metacell_annotation/"</span>, f), <span class="dt">destfile=</span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"lung_db/"</span>, f))
 }</code></pre></div>
 <p>Now let’s load the metacell package and define the output directories:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(metacell)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(metacell)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'dplyr'</span>
 <span class="co">#&gt; The following objects are masked from 'package:stats':</span>
@@ -137,7 +142,7 @@
 <span class="kw"><a href="../reference/scdb_init.html">scdb_init</a></span>(<span class="st">"lung_db"</span>, <span class="dt">force_reinit=</span>T)
 <span class="co">#&gt; initializing scdb to lung_db</span>
 
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(<span class="st">"lung_figs"</span>, <span class="dt">showWarnings =</span> F)
+<span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"lung_figs"</span>, <span class="dt">showWarnings =</span> F)
 <span class="kw"><a href="../reference/scfigs_init.html">scfigs_init</a></span>(<span class="st">"lung_figs"</span>)</code></pre></div>
 <p>For the sake of code clarity, lets define variables for the main metacell object IDs we’ll soon use:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mc_non_ann_id   =<span class="st"> "guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean_nonAnn"</span>
@@ -157,7 +162,7 @@ lateral_gset_id =<span class="st"> "guo2018_lateral"</span></code></pre></div>
 <span class="kw"><a href="../reference/mc_colorize_default.html">mc_colorize_default</a></span>(mc_id)
 mc =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mc.html">scdb_mc</a></span>(mc_id)
 
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(mc<span class="op">@</span>colors)
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mc<span class="op">@</span>colors)
 <span class="co">#&gt;  [1] "#FFFFFF" "#F9F9F9" "#F3F3F3" "#EDEDED" "#E7E7E7" "#E1E1E1" "#DBDBDB"</span>
 <span class="co">#&gt;  [8] "#D5D5D5" "#CFCFCF" "#CACACA" "#C4C4C4" "#BEBEBE" "#B9B9B9" "#B3B3B3"</span>
 <span class="co">#&gt; [15] "#AEAEAE" "#AAA9A8" "#B5AFA6" "#C1B4A5" "#CCBAA3" "#D8C0A1" "#E4C59F"</span>
@@ -168,7 +173,7 @@ mc =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mc.html
 <span class="co">#&gt; [50] "#C7128B" "#BA16AB" "#AE1BCC" "#A11FEC" "#8C1CF1" "#7717F3" "#6113F5"</span>
 <span class="co">#&gt; [57] "#4C0FF7" "#360AF9" "#2106FB" "#0B02FD" "#000FFF" "#0031FF" "#0053FF"</span>
 <span class="co">#&gt; [64] "#0075FF" "#0098FF" "#00BAFF" "#00DCFF" "#00FFFF"</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(mc<span class="op">@</span>color_key)
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mc<span class="op">@</span>color_key)
 <span class="co">#&gt; data frame with 0 columns and 0 rows</span></code></pre></div>
 <p>A concevenient way to explore the metacells is to generate a heatmap of gene enrichments on single cells or metacells. The input data is the genes relative footprint values across metacells over the median metacell footprint (the table under the <span class="citation">@mc_fp</span> slot). We’ll usually use the log2 value of these ratios, and will term the matrix of log ratios <em>lfp</em> in this vignette.</p>
 <p>We’ll first select which genes to present with <em>mcell_gset_from_mc_markers</em>. Its basic usage expects an input metacell id (mc_id) and the name of the gene set to store the genes in (gset_id). This function screens for highly varying genes (max absolute lfp value above the config parameter <em>scm_mc_mark_min_gene_fold</em>, 1.5 by default) and selects the top N varying genes per metacell (N is defined in the <em>scm_mc_mark_k_per_clust</em> parameter, 5 by default). The union of the genes selected per metacell defines the output gene set.</p>
@@ -185,9 +190,9 @@ Varying genes footprint on single-cells, ordered by metacells
 <span class="kw"><a href="../reference/mcell_gset_from_mc_markers.html">mcell_gset_from_mc_markers</a></span>(<span class="dt">gset_id =</span> mc_id, <span class="dt">mc_id =</span> mc_id, <span class="dt">blacklist_gset_id =</span> lateral_gset_id)
 
 <span class="co"># select variable genes from the lateral gene set</span>
-<span class="kw"><a href="../reference/mcell_gset_from_mc_markers.html">mcell_gset_from_mc_markers</a></span>(<span class="dt">gset_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(mc_id, <span class="st">"_lateral"</span>), <span class="dt">mc_id =</span> mc_id, <span class="dt">filt_gset_id =</span> lateral_gset_id)
+<span class="kw"><a href="../reference/mcell_gset_from_mc_markers.html">mcell_gset_from_mc_markers</a></span>(<span class="dt">gset_id =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(mc_id, <span class="st">"_lateral"</span>), <span class="dt">mc_id =</span> mc_id, <span class="dt">filt_gset_id =</span> lateral_gset_id)
         
-<span class="kw"><a href="../reference/mcell_mc_plot_marks.html">mcell_mc_plot_marks</a></span>(<span class="dt">mc_id =</span> mc_id, <span class="dt">gset_id =</span> mc_id, <span class="dt">mat_id =</span> mat_id, <span class="dt">fig_fn =</span> <span class="kw"><a href="../reference/scfigs_fn.html">scfigs_fn</a></span>(mc_id, <span class="st">"cells_heat_marks_lat"</span>), <span class="dt">lateral_gset_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(mc_id, <span class="st">"_lateral"</span>), <span class="dt">plot_cells=</span>T)</code></pre></div>
+<span class="kw"><a href="../reference/mcell_mc_plot_marks.html">mcell_mc_plot_marks</a></span>(<span class="dt">mc_id =</span> mc_id, <span class="dt">gset_id =</span> mc_id, <span class="dt">mat_id =</span> mat_id, <span class="dt">fig_fn =</span> <span class="kw"><a href="../reference/scfigs_fn.html">scfigs_fn</a></span>(mc_id, <span class="st">"cells_heat_marks_lat"</span>), <span class="dt">lateral_gset_id =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(mc_id, <span class="st">"_lateral"</span>), <span class="dt">plot_cells=</span>T)</code></pre></div>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.cells_heat_marks_lat.png" alt="Varying genes footrprint on single-cells, ordered by metacells, lateral genes on top in red" width="100%"><p class="caption">
 Varying genes footrprint on single-cells, ordered by metacells, lateral genes on top in red
@@ -199,7 +204,7 @@ Varying genes footrprint on single-cells, ordered by metacells, lateral genes on
 <span class="kw"><a href="../reference/mcell_mc2d_plot.html">mcell_mc2d_plot</a></span>(<span class="dt">mc2d_id =</span> mc_id, <span class="dt">plot_edges =</span> <span class="ot">TRUE</span>) 
 <span class="co">#&gt; png </span>
 <span class="co">#&gt;   2</span></code></pre></div>
-<pre><code>#&gt; [1] FALSE</code></pre>
+<pre><code>#&gt; [1] TRUE</code></pre>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_default_col.png" alt="Single-cell and metacells 2D projection" width="100%"><p class="caption">
 Single-cell and metacells 2D projection
@@ -210,27 +215,27 @@ Single-cell and metacells 2D projection
 <h2 class="hasAnchor">
 <a href="#metacells-gene-enrichment-table" class="anchor"></a>Metacells gene enrichment table</h2>
 <p>As discussed above, the central way to characterize metacells is via the metacell gene enrichment table (termed here <em>lfp</em>, values in log2 ratio over median gene expression across metacells). We can generate a heatmap of the lfp, marking lateral genes in red and disabling them from affecting the metacells order (columns) as we did before when plotting a heatmap of genes and single-cells:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc_plot_marks.html">mcell_mc_plot_marks</a></span>(<span class="dt">mc_id =</span> mc_id, <span class="dt">gset_id =</span> mc_id, <span class="dt">mat_id =</span> mat_id, <span class="dt">fig_fn =</span> <span class="kw"><a href="../reference/scfigs_fn.html">scfigs_fn</a></span>(mc_id, <span class="st">"mc_heat_marks_lat"</span>), <span class="dt">lateral_gset_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(mc_id, <span class="st">"_lateral"</span>), <span class="dt">plot_cells=</span>F)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc_plot_marks.html">mcell_mc_plot_marks</a></span>(<span class="dt">mc_id =</span> mc_id, <span class="dt">gset_id =</span> mc_id, <span class="dt">mat_id =</span> mat_id, <span class="dt">fig_fn =</span> <span class="kw"><a href="../reference/scfigs_fn.html">scfigs_fn</a></span>(mc_id, <span class="st">"mc_heat_marks_lat"</span>), <span class="dt">lateral_gset_id =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(mc_id, <span class="st">"_lateral"</span>), <span class="dt">plot_cells=</span>F)</code></pre></div>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.mc_heat_marks_lat.png" alt="Varying genes footrprint on metacells, ordered by metecalls, blacklisted genes on top in red" width="100%"><p class="caption">
 Varying genes footrprint on metacells, ordered by metecalls, blacklisted genes on top in red
 </p>
 </div>
 <p>It is also useful to do scatter plots for specific genes. In the example below, we’re interested if the data contain Treg cells, so we plot CTLA4 vs CD4, and indeed there is a group of metacells enriched in both genes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lfp =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(mc<span class="op">@</span>mc_fp)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lfp =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(mc<span class="op">@</span>mc_fp)
 
 plt =<span class="st"> </span><span class="cf">function</span>(gene1, gene2, lfp, colors) 
 {
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(lfp[gene1, ], lfp[gene2, ], <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">cex=</span><span class="dv">3</span>, <span class="dt">bg=</span>colors, <span class="dt">xlab=</span>gene1, <span class="dt">ylab=</span>gene2)
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/text">text</a></span>(lfp[gene1, ], lfp[gene2, ], <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(lfp))
+    <span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(lfp[gene1, ], lfp[gene2, ], <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">cex=</span><span class="dv">3</span>, <span class="dt">bg=</span>colors, <span class="dt">xlab=</span>gene1, <span class="dt">ylab=</span>gene2)
+    <span class="kw"><a href="https://rdrr.io/r/graphics/text.html">text</a></span>(lfp[gene1, ], lfp[gene2, ], <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(lfp))
     
 }
 <span class="kw">plt</span>(<span class="dt">gene1 =</span> <span class="st">'CD4'</span>, <span class="dt">gene2 =</span> <span class="st">'CTLA4'</span>, <span class="dt">lfp =</span> lfp, <span class="dt">colors =</span> mc<span class="op">@</span>colors)</code></pre></div>
 <p><img src="c-metacell_annotation_files/figure-html/unnamed-chunk-14-1.png" width="480"></p>
 <p>It is also useful to browse the lfp table itself. <em>mcell_mc_export_tab</em> exports the lfp table to a tab-delimited file. It filters genes with maximal lfp value above the <em>T_fold</em> parameter. The function reports the metacell size (n_cells) and mean UMIs per metacell (mean_umis), which is a proxy for the cell size. The group field contains the annotation of the metacell (this will be informative after the metacell coloring functions we’ll present below). The metadata field names (columns in the mat object <span class="citation">@cell_metadata</span> table) can be supplied to the <em>metadata_fields</em> parameter. The function would then breakdown cells in each metacell on the values of the metadata field. Very useful to characterize the metacells if our data has informative metadata features.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc_export_tab.html">mcell_mc_export_tab</a></span>(<span class="dt">mc_id =</span> mc_id, <span class="dt">gstat_id =</span> mat_id, <span class="dt">mat_id =</span> mat_id, <span class="dt">T_fold=</span><span class="dv">2</span>, <span class="dt">metadata_fields=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'Patient'</span>, <span class="st">'CD8_gate'</span>, <span class="st">'Sex'</span>, <span class="st">'Stage'</span>, <span class="st">'Histology'</span>))
-lfp_tab =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="kw"><a href="../reference/scfigs_fn.html">scfigs_fn</a></span>(mc_id, <span class="st">"log2_mc_fp"</span>, <span class="dt">ext =</span> <span class="st">"txt"</span>), <span class="dt">header=</span>F, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">stringsAsFactors =</span> F)
-knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(lfp_tab[<span class="dv">1</span><span class="op">:</span><span class="dv">40</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc_export_tab.html">mcell_mc_export_tab</a></span>(<span class="dt">mc_id =</span> mc_id, <span class="dt">gstat_id =</span> mat_id, <span class="dt">mat_id =</span> mat_id, <span class="dt">T_fold=</span><span class="dv">2</span>, <span class="dt">metadata_fields=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Patient'</span>, <span class="st">'CD8_gate'</span>, <span class="st">'Sex'</span>, <span class="st">'Stage'</span>, <span class="st">'Histology'</span>))
+lfp_tab =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw"><a href="../reference/scfigs_fn.html">scfigs_fn</a></span>(mc_id, <span class="st">"log2_mc_fp"</span>, <span class="dt">ext =</span> <span class="st">"txt"</span>), <span class="dt">header=</span>F, <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">stringsAsFactors =</span> F)
+knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(lfp_tab[<span class="dv">1</span><span class="op">:</span><span class="dv">40</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">V1</th>
@@ -574,19 +579,19 @@ Example of formatted lfp table
 <h2 class="hasAnchor">
 <a href="#manual-annotation-by-thresholding-gene-enrichment" class="anchor"></a>Manual annotation by thresholding gene enrichment</h2>
 <p>In many cases we’ll have some prior knowledge on the cell types we expect to be represented by the metacells. Scatter plots of lfp values of selected genes can highlight these metacells. For instance, the plots below show metacells enriched in IL2RA and FOXP3, which are probably Tregs, CD4+ metacells that strongly express CXCL13, which probably represent Tfh cells, a single proliferating metacell enriched with TOP2A, and naive T cells, expressiong IL7R and TCF7. We can set a threshold on the lfp value of these genes (marked with dashed line) to assign an annotation to these metacells:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genes1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'IL2RA'</span>, <span class="st">'CD4'</span>, <span class="st">'IL7R'</span>, <span class="st">'CD8A'</span>)
-genes2 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'FOXP3'</span>, <span class="st">'CXCL13'</span>, <span class="st">'TCF7'</span>, <span class="st">'TOP2A'</span>)
-cutoffs =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">2.25</span>, <span class="dv">16</span>, <span class="dv">2</span>, <span class="dv">2</span>))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">2</span>))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_along</a></span>(genes1)) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genes1 =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'IL2RA'</span>, <span class="st">'CD4'</span>, <span class="st">'IL7R'</span>, <span class="st">'CD8A'</span>)
+genes2 =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'FOXP3'</span>, <span class="st">'CXCL13'</span>, <span class="st">'TCF7'</span>, <span class="st">'TOP2A'</span>)
+cutoffs =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2.25</span>, <span class="dv">16</span>, <span class="dv">2</span>, <span class="dv">2</span>))
+<span class="kw"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="dt">mfrow=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="kw"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(genes1)) {
     <span class="kw">plt</span>(<span class="dt">gene1 =</span> genes1[i], <span class="dt">gene2 =</span> genes2[i], <span class="dt">lfp =</span> lfp, <span class="dt">colors =</span> mc<span class="op">@</span>colors)
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/abline">abline</a></span>(<span class="dt">h=</span>cutoffs[i], <span class="dt">lty=</span><span class="dv">2</span>)
+    <span class="kw"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="dt">h=</span>cutoffs[i], <span class="dt">lty=</span><span class="dv">2</span>)
 }</code></pre></div>
 <p><img src="c-metacell_annotation_files/figure-html/unnamed-chunk-17-1.png" width="480"></p>
 <p>We define the annotations with their thresholds on genes in a tab-delimited file:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">marks_colors =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_mc_partial_colorize.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
-knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(marks_colors)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">marks_colors =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_mc_partial_colorize.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
+knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(marks_colors)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">group</th>
@@ -633,7 +638,7 @@ knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentat
 <span class="kw"><a href="../reference/mcell_mc2d_plot.html">mcell_mc2d_plot</a></span>(<span class="dt">mc2d_id =</span> mc_id)
 <span class="co">#&gt; png </span>
 <span class="co">#&gt;   2</span></code></pre></div>
-<pre><code>#&gt; [1] FALSE</code></pre>
+<pre><code>#&gt; [1] TRUE</code></pre>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_col1.png" alt="Single-cell and metacells 2D projection" width="100%"><p class="caption">
 Single-cell and metacells 2D projection
@@ -655,14 +660,14 @@ Single-cell and metacells 2D projection
                         <span class="dt">min_nmc=</span><span class="dv">2</span>, <span class="dt">show_mc_ids =</span> T)
 <span class="co">#&gt; png </span>
 <span class="co">#&gt;   2</span></code></pre></div>
-<pre><code>#&gt; [1] FALSE</code></pre>
+<pre><code>#&gt; [1] TRUE</code></pre>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu_no_col.png" alt="Clustered metacells confusion matrix" width="100%"><p class="caption">
 Clustered metacells confusion matrix
 </p>
 </div>
 <p>There are several lists of enriched genes for each subtree. Let’s examine all the information supplied on a subree. For instance, subtree number 4 (which is clearly comprised of Treg metacells):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(mc_sup[[<span class="dv">4</span>]])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mc_sup[[<span class="dv">4</span>]])
 <span class="co">#&gt; $marks</span>
 <span class="co">#&gt;    GAPDH CD27-AS1    CXCR6   CARD16     SELL    CTLA4 TNFRSF1B     ICOS </span>
 <span class="co">#&gt; 1.409033 1.425825 1.478982 1.527237 1.571408 1.609004 1.647381 1.729588 </span>
@@ -726,9 +731,9 @@ Clustered metacells confusion matrix
 <p>We see that there are 3 metacells with ZNF683 lfp values above 2.5, but where are these metacells within the sup_mc tree? We define here a simple helper function named <em>query_sup_by_mcs</em>, that gets a list of metacells and reports the sup_mcs that contain them (the id of the sup_mc, number of queried metacells, number of queried metacells inside the sup_mc and the sup_mc size). We usually aim to find the minimal sup_mc that contains most of the metacells we’re interested in, in this case, sup_mc 42 seems like a reasonable choice:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">query_sup_by_mcs =<span class="st"> </span><span class="cf">function</span>(sup, mcs) 
 {
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/do.call">do.call</a></span>(<span class="st">'rbind'</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(sup), <span class="cf">function</span>(i) { csup =<span class="st"> </span>sup[[i]]; <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id=</span>i, <span class="dt">n_mcs=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(mcs), <span class="dt">n_in=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/setops.html">intersect</a></span>(mcs, csup<span class="op">$</span>mcs)), <span class="dt">sup_size=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(csup<span class="op">$</span>mcs)) })) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(n_in <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(sup_size)
+    <span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="st">'rbind'</span>, <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(sup), <span class="cf">function</span>(i) { csup =<span class="st"> </span>sup[[i]]; <span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">id=</span>i, <span class="dt">n_mcs=</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(mcs), <span class="dt">n_in=</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/setops.html">intersect</a></span>(mcs, csup<span class="op">$</span>mcs)), <span class="dt">sup_size=</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(csup<span class="op">$</span>mcs)) })) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(n_in <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(sup_size)
 }
-<span class="kw">query_sup_by_mcs</span>(mc_sup, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(lfp[<span class="st">'ZNF683'</span>, ] <span class="op">&gt;</span><span class="st"> </span><span class="fl">2.5</span>))
+<span class="kw">query_sup_by_mcs</span>(mc_sup, <span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(lfp[<span class="st">'ZNF683'</span>, ] <span class="op">&gt;</span><span class="st"> </span><span class="fl">2.5</span>))
 <span class="co">#&gt;   id n_mcs n_in sup_size</span>
 <span class="co">#&gt; 1 43     3    2        4</span>
 <span class="co">#&gt; 2 42     3    3        5</span>
@@ -737,7 +742,7 @@ Clustered metacells confusion matrix
 <span class="co">#&gt; 5 44     3    3       28</span>
 <span class="co">#&gt; 6 41     3    3       30</span>
 
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(mc_sup[[<span class="dv">42</span>]])
+<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mc_sup[[<span class="dv">42</span>]])
 <span class="co">#&gt; $marks</span>
 <span class="co">#&gt;        CAPG       COTL1    APOBEC3C        PRF1       ITGAE     ALOX5AP </span>
 <span class="co">#&gt;    1.741976    1.760421    1.774480    1.929533    2.148585    2.170378 </span>
@@ -785,8 +790,8 @@ Clustered metacells confusion matrix
 <span class="co">#&gt; $sup_mcs</span>
 <span class="co">#&gt; [1] 16 13 14 12 15  5  4</span></code></pre></div>
 <p>The list of annotated sup_mcs should be in a tab-delimited table containing the id of the sup_mc, its name and color, as shown below. Note that the order of entries matters - the annotation function process this table sequentially, so the newest entry overrides previous ones (if a metacell below to several sup_mcs in the table). It is actually useful in some cases, where you first define a large group of metacells and then pick from within it a smaller group and re-annotate it.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">supmc_tab =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_supmc.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
-knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(supmc_tab)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">supmc_tab =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_supmc.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F)
+knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(supmc_tab)</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">supid</th>
@@ -844,7 +849,7 @@ knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentat
 <p>Sometimes the sup_mcs will not cover all the metacells. Usually this is the case if we have rare cell types represented by a single metacell. For instance Mucosal associated invariant T cell (MAIT) cells in our data here:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plt</span>(<span class="dt">gene1 =</span> <span class="st">'SLC4A10'</span>, <span class="dt">gene2 =</span> <span class="st">'KLRB1'</span>, <span class="dt">lfp =</span> lfp, <span class="dt">colors =</span> mc<span class="op">@</span>colors)</code></pre></div>
 <p><img src="c-metacell_annotation_files/figure-html/unnamed-chunk-28-1.png" width="480"> We can annotate these metacells by defining thresholds on genes. Note that the <em>T_fold</em> threshold in this case is compared to the log2 lfp value. Processing of this table is also sequetial, so if a metacell matches several rules, the last one overwrites any of the previous rules, and coloring by this table will also override any coloring done based on the sup_mcs table.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_marks.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_marks.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>), <span class="dt">sep=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, <span class="dt">h=</span>T, <span class="dt">stringsAsFactors=</span>F))</code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">name</th>
@@ -882,8 +887,8 @@ knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentat
 <p>Once both these tables are defined, we can colorize (e.g. annotate) metacells with them using the <em>mc_colorize_sup_hierarchy</em> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mc_colorize_sup_hierarchy.html">mc_colorize_sup_hierarchy</a></span>(<span class="dt">mc_id =</span> mc_id,
                           <span class="dt">supmc =</span> mc_sup,
-                          <span class="dt">supmc_key =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_supmc.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>),
-                          <span class="dt">gene_key=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_marks.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>))
+                          <span class="dt">supmc_key =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_supmc.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>),
+                          <span class="dt">gene_key=</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"guo2018_marks.txt"</span>, <span class="dt">package =</span> <span class="st">"metacell"</span>))
 
 
 <span class="co"># generate metacell clusters heatmap</span>
@@ -894,7 +899,7 @@ knitr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentat
                                                 <span class="dt">width=</span><span class="dv">1200</span>, <span class="dt">height=</span><span class="dv">2400</span>, <span class="dt">min_nmc=</span><span class="dv">2</span>, <span class="dt">show_mc_ids=</span> T)
 <span class="co">#&gt; png </span>
 <span class="co">#&gt;   2</span></code></pre></div>
-<pre><code>#&gt; [1] FALSE</code></pre>
+<pre><code>#&gt; [1] TRUE</code></pre>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.supmc_confu_col.png" alt="Clustered metacells confusion matrix" width="100%"><p class="caption">
 Clustered metacells confusion matrix
@@ -903,7 +908,7 @@ Clustered metacells confusion matrix
 <p>And the updated 2D projection would look like this:</p>
 <pre><code>#&gt; png 
 #&gt;   2</code></pre>
-<pre><code>#&gt; [1] FALSE</code></pre>
+<pre><code>#&gt; [1] TRUE</code></pre>
 <div class="figure">
 <img src="lung_figs/guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean.2d_graph_proj_final_col.png" alt="Single-cell and metacells 2D projection" width="100%"><p class="caption">
 Single-cell and metacells 2D projection
@@ -913,6 +918,7 @@ Single-cell and metacells 2D projection
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -930,17 +936,20 @@ Single-cell and metacells 2D projection
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/">Amos Tanay</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

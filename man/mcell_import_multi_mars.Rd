@@ -5,7 +5,7 @@
 \title{Load a matrix from a MARS-seq multi-batch dataset. The scdb version of mcell_read_multi_scmat_mars}
 \usage{
 mcell_import_multi_mars(mat_nm, dataset_table_fn, base_dir,
-  patch_cell_name = F, force = FALSE)
+  patch_cell_name = F, md_filter = NULL, force = FALSE)
 }
 \arguments{
 \item{mat_nm}{- the name of the new matrix in scdb}

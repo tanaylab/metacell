@@ -162,6 +162,8 @@ scm_merge_mats = function(scmat1, scmat2)
 
 	scmat1 = scm_ignore_cells(scmat1, NULL)
 	scmat2 = scm_ignore_cells(scmat2, NULL)
+	scmat1 = scm_ignore_genes(scmat1, NULL)
+	scmat2 = scm_ignore_genes(scmat2, NULL)
 	md1 = scmat1@cell_metadata
 	md2 = scmat2@cell_metadata
 	md_f1 = colnames(md1)
@@ -197,6 +199,11 @@ scm_merge_mats = function(scmat1, scmat2)
 	scmat1@cells= colnames(scmat1@mat)
 	scmat1@ncells = ncol(scmat1@mat)
 	scmat1@ngenes = nrow(scmat1@mat)
+	scmat1@ignore_genes = vector(l=0)
+	scmat1@ignore_cells = vector(l=0)
+	scmat1@ignore_cmat =  as(matrix(0, nrow=nrow(scmat1@mat), ncol=0), 'dgCMatrix')
+	scmat1@ignore_gmat =  as(matrix(0, ncol=ncol(scmat1@mat), nrow=0), 'dgCMatrix')
+	scmat1@ignore_gcmat =  as(matrix(0, ncol=0, nrow=0), 'dgCMatrix')
 	rownames(scmat1@cell_metadata) = scmat1@cells
 
 	return(scmat1)
@@ -355,6 +362,9 @@ scm_ignore_cells = function(scmat, ig_cells, reverse=FALSE)
 
 scm_ignore_genes = function(scmat, ig_genes, reverse=FALSE)
 {
+	if(is.null(ig_genes)) {
+		ig_genes = vector(l=0)
+	}
 	if(length(scmat@ignore_genes) > 0) {
 		scmat@mat = rbind(scmat@mat, scmat@ignore_gmat)
 		if(length(scmat@ignore_cells) > 0) {

@@ -5,7 +5,8 @@
 \title{plot a metacel confusion matrix}
 \usage{
 mcell_mc_plot_confusion(mc_id, graph_id, coc_id = NULL,
-  use_orig_order = F, mc_order = NULL, fig_fn = NULL)
+  use_orig_order = F, mc_order = NULL, fig_fn = NULL,
+  symmetrize = F)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}
@@ -17,6 +18,8 @@ mcell_mc_plot_confusion(mc_id, graph_id, coc_id = NULL,
 \item{use_orig_order}{TRUE if you want to preserve the metacell order in the figu. Flase by default}
 
 \item{mc_order}{defining an order for the MCs. If this is null and use_orig_order is false, the ordering will be based on hclust of the confusion matrix}
+
+\item{symmetrize}{should the graph be symetrized before analyzing the confuson matrix.}
 }
 \description{
 plot a metacel confusion matrix

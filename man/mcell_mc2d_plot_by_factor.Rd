@@ -4,9 +4,9 @@
 \alias{mcell_mc2d_plot_by_factor}
 \title{Plot mc+cells using pre-defined mc colorization, breakdown by given metadata field (e.g. patient)}
 \usage{
-mcell_mc2d_plot_by_factor(mc2d_id, mat_id, meta_field, single_plot = T,
-  filter_values = NULL, filter_name = NULL, ncols = NULL,
-  neto_points = F)
+mcell_mc2d_plot_by_factor(mc2d_id, mat_id, meta_field,
+  meta_data_vals = NULL, single_plot = T, filter_values = NULL,
+  filter_name = NULL, ncols = NULL, neto_points = F)
 }
 \arguments{
 \item{mc2d_id}{mc2d object to use for plot}
@@ -14,6 +14,8 @@ mcell_mc2d_plot_by_factor(mc2d_id, mat_id, meta_field, single_plot = T,
 \item{mat_id}{mat object matching mc2d_id that contains the cells metadata information}
 
 \item{meta_field}{field name (in mat cell_metadata slot) to split cells by}
+
+\item{meta_data_vals}{actual named vector (names are cells, values are the metadata to factor on), if this is not null, the meta_field is not used}
 
 \item{single_plot}{output all panels in a single plot or plot per panel (T)}
 

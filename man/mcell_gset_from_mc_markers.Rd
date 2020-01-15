@@ -5,7 +5,7 @@
 \title{Generate a gene set of markers from a metacell cover}
 \usage{
 mcell_gset_from_mc_markers(gset_id, mc_id, filt_gset_id = NULL,
-  blacklist_gset_id = NULL)
+  blacklist_gset_id = NULL, non_marker_genes = NULL)
 }
 \arguments{
 \item{gset_id}{id of gene set to generate}
@@ -15,6 +15,8 @@ mcell_gset_from_mc_markers(gset_id, mc_id, filt_gset_id = NULL,
 \item{filt_gset_id}{gene set to select from (null by default)}
 
 \item{blacklist_gset_id}{gene set to exclude (null by default)}
+
+\item{non_marker_genes}{list of gene names to avoid}
 }
 \description{
 This should be mostly used for visualization and highlighting key genes

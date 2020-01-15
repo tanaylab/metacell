@@ -5,7 +5,13 @@
 #' @slot mc assignment of cells to metacell id
 #' @slot cell_names names of cells (all other objects use running integres relating to these names)
 #' @slot mc_fp a matrix showing for each gene (row) the relative enrichment of umis
-#' @slot e_gc a matrix showing for each gene (row) the mean umi count (without normalizing for cell size)
+#' @slot e_gc a matrix showin
+#'
+#'
+#'
+#'
+#'
+#'                                                                                                                                                                                                                                     g for each gene (row) the mean umi count (without normalizing for cell size)
 #' @slot cov_gc a matrix showing for each gene (row) the fraction of cells in the meta cell that are non zero for the umi
 #' @slot n_bc a matrix detemrining for each batch (row) the meta cell breakdown
 #' @slot annots names of metacells (oridnal numbers by default)
@@ -128,7 +134,6 @@ mc_set_outlier_mc = function(mc, mc_ids)
 	mc@mc_fp = mc@mc_fp[,drop_f]
 	colnames(mc@mc_fp) = 1:newN
 	mc@e_gc = mc@e_gc[,drop_f]
-	colnames(mc@e_gc) = 1:newN
 	mc@cov_gc = mc@cov_gc[,drop_f]
 	colnames(mc@cov_gc) = 1:newN
 
@@ -216,7 +221,7 @@ mc_compute_e_gc= function(mc, us, norm_by_mc_meansize=T)
 	rownames(e_gc) = rownames(us)[f_g_cov]
 
 	if (norm_by_mc_meansize) {
-    		mc_meansize = tapply(colSums(us), mc@mc, mean)
+		mc_meansize = tapply(colSums(us), mc@mc, mean)
 		e_gc = t(t(e_gc)/as.vector(mc_meansize))
 	}
 	return(e_gc)
@@ -411,6 +416,36 @@ mcell_mc_match_graph = function(mc_id, graph_id)
 	graph = scdb_cgraph(graph_id)
 	cov = intersect(graph@cell_names, mc@cell_names)
 	return(length(cov) == length(mc@cell_names))
+}
+
+#' Create a metacell object on a subset of the MCs, with all other cells becoming outliers. There is no re-normalization of mc_fp.
+#'
+#' @param mc metacell object
+#' @param foc_mcs list of metacell to keep in the object
+#'
+#' @export
+
+mc_restrict = function(mc, foc_mcs)
+{
+	foc_mcs = intersect(as.character(foc_mcs), as.character(1:ncol(mc@mc_fp)))
+	all_nms = names(mc@mc)
+	foc_nms = names(mc@mc)[mc@mc %in% foc_mcs]
+	message("restrict mc from ", length(mc@mc), " to ", length(foc_nms), "cells")
+	mc@outliers = union(mc@outliers, setdiff(all_nms, foc_nms))
+	mc@mc = mc@mc[foc_nms]
+	mc@mc_fp = mc@mc_fp[,foc_mcs]
+	mc@e_gc = mc@e_gc[,foc_mcs]
+	mc@cov_gc = mc@cov_gc[,foc_mcs]
+	colnames(mc@n_bc) = 1:ncol(mc@n_bc)
+	mc@n_bc = mc@n_bc[,foc_mcs]
+	if(!is.null(mc@annots)) {
+		mc@annots = mc@annots[foc_mcs]
+	}
+	if(!is.null(mc@colors)) {
+		names(mc@colors) = 1:length(mc@colors)
+		mc@colors = mc@colors[foc_mcs]
+	}
+	return(mc)
 }
 
 #' Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>

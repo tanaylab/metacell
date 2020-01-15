@@ -4,7 +4,7 @@
 \alias{mcell_plot_outlier_heatmap}
 \title{Plot and outlier heat map.}
 \usage{
-mcell_plot_outlier_heatmap(mc_id, mat_id, T_lfc)
+mcell_plot_outlier_heatmap(mc_id, mat_id, T_lfc, max_genes_to_plot = 500)
 }
 \arguments{
 \item{mc}{metacell object (not id)}

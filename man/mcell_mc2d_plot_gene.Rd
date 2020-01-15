@@ -5,7 +5,8 @@
 \title{Plot the (log2) metacell footprint value of the selected gene on the 2d projection}
 \usage{
 mcell_mc2d_plot_gene(mc2d_id, gene, show_mc_ids = F, show_legend = T,
-  neto_points = F)
+  neto_points = F, max_lfp = NA, min_lfp = NA, color_cells = F,
+  mat_ds = NULL, zero_sc_v = 0, one_sc_v = 1, two_sc_v = 2)
 }
 \arguments{
 \item{mc2d_id}{mc2d object to use for plot}

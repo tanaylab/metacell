@@ -134,7 +134,7 @@ tgs_cor_graph = function(x, knn, k_expand, k_alpha, k_beta)
 {
 #	x_c = tgs_cor(x)
 #	x_knn = tgs_knn(x_c, knn*k_expand)
-	x_knn = tgs_cor_knn(x, y=NULL, k=knn*k_expand)
+	x_knn = tgs_cor_knn(x, y=x, knn=knn*k_expand)
 	gr = tgs_graph(x_knn, knn, k_expand, k_beta)
 	return(gr)
 #	gr = tgs_cor_graph(x=feat, knn=K, k_expand=10, k_alpha=k_alpha, k_beta=k_beta)

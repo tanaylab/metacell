@@ -24,10 +24,12 @@ mcell_gset_add_gene = function(gset_id, genes, subset_id = 1)
 #' @param mc_id id of metacell object
 #' @param filt_gset_id gene set to select from (null by default)
 #' @param blacklist_gset_id gene set to exclude (null by default)
+#' @param non_marker_genes list of gene names to avoid
 #'
 #' @export
 mcell_gset_from_mc_markers = function(gset_id, mc_id, 
-					filt_gset_id=NULL, blacklist_gset_id = NULL)
+					filt_gset_id=NULL, blacklist_gset_id = NULL,
+					non_marker_genes = NULL)
 {
 	k_per_clust = get_param("scm_mc_mark_k_per_clust")
 	min_gene_fold = get_param("scm_mc_mark_min_gene_fold")
@@ -49,6 +51,9 @@ mcell_gset_from_mc_markers = function(gset_id, mc_id,
 			stop("MC-ERR: intersect between metacell gene names and filt gene set is < 2")
 		}
 	}
+	if(!is.null(non_marker_genes)) {
+		genes_pool = setdiff(genes_pool, non_marker_genes)
+	}
 	if(!is.null(blacklist_gset_id)) {
 		bl_gset = scdb_gset(blacklist_gset_id)
 		if(is.null(bl_gset)) {
@@ -61,10 +66,11 @@ mcell_gset_from_mc_markers = function(gset_id, mc_id,
 	}
 
 #	mask_folds = gene_folds[genes_pool,]*(mc@cov_gc[genes_pool,]>min_gene_cov)
-	lfp = abs(log2(gene_folds[genes_pool,]))
+	lfp = log2(gene_folds[genes_pool,])
+	alfp = abs(log2(gene_folds[genes_pool,]))
 
 	marks = unique(as.vector(unlist(
-			apply(lfp,
+			apply(alfp,
 				2,
 				function(x)  {
 				   names(head(sort(-x[x>min_gene_fold]),n=k_per_clust)) })

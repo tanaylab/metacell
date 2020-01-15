@@ -11,6 +11,7 @@ mcell_import_multi_mars = function(mat_nm,
 							dataset_table_fn,
 							base_dir,
 							patch_cell_name=F,
+							md_filter = NULL,
 							force=FALSE)
 {
 	if(!scdb_is_valid()) {
@@ -20,7 +21,7 @@ mcell_import_multi_mars = function(mat_nm,
 		return(TRUE)
 	}
 	scdb_add_mat(mat_nm,
-			 mcell_read_multi_scmat_mars(dataset_table_fn, base_dir, patch_cell_name=patch_cell_name))
+			 mcell_read_multi_scmat_mars(dataset_table_fn, base_dir, patch_cell_name=patch_cell_name, md_filter))
 	return(TRUE)
 }
 
@@ -28,10 +29,11 @@ mcell_import_multi_mars = function(mat_nm,
 #'
 #' @param datasets_table_fn the index file of the MARS multi batch dataset. This is a tab delimited text file, with an arbitrary number of columns and a header line. The three mandatory fields are Amp.Batch.ID and Seq.Batch.ID, Batch.Set.ID. The first specify the ID of the batch defined by the row, and also the file name (without the .txt suffix) of the respective umi table in the base_dir provided. The second defines and ID of the sequencing batch (may be relevant for further noise cleanups beyond those done in the low-level pipeline). The third id group different batches into sets for downstream analysis (e.g. QC and more). This is specifically geared toward the output of the std MARS pipeline circa 2014...(bummer).
 #' @param base_dir defines the umitab directory
+#' @param md_filter optional string specifying the a metadata filter on the index: (example: "amp_batch_id!="SB00034")
 #'
 #' @export
 
-mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir, patch_cell_name=F)
+mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir, patch_cell_name=F, md_filter = NULL)
 {
 	if(!file.exists(datasets_table_fn)) {
 		stop("MC-ERR: MARS multi_batch index file is missing, fn = ", datasets_table_fn)
@@ -41,6 +43,19 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir, patch_cell_n
 	miss_f = setdiff(mandatory, colnames(dsets))
 	if(length(miss_f)>0) {
 		stop("MC-ERR: missing fields in MARS dataset table fn : ", miss_f)
+	}
+	if(!is.null(md_filter)) {
+		tryCatch(expr = { pre_dsets = dsets; 
+								dsets = pre_dsets %>% filter(eval(parse(text=md_filter)));
+								message("Kept ", nrow(dsets), " out of ", nrow(pre_dsets), " rows in index following filter") },
+					error = function(e) { 
+									message("cannot parse metadata filter ", md_filter);
+									print(e);
+									stop("Existing now") })
+			
+		if(nrow(dsets)==0) {
+			stop("metadata filter ", md_filter, " return no key rows, exiting")
+		}
 	}
 
 	mat = NULL

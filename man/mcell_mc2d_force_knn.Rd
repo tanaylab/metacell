@@ -4,7 +4,8 @@
 \alias{mcell_mc2d_force_knn}
 \title{Metacell layout using force directed projection of a low degree mc graph}
 \usage{
-mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F)
+mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F,
+  symmetrize = F, ignore_edges = NULL)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}
@@ -14,6 +15,8 @@ mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F)
 \item{graph_id}{graph_id of the similarity graph on cells from the metacell}
 
 \item{ignore_mismatch}{}
+
+\item{symetrix}{should the mc confusion matrix be symmetrized before computing layout?}
 }
 \description{
 Metacell layout using force directed projection of a low degree mc graph

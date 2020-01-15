@@ -4,9 +4,10 @@
 #' @param mc_id2 second mc object to use
 #' @param ord_1 optional ordering of first MC set (default is original order)
 #' @param ord_2 optional ordering of second MC set (Default is based on max intersection with the first set)
+#' @param not_log use this to avoid using log scale on the colors - making the best match MC more pronanouced
 #'
 #' @export
-mcell_plot_cross_mc = function(mc_id1, mc_id2, ord_1=NULL, ord_2=NULL)
+mcell_plot_cross_mc = function(mc_id1, mc_id2, ord_1=NULL, ord_2=NULL, not_log=F)
 {
 	mc1 = scdb_mc(mc_id1)
 	mc2 = scdb_mc(mc_id2)
@@ -49,7 +50,11 @@ mcell_plot_cross_mc = function(mc_id1, mc_id2, ord_1=NULL, ord_2=NULL)
 	mtext((0:n2)[ord_2], at=seq(0,1,l=n2+1), las=2, side=2, cex=1.5)
 	top_marg=c(0,0,4,4)
 	par(mar=top_marg)
-	image(log2(1+cross)[ord_1,ord_2], col=shades, xaxt='n', yaxt='n')
+	if(not_log) {
+		image(log2(1+cross)[ord_1,ord_2], col=shades, xaxt='n', yaxt='n')
+	} else {
+		image(log2(1+cross)[ord_1,ord_2], col=shades, xaxt='n', yaxt='n')
+	}
 	lower_marg=c(4,0,0,4)
 	par(mar=lower_marg)
 	image(as.matrix(1:(n1+1),ncol=1), col=c("white", mc1@colors)[ord_1], yaxt='n', xaxt='n')

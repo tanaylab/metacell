@@ -5,7 +5,10 @@
 \title{plot a marker heat map give a metacell object}
 \usage{
 mcell_mc_plot_marks(mc_id, gset_id, mat_id = mc_id, fig_fn = NULL,
-  lateral_gset_id = NULL, plot_cells = T, mc_ord = NULL)
+  lateral_gset_id = NULL, mc_ord = NULL, plot_cells = T,
+  zero_median = T, add_genes = NULL, add_metadata = NULL,
+  ext_metadata = NULL, md_level_colors = NULL, focus_mcs = NULL,
+  gene_list = NULL, reorder_marks = F, fold_burn = 3)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}
@@ -19,6 +22,20 @@ mcell_mc_plot_marks(mc_id, gset_id, mat_id = mc_id, fig_fn = NULL,
 \item{lateral_gset_id}{markers to plot on top (e.g. cell cycle)}
 
 \item{plot_cells}{by defulat this is TRUE and data is shown for single cells. If this is false, than metacells fold change values will be plotted}
+
+\item{zero_median}{if this is true then for each gene, all values below the median will be plotted as "0". It can save some noise but will  make genes that are anit-enriched in some MC non visible.}
+
+\item{add_genes}{A list of marker genes to be added manually}
+
+\item{add_metadata}{name of metadata field to add below hte heat map}
+
+\item{ext_metadata}{values of metadata per cell to add (a anamed vector, with some or all of the cell names specified)}
+
+\item{md_level_colors}{what colors to use for the metadata levels, if present}
+
+\item{focus_mcs}{option list of MC IDs in case only some of the model should be plotted}
+
+\item{gene_list}{a list of gene names to replcace the markers from a gset_id}
 }
 \description{
 plot a marker heat map give a metacell object

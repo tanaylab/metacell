@@ -38,6 +38,7 @@ Imports:
   tgconfig  
 Collate:
   	'mc_plot_confusion.r'
+	'atlas_project.r'
 	'cgraph_gcor_norm.r'
 	'cgraph_knn_mcnorm.r'
 	'coclust.r'

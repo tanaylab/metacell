@@ -5,11 +5,12 @@
 #' @param coc_id coclustering object to be used as the graph. If this is not null, graph_id must be null (and vice versa)
 #' @param use_orig_order TRUE if you want to preserve the metacell order in the figu. Flase by default
 #' @param mc_order defining an order for the MCs. If this is null and use_orig_order is false, the ordering will be based on hclust of the confusion matrix
+#' @param symmetrize should the graph be symetrized before analyzing the confuson matrix.
 #'
 #' @export
 
 mcell_mc_plot_confusion = function(mc_id, graph_id, coc_id = NULL,
-							use_orig_order=F, mc_order =NULL, fig_fn = NULL)
+			 use_orig_order=F, mc_order =NULL, fig_fn = NULL, symmetrize=F)
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -36,6 +37,9 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, coc_id = NULL,
 		}
 		max_deg = median(table(mc@mc))/2
 		confu = mcell_mc_coclust_confusion_mat(mc_id, coc_id=coc_id, K=max_deg, ignore_mismatch=T, alpha=2)
+	}
+	if(symmetrize) {
+		confu = confu + t(confu)
 	}
 	r_confu = rowSums(confu)
 	c_confu = colSums(confu)
@@ -70,6 +74,8 @@ mcell_mc_plot_confusion = function(mc_id, graph_id, coc_id = NULL,
 	top_marg=c(0,0,5,5)
 	par(mar=top_marg)
 	log_scale = F
+	confu_n[is.na(confu_n)] = 0
+	confu_n[is.nan(confu_n)] = 0
 	if(log_scale) {
 		image(log2(1+confu),col=shades(1000),xaxt='n', yaxt='n')
 	} else {

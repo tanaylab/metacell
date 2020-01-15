@@ -72,3 +72,51 @@ mcell_new_mc2d = function(mc2d_id, mc_id, mc_x, mc_y, sc_x, sc_y, graph)
 	scdb_add_mc2d(mc2d_id, tgMC2D(mc_id, mc_x, mc_y, sc_x, sc_y, graph))
 }
 
+#' Rotatae/invert projection
+#'
+#' transform all coordainte by a rotation and inversion
+#'
+#' @param mc2d_id new id of 2d object to add
+#' @param alpha angle in degrees
+#' @param flipx should flip the X over the mean(x)
+#' @param flipy should flip the Y over the mean(Y)
+#'
+#' @export
+mcell_mc2d_rotate= function(mc2d_id, alpha = 0, flipx = F, flipy = F)
+{
+	mc2d = scdb_mc2d(mc2d_id)
+	if(is.null(mc2d)) {
+		stop("cannot get mc2d object id ", mc2d_id)
+	}
+	alpha = alpha*pi/180
+	sina = sin(alpha)
+	cosa = cos(alpha)
+	mx = mean(mc2d@sc_x, na.rm=T)
+	my = mean(mc2d@sc_y, na.rm=T)
+	if(flipx) {
+		mc2d@sc_x = 2*mx - mc2d@sc_x
+		mc2d@mc_x = 2*mx - mc2d@mc_x
+	}
+	if(flipy) {
+		mc2d@sc_y = 2*my - mc2d@sc_y
+		mc2d@mc_y = 2*my - mc2d@mc_y
+	}
+
+	dscx = mc2d@sc_x - mx
+	dscy = mc2d@sc_y - my
+	scx = mx + cosa*dscx - sina*dscy
+	scy = my + sina*dscx + cosa*dscy
+
+	dmcx = mc2d@mc_x - mx
+	dmcy = mc2d@mc_y - my
+	mcx = mx + cosa*dmcx - sina*dmcy
+	mcy = my + sina*dmcx + cosa*dmcy
+
+	mc2d@sc_x = scx
+	mc2d@sc_y = scy
+	mc2d@mc_x = mcx
+	mc2d@mc_y = mcy
+
+	scdb_add_mc2d(mc2d_id, mc2d)
+}
+

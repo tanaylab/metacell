@@ -4,7 +4,8 @@
 \alias{mcell_plot_cross_mc}
 \title{Plotting a matrix of co-occurences between two metacell covers of the same dataset}
 \usage{
-mcell_plot_cross_mc(mc_id1, mc_id2, ord_1 = NULL, ord_2 = NULL)
+mcell_plot_cross_mc(mc_id1, mc_id2, ord_1 = NULL, ord_2 = NULL,
+  not_log = F)
 }
 \arguments{
 \item{mc_id1}{first mc object to use}
@@ -14,6 +15,8 @@ mcell_plot_cross_mc(mc_id1, mc_id2, ord_1 = NULL, ord_2 = NULL)
 \item{ord_1}{optional ordering of first MC set (default is original order)}
 
 \item{ord_2}{optional ordering of second MC set (Default is based on max intersection with the first set)}
+
+\item{not_log}{use this to avoid using log scale on the colors - making the best match MC more pronanouced}
 }
 \description{
 Plotting a matrix of co-occurences between two metacell covers of the same dataset

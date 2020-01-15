@@ -31,7 +31,9 @@ mcell_mc_confusion_mat = function(mc_id, graph_id, K, ignore_mismatch = F)
 #	mc_map = mc@mc[as.character(levels(edges$mc1))] 
 #	mc_map = factor(as.character(lresamp$co_cluster$node1 = factor(as.character(resamp$co_cluster$node1), levels=orig_levels)
 	mc_map = rep(NA, length(levels(edges$mc1)))
-	mc_map[factor(names(mc@mc),levels(edges$mc1))] = mc@mc
+
+	f = names(mc@mc) %in% levels(edges$mc1)	
+	mc_map[factor(names(mc@mc)[f],levels(edges$mc1))] = mc@mc[f]
 	mc1 = mc_map[edges$mc1[f]]
 	mc2 = mc_map[edges$mc2[f]]
 	N = max(mc1, mc2, na.rm=T)

@@ -3,18 +3,27 @@
 #' @param mc2d_id 2d object to add
 #' @param mc_id meta cell id to work with
 #' @param graph_id graph_id of the similarity graph on cells from the metacell
+#' @param symetrix should the mc confusion matrix be symmetrized before computing layout?
 #' @param ignore_mismatch
 #'
 #' @export
-mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F)
+mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F, symmetrize=F, ignore_edges = NULL)
 {
 	mc = scdb_mc(mc_id)
 	if (is.null(mc)) {
 		stop(sprintf("mc %s not found"), mc_id)
 	}
-	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch)
+	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch, symmetrize=symmetrize)
+	if(!is.null(ignore_edges)) {
+		all_e = paste(mgraph$mc1, mgraph$mc2, sep="-")
+		ig_e = paste(ignore_edges$mc1, ignore_edges$mc2, sep="-")
+		ig_re = paste(ignore_edges$mc2, ignore_edges$mc1, sep="-")
+		f = all_e %in% c(ig_e,ig_re)
+		mgraph= mgraph[!f,]
+		message("igoring ", sum(f), " edges")
+	}
 	mc_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
-	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, mc_xy)
+	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, mc_xy, symmetrize=symmetrize)
 	scdb_add_mc2d(mc2d_id, tgMC2D(mc_id, mc_xy$mc_x, mc_xy$mc_y, xy$x, xy$y, mgraph))
 }
 
@@ -35,7 +44,7 @@ mcell_mc2d_force_knn_on_cells = function(mc2d_id, mc_id, graph_id, mc_xy, ignore
 }
 
 #' @export
-mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F)
+mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F, symmetrize=F)
 {
 	mc2d_K = get_param("mcell_mc2d_K")
 	mc2d_T_edge = get_param("mcell_mc2d_T_edge")
@@ -64,6 +73,9 @@ mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F)
 		message("comp mc graph using the graph ", graph_id, " and K ", mc2d_K)
 		confu = mcell_mc_confusion_mat(mc_id, graph_id, mc2d_K, 
 													ignore_mismatch=ignore_mismatch)
+		if(symmetrize) {
+			confu =confu + t(confu)
+		}
 # k_expand_inout_factor=k_expand_inout_factor
 
 		csize = as.matrix(table(mc@mc))
@@ -137,7 +149,7 @@ mc2d_comp_graph_coord = function(mc_graph, N)
 }
 
 #' @export
-mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy, skip_missing=F)
+mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy, skip_missing=F, symmetrize=F)
 {
 	mc2d_proj_blur = get_param("mcell_mc2d_proj_blur")
 	mc2d_K_cellproj = get_param("mcell_mc2d_K_cellproj")
@@ -158,36 +170,64 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy, skip_missing=F)
 	blurx = mc2d_proj_blur*(max(x_cl) - min(x_cl))
 	blury = mc2d_proj_blur*(max(y_cl) - min(y_cl))
 
+#defining all pairs of MCs that are connected on the mc graph sekelton as active
 	is_active = rep(FALSE, N_mc*N_mc)
 	is_active[(mgraph$mc1-1) * N_mc + mgraph$mc2] = TRUE
+	if(symmetrize) {
+		message("project on symmetrized graph")
+		is_active[(mgraph$mc2-1) * N_mc + mgraph$mc1] = TRUE
+	}
+#including the diagnoal
 	is_active[((1:N_mc)-1) * N_mc + 1:N_mc] = TRUE
 
 	mc_key1 = mc@mc[levels(graph@edges$mc1)]
 	mc_key2 = mc@mc[levels(graph@edges$mc2)]
 	mc1 = mc_key1[graph@edges$mc1]
 	mc2 = mc_key2[graph@edges$mc2]
+	e_wgts = graph@edges$w
+	if(symmetrize) {
+		amc1 = c(mc1, mc2)
+		amc2 = c(mc2, mc1)
+		mc1 = amc1
+		mc2 = amc2
+		e_wgts = c(e_wgts, e_wgts)
+	}
 
 	f_in_mc = !is.na(mc1) & !is.na(mc2) #missing mc's, for example orphans
 	f_active = is_active[(mc1-1)*N_mc + mc2]
 	f = !is.na(f_active) & f_in_mc & f_active
 
 	deg = nrow(graph@edges[f,])/length(graph@nodes)
+	if(symmetrize) {
+		deg = 2*deg
+	}
 	T_w = 1-(mc2d_K_cellproj+1)/deg
-	f = f & graph@edges$w > T_w
+	f = f & e_wgts > T_w
 
 	to_x = x_cl[mc2]
 	to_y = y_cl[mc2]
-	c_x = tapply(to_x[f], graph@edges$mc1[f], mean)
-	c_y = tapply(to_y[f], graph@edges$mc1[f], mean)
+	if(symmetrize) {
+		edges_mcs = c(as.character(graph@edges$mc1), as.character(graph@edges$mc2))[f]
+		c_x = tapply(to_x[f], edges_mcs, mean)
+		c_y = tapply(to_y[f], edges_mcs, mean)
+		c_x = c_x[names(mc@mc)]
+		c_y = c_y[names(mc@mc)]
+		names(c_x) = names(mc@mc)
+		names(c_y) = names(mc@mc)
+	} else {
+		c_x = tapply(to_x[f], as.character(graph@edges$mc1[f]), mean)
+		c_y = tapply(to_y[f], as.character(graph@edges$mc1[f]), mean)
+	}
 
 	base_x = min(c_x)
 	base_y = min(c_y)
 	max_x = max(c_x)
 	base_x = base_x - (max_x-base_x)*0.1
 
-	n_miss = length(setdiff(names(mc@mc), names(c_x)))
-	if(n_miss > 0) {
-		stop("Missing coordinates in some cells that are not ourliers or ignored - check this out! (total ", n_miss, " cells are missing, maybe you used the wrong graph object?")
+	miss = setdiff(names(mc@mc), names(c_x))
+	if(length(miss) > 0) {
+		message("Missing coordinates in some cells that are not ourliers or ignored - check this out! (total ", length(miss), " cells are missing, maybe you used the wrong graph object?", " first nodes ", head(miss,10))
+#		stop("existing")
 	}
 	x = c_x[names(mc@mc)]
 	y = c_y[names(mc@mc)]

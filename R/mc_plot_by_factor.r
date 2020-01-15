@@ -63,7 +63,7 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 											 sprintf("%s/%s.mc_comp_by_%s", .scfigs_base, mc_id, meta_field))
 	}
 	
-	.plot_start(fig_fn, w=mcp_heatmap_width,h=100 + ncol(mc_t) * 15)
+	.plot_start(fig_fn, w=mcp_heatmap_width,h=300 + ncol(mc_t) * 15)
 
 	n_ann = 1 + ifelse(is.null(meta_field_annotate_by), 0, length(meta_field_annotate_by)) + length(custom_made_fields)
   layout(matrix(c(rep(n_ann+3, n_ann), n_ann+1, 1:n_ann, n_ann+2), nrow=2, byrow=T), heights = c(2, ncol(mc_t)), widths = c(rep(1, n_ann), n_ann * 16))

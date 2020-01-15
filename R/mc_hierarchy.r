@@ -32,6 +32,8 @@ mcell_mc_hclust_confu = function(mc_id, graph_id, confu=NULL)
 	c_confu = colSums(confu)
 	norm = r_confu %*% t(c_confu)
 	confu_n = confu/norm
+	confu_n[is.na(confu_n)] = 0
+	confu_n[is.nan(confu_n)] = 0
 
 	confu_nodiag = confu_n
 	diag(confu_nodiag) = 0

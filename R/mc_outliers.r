@@ -59,6 +59,9 @@ mc_compute_outlier_fc = function(mc, mat)
 	for(i in 0:floor(nrow(u_gi)/1000)) {
 		fr = i * 1000 + 1
 		to = min(fr+1000, nrow(u_gi))
+		if(to < fr + 2) {
+			fr = fr - 1
+		}
 		ishigh_g[fr:to] = apply(u_gi[fr:to,],1,max) >= min_outlier_u
 	}
 	u_gi = u_gi[ishigh_g,]
@@ -84,7 +87,7 @@ mc_compute_outlier_fc = function(mc, mat)
 #' @param mat matrix object (not id)
 #'
 #' @export
-mcell_plot_outlier_heatmap = function(mc_id, mat_id, T_lfc)
+mcell_plot_outlier_heatmap = function(mc_id, mat_id, T_lfc, max_genes_to_plot = 500)
 {
 	mc = scdb_mc(mc_id)
 	if(is.null(mc)) {
@@ -99,20 +102,28 @@ mcell_plot_outlier_heatmap = function(mc_id, mat_id, T_lfc)
 	maxlfc_g = apply(lfc_gi, 1, max)
 	maxlfc_i = apply(lfc_gi, 2, max)
 
-	out_g_nms = names(which(maxlfc_g > T_lfc))
-	out_i_nms = names(which(maxlfc_i > T_lfc))
+	if(sum(maxlfc_g>T_lfc) > max_genes_to_plot) {
+      out_g_nms = names(tail(sort(maxlfc_g),max_genes_to_plot))
+	} else {
+		out_g_nms = names(which(maxlfc_g > T_lfc))
+	}
+        
+# some cells are all zero for max_genes_to_plot. Alternative just select top genes for plotting
+	out_i_nms = intersect(names(which(maxlfc_i > T_lfc)), colnames(u_gi)[colSums(u_gi[out_g_nms, ]) != 0])
+
+   #hc1 = hclust(tgs_dist(tgs_cor(outu_gi)), "ward.D2") use mc ord instead
 
 	if(sum(maxlfc_g > T_lfc) > 1 & sum(maxlfc_i > T_lfc) > 2) {
 		outu_gi = log2(1 + as.matrix(u_gi[out_g_nms, out_i_nms]))
 
 	#reporting the outlier gene / cell matrix
 
-		hc1 = hclust(dist(cor(outu_gi)), "ward.D2")
-		hc2 = hclust(dist(cor(t(outu_gi))), "ward.D2")
+		hc1 = hclust(tgs_dist(tgs_cor(outu_gi)), "ward.D2")
+		hc2 = hclust(tgs_dist(tgs_cor(t(outu_gi))), "ward.D2")
 		fig_nm = scfigs_fn(mc_id, "outlier")
 	
-		h_mat = 300+length(out_g_nms)*16
-		png(fig_nm, w=min(300+20*length(out_i_nms),3000), h=h_mat+100)
+		h_mat = 500+length(out_g_nms)*16
+		png(fig_nm, w=min(500+20*length(out_i_nms),3000), h=h_mat+100)
 
 		layout(matrix(c(1,2),nrow=2),heights=c(h_mat, 100))
 		top_marg=c(0,13,5,20)
@@ -214,12 +225,6 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 			names(clst) = nms
 			return(clst)
 		}
-#		if(sum(clst!=1) > 0) {
-#			message("breaking ", id, " : ", 
-#					paste(as.numeric(table(clst)), collapse=" "))
-#		} else {
-#			message("homogeneous ", id)
-#		}
 		clst[is.na(clst)] = 0
 		return(clst)
 	}
@@ -239,15 +244,19 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 		clst = all_clst[[cid]]
 #		message("opening clst length ", length(clst))
 		#adding cluster 1 and all dbscan outliers that were not filtered parametrically to a new MC
+		cl_sz = table(clst)
+		clst[cl_sz[as.character(clst)]<8]=1
 		new_mc[intersect(good_cells, names(which(clst < 2)))] = next_mcid
 		next_mcid = next_mcid + 1
 		if(length(clst) > 1 & max(clst) > 1) {
 		  for(sub_i in 2:max(clst)) {
-				message("splitting metacell ", cid)
-				new_mc[intersect(good_cells, names(which(clst == sub_i)))] = next_mcid
-				clust_outliers = c(clust_outliers, 
+				if(sum(clst==sub_i)>0) {
+					message("splitting metacell ", cid)
+					new_mc[intersect(good_cells, names(which(clst == sub_i)))] = next_mcid
+					clust_outliers = c(clust_outliers, 
 											names(which(clst == sub_i)))
-				next_mcid = next_mcid + 1
+					next_mcid = next_mcid + 1
+				}
 		  }  
 		}
 	}

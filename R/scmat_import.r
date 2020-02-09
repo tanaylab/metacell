@@ -1,8 +1,8 @@
 #' Load a matrix from a simple dense table with genes in rows and cells in columns. First column is the gene name
 #'
 #' @param mat_nm - the name of the new matrix in scdb
-#' @param fn  path of the matrix to read
-#' @param meta_fn meta data table to read. If this is null, all cells will be onsidred as part of a single Amp.Batch and Dataset.ID
+#' @param fn  path of the matrix to read (columns names should represent Cell.IDs, rownames should represent gene names, values are expected to represent number of UMIs per gene per Cell)
+#' @param meta_fn meta data table to read. If this is null, all cells will be onsidred as part of a single Amp.Batch and Dataset.ID. The table must include at least the fields "Cell.ID", "Amp.Batch.ID", "Seq.Batch.ID", "Batch.Set.ID", where Cell.ID should match the names of cells in the data matrix.
 #' @param force - if true, will import from 10x files even when the matrix is present in the DB
 #'
 #' @export
@@ -56,11 +56,13 @@ mcell_import_scmat_tsv = function(mat_nm, fn, genes_fn = NULL, meta_fn = NULL, d
 	}
 	if(!is.null(meta_fn)) {
 		md = fread(meta_fn, sep="\t")
-		mandatory = c("Amp.Batch.ID", "Seq.Batch.ID", "Batch.Set.ID")
+		mandatory = c("Cell.ID", "Amp.Batch.ID", "Seq.Batch.ID", "Batch.Set.ID")
 		miss_f = setdiff(mandatory, colnames(md))
 		if(length(miss_f)>0) {
 			stop("MC-ERR: missing fields in matrix metadata : ", miss_f)
 		}
+		rownames(md) = md$Cell.ID
+		md = md %>% select(-Cell.ID)
 	} else {
 		if(is.null(dset_nm)) {
 			stop("either provide a meta data file, or supply a dataset name (parameter dset_nm) and we'll fake it for you...")

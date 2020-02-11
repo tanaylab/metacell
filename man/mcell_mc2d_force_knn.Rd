@@ -5,7 +5,8 @@
 \title{Metacell layout using force directed projection of a low degree mc graph}
 \usage{
 mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F,
-  symmetrize = F, ignore_edges = NULL)
+  symmetrize = F, ignore_edges = NULL, use_umap_on_mc_egc = F,
+  gset_for_umap = NULL, uconf = NULL, umap_exclude_genes = NULL)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}

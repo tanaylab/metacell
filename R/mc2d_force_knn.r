@@ -7,7 +7,7 @@
 #' @param ignore_mismatch
 #'
 #' @export
-mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F, symmetrize=F, ignore_edges = NULL)
+mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F, symmetrize=F, ignore_edges = NULL, use_umap_on_mc_egc=F, gset_for_umap=NULL, uconf=NULL, umap_exclude_genes=NULL)
 {
 	mc = scdb_mc(mc_id)
 	if (is.null(mc)) {
@@ -22,7 +22,27 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F, sym
 		mgraph= mgraph[!f,]
 		message("igoring ", sum(f), " edges")
 	}
-	mc_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
+	if(use_umap_on_mc_egc) {
+		if(is.null(gset_for_umap)) {
+			stop("Specifiy a gene set for layout using umap on mc egc")
+		}
+		if(is.null(uconf)) {
+			uconf = umap.defaults
+			uconf$n_neighbors=6
+			uconf$min_dist=0.9
+			uconf$bandwidth=1.3
+		}
+		gset = scdb_gset(gset_for_umap)
+		genes = names(gset@gene_set)
+		if(!is.null(umap_exclude_genes)) {
+			genes = setdiff(genes, umap_exclude_genes)
+			message("remove exclude, total now ", length(genes))
+		}
+		message("map with gset ", gset_for_umap, " on ", length(genes), " genes")
+		mc_xy = mc2d_comp_graph_coord_umap(mc, genes, uconf)
+	} else {
+		mc_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
+	}
 	xy = mc2d_comp_cell_coord(mc_id, graph_id, mgraph, mc_xy, symmetrize=symmetrize)
 	scdb_add_mc2d(mc2d_id, tgMC2D(mc_id, mc_xy$mc_x, mc_xy$mc_y, xy$x, xy$y, mgraph))
 }
@@ -126,6 +146,14 @@ mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F, symmetrize=F)
 	n1 = ceiling((e)/N)
 	n2 = 1+((e-1) %% N)
 	return(data.frame(mc1 = n1, mc2 = n2))
+}
+
+#' @export
+mc2d_comp_graph_coord_umap = function(mc, genes, uconf)
+{
+	legc = log2(mc@e_gc[genes,] + 1e-5)
+	um = umap(t(legc), uconf)
+	return(list(mc_x=um$layout[,1], mc_y=um$layout[,2]))
 }
 
 #' @importClassesFrom graph graphNEL

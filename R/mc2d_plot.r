@@ -5,7 +5,7 @@
 #' @param plot_edges plot edges between metacells (true by default)
 #'
 #' @export
-mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T)
+mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge_l=0, edge_w = 1, short_edge_w=0)
 {
 	mcp_2d_height = get_param("mcell_mc2d_height")
 	mcp_2d_width = get_param("mcell_mc2d_width")
@@ -30,7 +30,11 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T)
 	fr = mc2d@graph$mc1
 	to = mc2d@graph$mc2
 	if (plot_edges) {
-		segments(mc2d@mc_x[fr], mc2d@mc_y[fr], mc2d@mc_x[to], mc2d@mc_y[to])
+		dx = mc2d@mc_x[fr]-mc2d@mc_x[to]
+		dy = mc2d@mc_y[fr]-mc2d@mc_y[to]
+		f = sqrt(dx*dx+dy*dy) > min_edge_l
+		segments(mc2d@mc_x[fr], mc2d@mc_y[fr], mc2d@mc_x[to], mc2d@mc_y[to], 
+					lwd=ifelse(f, edge_w, short_edge_w))
 	}
 	points(mc2d@mc_x, mc2d@mc_y, cex= 3*mcp_2d_cex, col="black", pch=21, bg=cols)
 	text(mc2d@mc_x, mc2d@mc_y, 1:length(mc2d@mc_x), cex=mcp_2d_cex)

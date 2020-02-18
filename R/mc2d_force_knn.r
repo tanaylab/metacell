@@ -3,17 +3,50 @@
 #' @param mc2d_id 2d object to add
 #' @param mc_id meta cell id to work with
 #' @param graph_id graph_id of the similarity graph on cells from the metacell
-#' @param symetrix should the mc confusion matrix be symmetrized before computing layout?
+#' @param symetrize should the mc confusion matrix be symmetrized before computing layout?
 #' @param ignore_mismatch
+#' @param feats_gset gene set name for use in parametric graph and/or umap 2d projection
+#' @param feats_exclude list of genes to exclude from the features gene set
+#' @param graph_parametric if this is True, mc edges will be determined using parametric distances and not the cells k-nn graph.
+#' @param logist_loc the "location" parametr of the logistic function used to determine parametric distances between metacelles
+#' @param logist_scale the "lscale" parametr of the logistic function used to determine parametric distances between metacelles
 #'
 #' @export
-mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F, symmetrize=F, ignore_edges = NULL, use_umap_on_mc_egc=F, gset_for_umap=NULL, uconf=NULL, umap_exclude_genes=NULL)
+mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, 
+			ignore_mismatch=F, symmetrize=F, 
+			ignore_edges = NULL, 
+			feats_gset = NULL, 
+			feats_exclude =NULL,
+			graph_parametric = F, logist_loc = 1, logist_scale = 0.2, 
+			logist_eps = 4e-5, max_d_fold = 3,
+			use_umap_for_2d_pos=F, umap_mgraph=F,
+			uconf=NULL)
 {
 	mc = scdb_mc(mc_id)
 	if (is.null(mc)) {
 		stop(sprintf("mc %s not found"), mc_id)
 	}
-	mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch, symmetrize=symmetrize)
+	feat_genes = NULL
+	if(!is.null(feats_gset)) {
+		gset = scdb_gset(feats_gset)
+		if(is.null(gset)) {
+			stop("Unkown gset ", feats_gset, " defined in mc2d graph construction")
+		}
+		feat_genes = names(gset@gene_set)
+		if(!is.null(feat_genes)) {
+			feat_genes = setdiff(feat_genes, feats_exclude)
+		}
+		message("got ", length(feat_genes), " feat genes for mc graph construction")
+	}
+
+	if(!graph_parametric) {
+		mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch, symmetrize=symmetrize)
+	} else {
+		if(is.null(feat_genes)) {
+			stop("must specify feat gene set to build parametric mc2d graph")
+		}
+		mgraph = mc2d_comp_mgraph_param(mc, feat_genes, logist_loc, logist_scale, logist_eps, max_d_fold)
+	}
 	if(!is.null(ignore_edges)) {
 		all_e = paste(mgraph$mc1, mgraph$mc2, sep="-")
 		ig_e = paste(ignore_edges$mc1, ignore_edges$mc2, sep="-")
@@ -22,24 +55,18 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, ignore_mismatch=F, sym
 		mgraph= mgraph[!f,]
 		message("igoring ", sum(f), " edges")
 	}
-	if(use_umap_on_mc_egc) {
-		if(is.null(gset_for_umap)) {
+	if(use_umap_for_2d_pos) {
+		if(is.null(feat_genes)) {
 			stop("Specifiy a gene set for layout using umap on mc egc")
 		}
 		if(is.null(uconf)) {
-			uconf = umap.defaults
+			#uconf = umap.defaults
+			uconf = 
 			uconf$n_neighbors=6
 			uconf$min_dist=0.9
 			uconf$bandwidth=1.3
 		}
-		gset = scdb_gset(gset_for_umap)
-		genes = names(gset@gene_set)
-		if(!is.null(umap_exclude_genes)) {
-			genes = setdiff(genes, umap_exclude_genes)
-			message("remove exclude, total now ", length(genes))
-		}
-		message("map with gset ", gset_for_umap, " on ", length(genes), " genes")
-		mc_xy = mc2d_comp_graph_coord_umap(mc, genes, uconf)
+		mc_xy = mc2d_comp_graph_coord_umap(mc, feat_genes, mgraph, uconf, umap_mgraph)
 	} else {
 		mc_xy = mc2d_comp_graph_coord(mgraph, N=ncol(mc@mc_fp))
 	}
@@ -149,12 +176,64 @@ mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F, symmetrize=F)
 }
 
 #' @export
-mc2d_comp_graph_coord_umap = function(mc, genes, uconf)
+mc2d_comp_mgraph_param = function(mc, genes, loc, scale, eps, max_d_fold)
+{
+	max_deg = get_param("mcell_mc2d_max_confu_deg")
+	legc = log2(mc@e_gc[genes,] + eps)
+
+	logist_d = function(x) {
+		d = abs(legc - x)
+		d = plogis(d, loc, scale)
+		return(colSums(d))
+	}
+	a = apply(legc, 2, logist_d) 
+
+#connect - d-best outgoing. filter by d_best_ratio < 2
+	diag(a) = 1000;
+	d_T = apply(a, 1, function(x) sort(x,partial=2)[2])
+	a_n = a/d_T
+	diag(a) = 0;
+	diag(a_n) = 0;
+
+   rank_fr = t(apply(a, 1, rank))
+   rank_fr_m = rank_fr
+   rank_fr_m[a_n > max_d_fold] = 1000
+   rank_fr_m2 = rank_fr_m
+   rank_fr_m2[t(a_n) > max_d_fold] = 1000
+
+   edges = apply(rank_fr_m2, 1, function(x) {
+                        mc2 = which(x > 0 & x <= max_deg+1);
+                        mc1 = rep(which.min(x), length(mc2));
+                        return(data.frame(mc1 = mc1, mc2=mc2)) })
+   ed_df = as.data.frame(do.call(rbind, edges))
+	ed_df$dist = apply(ed_df, 1, function(x) 1+a[x[1],x[2]])
+	return(ed_df)
+}
+
+#' @export
+mc2d_comp_graph_coord_umap = function(mc, genes, mgraph, uconf, use_mgraph)
 {
 	legc = log2(mc@e_gc[genes,] + 1e-5)
-	um = umap(t(legc), uconf)
-	return(list(mc_x=um$layout[,1], mc_y=um$layout[,2]))
+#	um = umap(t(legc), uconf)
+if(0) {
+	um = umap(t(legc), n_neighbors=uconf$n_neighbors, min_dist=uconf$min_dist,bandwidth=uconf$bandwidth, local_connectivity=uconf$local_connectivity, metric="cosine")
+	return(list(mc_x=um[,1], mc_y=um[,2]))
+} else {
+	if(use_mgraph) {
+		m = sparseMatrix(mgraph$mc1, mgraph$mc2, x=1/mgraph$dist)
+		m = as.matrix(m)
+		diag(m) = 0
+		m = m/(0.5+rowSums(m))
+		diag(m) = 0.5+apply(m,1, max)
+		m  = m %*% m
+		um = umap(as.matrix(m), uconf);
+	} else {
+		um = umap(t(legc) , uconf)
+	}
+	return(list(mc_x = um$layout[,1], mc_y = um$layout[,2]))
 }
+}
+
 
 #' @importClassesFrom graph graphNEL
 #' @importFrom graph plot addEdge addNode nodeRenderInfo

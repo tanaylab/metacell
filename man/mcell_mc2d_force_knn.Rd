@@ -5,8 +5,10 @@
 \title{Metacell layout using force directed projection of a low degree mc graph}
 \usage{
 mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F,
-  symmetrize = F, ignore_edges = NULL, use_umap_on_mc_egc = F,
-  gset_for_umap = NULL, uconf = NULL, umap_exclude_genes = NULL)
+  symmetrize = F, ignore_edges = NULL, feats_gset = NULL,
+  feats_exclude = NULL, graph_parametric = F, logist_loc = 1,
+  logist_scale = 0.2, logist_eps = 4e-05, max_d_fold = 3,
+  use_umap_for_2d_pos = F, umap_mgraph = F, uconf = NULL)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}
@@ -15,9 +17,17 @@ mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F,
 
 \item{graph_id}{graph_id of the similarity graph on cells from the metacell}
 
-\item{ignore_mismatch}{}
+\item{feats_gset}{gene set name for use in parametric graph and/or umap 2d projection}
 
-\item{symetrix}{should the mc confusion matrix be symmetrized before computing layout?}
+\item{feats_exclude}{list of genes to exclude from the features gene set}
+
+\item{graph_parametric}{if this is True, mc edges will be determined using parametric distances and not the cells k-nn graph.}
+
+\item{logist_loc}{the "location" parametr of the logistic function used to determine parametric distances between metacelles}
+
+\item{logist_scale}{the "lscale" parametr of the logistic function used to determine parametric distances between metacelles}
+
+\item{symetrize}{should the mc confusion matrix be symmetrized before computing layout?}
 }
 \description{
 Metacell layout using force directed projection of a low degree mc graph

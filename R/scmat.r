@@ -144,69 +144,77 @@ mcell_merge_mats = function(id1, id2, new_id)
 					 scm_merge_mats(scdb_mat(id1), scdb_mat(id2)))
 }
 
-#' scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
+#' Merge multiple single cell matrix object.
+#' 
+#' Merge multiple single cell matrix object.
+#' Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices.
+#' 
+#' In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
 #'
-#' @param scmat1  tgScMat object.
-#' @param scmat2  tgScMat object.
+#' @param ... tgScMat objects to merge.
+#'   Each parameter can be either a single tgScMat or a list of tgScMat (that will be merged)
 #'
 #' @export
 #'
-scm_merge_mats = function(scmat1, scmat2)
+scm_merge_mats = function(...)
 {
-	if(class(scmat1)[1] != "tgScMat") {
-		stop("invalid scmat1 in scm_merge_mat - if you want to merge from the scdb, call mcell_merge_mats")
-	}
-	if(class(scmat2)[1] != "tgScMat") {
-		stop("invalid scmat2 in scm_merge_mat - if you want to merge from the scdb, call mcell_merge_mats")
+	scmats = list(...)
+	scmats = do.call(c, scmats)
+
+	if (length(scmats) == 0) {
+		return(NULL)
 	}
 
-	scmat1 = scm_ignore_cells(scmat1, NULL)
-	scmat2 = scm_ignore_cells(scmat2, NULL)
-	scmat1 = scm_ignore_genes(scmat1, NULL)
-	scmat2 = scm_ignore_genes(scmat2, NULL)
-	md1 = scmat1@cell_metadata
-	md2 = scmat2@cell_metadata
-	md_f1 = colnames(md1)
-	md_f2 = colnames(md2)
-	if(length(setdiff(md_f2,md_f1))>0) {
-		md1[,setdiff(md_f2,md_f1)]=NA
+	if (!all(sapply(scmats, function(scmat) {"tgScMat" %in% class(scmat)}))) {
+		stop("Trying to merge a non-tgScMat object using scm_merge_mats() - if you want to merge from the scdb, call mcell_merge_mats")
 	}
-	if(length(setdiff(md_f1,md_f2))>0) {
-		md2[,setdiff(md_f1,md_f2)]=NA
+
+	scmats = lapply(scmats, scm_ignore_cells, NULL)
+	scmats = lapply(scmats, scm_ignore_genes, NULL)
+
+	res = scmats[[1]]
+	
+	mds = lapply(scmats, function(scmat) {scmat@cell_metadata})
+	md_cols = lapply(mds, colnames)
+	md_cols_all = Reduce(function(a, b) {c(a, setdiff(b, a))}, md_cols)
+	mds = lapply(mds, function(md) {
+		missing = setdiff(md_cols_all, colnames(md))
+		if (length(missing) > 0) {
+			md[, missing] = NA
+		}
+		return(md[, md_cols_all])
+	})
+	res@cell_metadata = do.call(rbind, mds)
+
+	mats = lapply(scmats, function(scmat) {scmat@mat})
+	genes = lapply(scmats, function(scmat) {scmat@genes})
+	genes_all = Reduce(function(a, b) {c(a, setdiff(b, a))}, genes)
+	if (any(sapply(genes, length) != length(genes_all))) {
+		warning("Merged tgScMats have different gene sets. Missing genes will be set to 0.")
 	}
-	scmat1@cell_metadata = rbind(md1, md2)
-#	scmat1@cell_metadata = bind_rows(scmat1@cell_metadata, scmat2@cell_metadata)
+	mats = lapply(mats, function(mat) {
+		missing <- setdiff(genes_all, rownames(mat))
+		if (length(missing) > 0) {
+			missing = Matrix::sparseMatrix(i = c(), j = c(), x = 0,
+								           dims = c(length(missing), ncol(mat)),
+								           dimnames = list(missing, colnames(mat)))
+			mat = rbind(mat, missing)
+		}
+		return(mat[genes_all, ])
+	})
+	res@mat = do.call(cbind, mats)
 
-	m1 = scmat1@mat
-	m2 = scmat2@mat
+	res@genes = rownames(res@mat)
+	res@cells = colnames(res@mat)
+	res@ncells = ncol(res@mat)
+	res@ngenes = nrow(res@mat)
+	res@ignore_genes = vector(l=0)
+	res@ignore_cells = vector(l=0)
+	res@ignore_cmat =  as(matrix(0, nrow=nrow(res@mat), ncol=0), 'dgCMatrix')
+	res@ignore_gmat =  as(matrix(0, nrow=0, ncol=ncol(res@mat)), 'dgCMatrix')
+	res@ignore_gcmat =  as(matrix(0, nrow=0, ncol=0), 'dgCMatrix')
 
-	miss_nm1 = setdiff(scmat2@genes, scmat1@genes)
-	miss_nm2 = setdiff(scmat1@genes, scmat2@genes)
-
-	if (length(miss_nm1) > 0 | length(miss_nm2) > 0) {
-	  message(sprintf("will add missing genes (%d to scmat1, %d to scmat2)", length(miss_nm1), length(miss_nm2)))
-	}
-	m1 = rBind(m1,
-					sparseMatrix(i=c(), j=c(),
-									dims=c(length(miss_nm1), ncol(m1)),
-									dimnames=list(miss_nm1, colnames(m1) )))
-	m2 = rBind(m2,
-					sparseMatrix(i=c(), j=c(),
-									dims=c(length(miss_nm2), ncol(m2)),
-									dimnames=list(miss_nm2, colnames(m2) )))
-	scmat1@mat = cbind(m1,m2[rownames(m1),])
-	scmat1@genes = rownames(m1)
-	scmat1@cells= colnames(scmat1@mat)
-	scmat1@ncells = ncol(scmat1@mat)
-	scmat1@ngenes = nrow(scmat1@mat)
-	scmat1@ignore_genes = vector(l=0)
-	scmat1@ignore_cells = vector(l=0)
-	scmat1@ignore_cmat =  as(matrix(0, nrow=nrow(scmat1@mat), ncol=0), 'dgCMatrix')
-	scmat1@ignore_gmat =  as(matrix(0, ncol=ncol(scmat1@mat), nrow=0), 'dgCMatrix')
-	scmat1@ignore_gcmat =  as(matrix(0, ncol=0, nrow=0), 'dgCMatrix')
-	rownames(scmat1@cell_metadata) = scmat1@cells
-
-	return(scmat1)
+	return(res)
 }
 
 #'

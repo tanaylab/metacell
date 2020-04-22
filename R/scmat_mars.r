@@ -58,8 +58,7 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir, patch_cell_n
 		}
 	}
 
-	mat = NULL
-
+	mat = list()
 	for(i in 1:nrow(dsets)) {
 		amp_batch = dsets$Amp.Batch.ID[i]
 		message("will read ", amp_batch)
@@ -83,14 +82,9 @@ mcell_read_multi_scmat_mars = function(datasets_table_fn, base_dir, patch_cell_n
 		  md$spike_count = 0
 		}
 
-		amat = tgScMat(as.matrix(umis), stat_type = "umi", cell_metadata = md)
-		if(is.null(mat)) {
-			mat = amat
-		} else {
-			mat = scm_merge_mats(mat, amat)
-		}
-
+		mat[[i]] = tgScMat(as.matrix(umis), stat_type = "umi", cell_metadata = md)
 	}
+	mat = scm_merge_mats(mat)
 	return(mat)
 }
 

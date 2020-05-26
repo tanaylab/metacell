@@ -7,7 +7,9 @@
 scdb_cgraph(id)
 }
 \arguments{
-\item{id}{- id of cgraph}
+\item{id}{\itemize{
+\item id of cgraph
+}}
 }
 \description{
 scdb_cgraph - get a cgraph object

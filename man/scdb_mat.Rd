@@ -7,7 +7,9 @@
 scdb_mat(id)
 }
 \arguments{
-\item{id}{-  matrix id. Will return null if does not exist}
+\item{id}{\itemize{
+\item matrix id. Will return null if does not exist
+}}
 }
 \description{
 scdb_mat - get matrix from db, load it if needed

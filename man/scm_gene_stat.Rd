@@ -4,8 +4,12 @@
 \alias{scm_gene_stat}
 \title{Calculate basic statistics on a matrix}
 \usage{
-scm_gene_stat(mat_id, niche_quantile = 0.2, downsample_n = NULL,
-  K_std_n = 1000)
+scm_gene_stat(
+  mat_id,
+  niche_quantile = 0.2,
+  downsample_n = NULL,
+  K_std_n = 1000
+)
 }
 \arguments{
 \item{niche_quantile}{A value between 0 and 1.}
@@ -21,23 +25,23 @@ per cell sums to 1.
 The columns are:
 
 \describe{
-  \item{tot}{Total gene expression}
-  \item{var}{Gene variance}
-  \item{is_on_count}{Number of cells in which the gene is expressed}
-  \item{sz_cor}{Correlation with cell size}
-  \item{sz_cor_norm}{sz_cor after subtracting the trend}
-  \item{niche_stat}{How many of the genen's umis are found in X\% of the most highly expressing cells. (regularized) }
-  \item{niche_norm}{niche_stat after subtracting the niche_norm trend: median niche_norm value of genes with similar total expression}
-  \item{n_mean}{Mean after normalization}
-  \item{ds_top1}{Largest count, after downsampling}
-  \item{ds_top2}{2nd largest count, after downsampling}
-  \item{ds_top3}{3rd largest count, after downsampling}
-  \item{ds_mean}{Mean on downsampled data}
-  \item{ds_var}{Variance on downsampled data}
-  \item{ds_log_varmean}{log2 of ds_var/ds_mean }
-  \item{ds_vm_norm}{ds_log_varmean after subtracting the trend}
-  \item{ds_is_on_count}{Number of cells in which the gene is expressed, after down sampling}
-  \item{downsample_n}{Number of UMIs used for downsampling}
+\item{tot}{Total gene expression}
+\item{var}{Gene variance}
+\item{is_on_count}{Number of cells in which the gene is expressed}
+\item{sz_cor}{Correlation with cell size}
+\item{sz_cor_norm}{sz_cor after subtracting the trend}
+\item{niche_stat}{How many of the genen's umis are found in X\\% of the most highly expressing cells. (regularized) }
+\item{niche_norm}{niche_stat after subtracting the niche_norm trend: median niche_norm value of genes with similar total expression}
+\item{n_mean}{Mean after normalization}
+\item{ds_top1}{Largest count, after downsampling}
+\item{ds_top2}{2nd largest count, after downsampling}
+\item{ds_top3}{3rd largest count, after downsampling}
+\item{ds_mean}{Mean on downsampled data}
+\item{ds_var}{Variance on downsampled data}
+\item{ds_log_varmean}{log2 of ds_var/ds_mean }
+\item{ds_vm_norm}{ds_log_varmean after subtracting the trend}
+\item{ds_is_on_count}{Number of cells in which the gene is expressed, after down sampling}
+\item{downsample_n}{Number of UMIs used for downsampling}
 
 }
 }

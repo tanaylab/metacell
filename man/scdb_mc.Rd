@@ -7,7 +7,9 @@
 scdb_mc(id)
 }
 \arguments{
-\item{id}{- id of mc}
+\item{id}{\itemize{
+\item id of mc
+}}
 }
 \description{
 scdb_mc - get a mc object

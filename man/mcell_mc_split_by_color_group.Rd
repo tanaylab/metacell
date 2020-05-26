@@ -2,10 +2,14 @@
 % Please edit documentation in R/mc.r
 \name{mcell_mc_split_by_color_group}
 \alias{mcell_mc_split_by_color_group}
-\title{Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>}
+\title{Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>\emph{submc}<group>}
 \usage{
-mcell_mc_split_by_color_group(mc_id, mat_id, min_cells_per_sub_mc = 500,
-  col2grp = NULL)
+mcell_mc_split_by_color_group(
+  mc_id,
+  mat_id,
+  min_cells_per_sub_mc = 500,
+  col2grp = NULL
+)
 }
 \arguments{
 \item{mc_id}{input mc object}
@@ -17,5 +21,5 @@ mcell_mc_split_by_color_group(mc_id, mat_id, min_cells_per_sub_mc = 500,
 \item{col2grp}{mapping of mc colors to groups, by default, use the color_key slot}
 }
 \description{
-Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>
+Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>\emph{submc}<group>
 }

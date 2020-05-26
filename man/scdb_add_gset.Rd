@@ -7,9 +7,13 @@
 scdb_add_gset(id, gset)
 }
 \arguments{
-\item{id}{- id of gset}
+\item{id}{\itemize{
+\item id of gset
+}}
 
-\item{gset}{- gset data frame}
+\item{gset}{\itemize{
+\item gset data frame
+}}
 }
 \description{
 scdb_add_gset - add gset to the DB and cahce

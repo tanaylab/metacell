@@ -7,11 +7,17 @@
 scm_add_mars_facs_data(mat_id, base_dir, amp_batch_ids = NULL)
 }
 \arguments{
-\item{mat_id}{- id of the original matrix to add data to}
+\item{mat_id}{\itemize{
+\item id of the original matrix to add data to
+}}
 
-\item{base_dir}{- directory where raw tab-delimited index-sort data files are located. Expecting file name to be <amp_batch_id>.txt with well names as row names and antibodies as column names}
+\item{base_dir}{\itemize{
+\item directory where raw tab-delimited index-sort data files are located. Expecting file name to be <amp_batch_id>.txt with well names as row names and antibodies as column names
+}}
 
-\item{amp_batch_ids}{- if not null, upload data from amp_batch_id specified here.}
+\item{amp_batch_ids}{\itemize{
+\item if not null, upload data from amp_batch_id specified here.
+}}
 }
 \value{
 new matrix with updated metadata table

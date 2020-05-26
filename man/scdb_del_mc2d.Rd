@@ -7,7 +7,9 @@
 scdb_del_mc2d(id)
 }
 \arguments{
-\item{id}{- id of mc2d}
+\item{id}{\itemize{
+\item id of mc2d
+}}
 }
 \description{
 scdb_del_mc2d - del mc2d from the DB and cahce

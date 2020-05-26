@@ -5,13 +5,14 @@
 \title{port_cor
 matrix correlation wrap. Parameter selects which function to use, cor or tgs_cor. Tgs_cor can be more efficien if available}
 \usage{
-port_cor(x, pairwise.complete.obs = F, spearman = F, tidy = F,
-  threshold = 0)
+port_cor(x, pairwise.complete.obs = F, spearman = F, tidy = F, threshold = 0)
 }
 \arguments{
 \item{x}{matrix whole columans will be analyzed}
 
-\item{pairwise.complete.obs}{- similar to cor, if this is T, NA's will be ibe ignored and only values that are pairwise available will be used to compute the correlaiton}
+\item{pairwise.complete.obs}{\itemize{
+\item similar to cor, if this is T, NA's will be ibe ignored and only values that are pairwise available will be used to compute the correlaiton
+}}
 
 \item{spearman}{TRUE if rank correlation is to be used}
 

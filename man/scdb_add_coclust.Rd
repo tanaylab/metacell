@@ -7,9 +7,13 @@
 scdb_add_coclust(id, coclust)
 }
 \arguments{
-\item{id}{- id of coclust}
+\item{id}{\itemize{
+\item id of coclust
+}}
 
-\item{coclust}{- coclust data frame}
+\item{coclust}{\itemize{
+\item coclust data frame
+}}
 }
 \description{
 scdb_add_coclust - add coclust to the DB and cahce

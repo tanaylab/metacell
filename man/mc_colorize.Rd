@@ -4,8 +4,7 @@
 \alias{mc_colorize}
 \title{colorize metacell using a set of prefered markers and their colors}
 \usage{
-mc_colorize(new_mc_id, mc_id = new_mc_id, marker_colors = NULL,
-  override = T)
+mc_colorize(new_mc_id, mc_id = new_mc_id, marker_colors = NULL, override = T)
 }
 \arguments{
 \item{new_mc_id}{output metacell id in scdb}

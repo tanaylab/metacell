@@ -5,8 +5,14 @@
 \title{build a metacell cover from co-clust data through filtering un-balanced edges
 and running graph cover}
 \usage{
-mcell_mc_from_coclust_balanced(mc_id, coc_id, mat_id, K, min_mc_size,
-  alpha = 2)
+mcell_mc_from_coclust_balanced(
+  mc_id,
+  coc_id,
+  mat_id,
+  K,
+  min_mc_size,
+  alpha = 2
+)
 }
 \arguments{
 \item{mc_id}{Id of new metacell object}
@@ -15,7 +21,9 @@ mcell_mc_from_coclust_balanced(mc_id, coc_id, mat_id, K, min_mc_size,
 
 \item{mat_id}{mat object to use when building the mc object}
 
-\item{K}{- this will}
+\item{K}{\itemize{
+\item this will
+}}
 
 \item{min_mc_size}{minimum mc size for graph cov}
 

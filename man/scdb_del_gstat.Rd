@@ -7,7 +7,9 @@
 scdb_del_gstat(id)
 }
 \arguments{
-\item{id}{- id of gstat}
+\item{id}{\itemize{
+\item id of gstat
+}}
 }
 \description{
 scdb_del_gstat - del gstat from the DB and cahce

@@ -4,8 +4,7 @@
 \alias{mcell_add_cgraph_from_distmat}
 \title{Build a cell graph using blanacing of an extrenal distance matrix}
 \usage{
-mcell_add_cgraph_from_distmat(d_mat, graph_id, K, balance = F,
-  k_expand = 10)
+mcell_add_cgraph_from_distmat(d_mat, graph_id, K, balance = F, k_expand = 10)
 }
 \arguments{
 \item{d_mat}{distance matrix, col and row names should be a super set of the non ignored cells for the matrix in mat_id}

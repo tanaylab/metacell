@@ -7,13 +7,21 @@
 scfigs_fn(id, type, dir = NULL, ext = "png")
 }
 \arguments{
-\item{id}{- is of the object the figure relates to (E.g. mat_id)}
+\item{id}{\itemize{
+\item is of the object the figure relates to (E.g. mat_id)
+}}
 
-\item{type}{- a string defining the figure type}
+\item{type}{\itemize{
+\item a string defining the figure type
+}}
 
-\item{dir}{- output dir. If null, using figs base dir. Creates it if it doesn't exist.}
+\item{dir}{\itemize{
+\item output dir. If null, using figs base dir. Creates it if it doesn't exist.
+}}
 
-\item{ext}{- file extension (default: png)}
+\item{ext}{\itemize{
+\item file extension (default: png)
+}}
 }
 \description{
 Generate a standard figure name igven and object and figure type

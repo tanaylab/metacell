@@ -4,8 +4,13 @@
 \alias{mcell_coclust_from_graph_resamp}
 \title{Compute metacell using resampling iterations of graph cover k-means-like approach}
 \usage{
-mcell_coclust_from_graph_resamp(coc_id, graph_id, min_mc_size, p_resamp,
-  n_resamp)
+mcell_coclust_from_graph_resamp(
+  coc_id,
+  graph_id,
+  min_mc_size,
+  p_resamp,
+  n_resamp
+)
 }
 \arguments{
 \item{graph_id}{a knn graph object id into scdb}

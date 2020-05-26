@@ -4,8 +4,13 @@
 \alias{mcell_mc_coclust_confusion_mat}
 \title{Compute confusion matrix on metacells using a coclustering object}
 \usage{
-mcell_mc_coclust_confusion_mat(mc_id, coc_id, K, ignore_mismatch = F,
-  alpha = 2)
+mcell_mc_coclust_confusion_mat(
+  mc_id,
+  coc_id,
+  K,
+  ignore_mismatch = F,
+  alpha = 2
+)
 }
 \arguments{
 \item{mc_id}{meta cell object}

@@ -4,8 +4,13 @@
 \alias{mcell_gset_from_mc_markers}
 \title{Generate a gene set of markers from a metacell cover}
 \usage{
-mcell_gset_from_mc_markers(gset_id, mc_id, filt_gset_id = NULL,
-  blacklist_gset_id = NULL, non_marker_genes = NULL)
+mcell_gset_from_mc_markers(
+  gset_id,
+  mc_id,
+  filt_gset_id = NULL,
+  blacklist_gset_id = NULL,
+  non_marker_genes = NULL
+)
 }
 \arguments{
 \item{gset_id}{id of gene set to generate}

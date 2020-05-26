@@ -7,7 +7,9 @@
 scdb_del_cgraph(id)
 }
 \arguments{
-\item{id}{- id of cgraph}
+\item{id}{\itemize{
+\item id of cgraph
+}}
 }
 \description{
 scdb_del_cgraph - del cgraph from the DB and cahce

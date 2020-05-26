@@ -7,9 +7,13 @@
 scdb_add_mc(id, mc)
 }
 \arguments{
-\item{id}{- id of mc}
+\item{id}{\itemize{
+\item id of mc
+}}
 
-\item{mc}{- mc data frame}
+\item{mc}{\itemize{
+\item mc data frame
+}}
 }
 \description{
 scdb_add_mc - add mc to the DB and cahce

@@ -7,7 +7,9 @@
 scdb_del_gset(id)
 }
 \arguments{
-\item{id}{- id of gset}
+\item{id}{\itemize{
+\item id of gset
+}}
 }
 \description{
 scdb_del_gset - del gset from the DB and cahce

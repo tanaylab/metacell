@@ -7,9 +7,13 @@
 scfigs_dir(id, type)
 }
 \arguments{
-\item{id}{- is of the object the figure relates to (E.g. mat_id)}
+\item{id}{\itemize{
+\item is of the object the figure relates to (E.g. mat_id)
+}}
 
-\item{type}{- a string defining the figure type}
+\item{type}{\itemize{
+\item a string defining the figure type
+}}
 }
 \description{
 Generate a standard figure dir name igven and object and figure type

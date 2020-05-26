@@ -4,8 +4,7 @@
 \alias{mcell_wgtmc_pred_corr}
 \title{Compute predictive value of MC cover as correlation of weighted MC averages of sc umis}
 \usage{
-mcell_wgtmc_pred_corr(mc_id, mat_id, graph_id, do_log = F,
-  focus_cells = NULL)
+mcell_wgtmc_pred_corr(mc_id, mat_id, graph_id, do_log = F, focus_cells = NULL)
 }
 \arguments{
 \item{mc_id}{id of metacells to analyze}

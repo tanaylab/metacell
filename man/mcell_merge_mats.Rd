@@ -7,11 +7,17 @@
 mcell_merge_mats(id1, id2, new_id)
 }
 \arguments{
-\item{id1}{- first matrix to merge}
+\item{id1}{\itemize{
+\item first matrix to merge
+}}
 
-\item{id2}{- second matrix to merge}
+\item{id2}{\itemize{
+\item second matrix to merge
+}}
 
-\item{new_id}{- id of matrix to generate}
+\item{new_id}{\itemize{
+\item id of matrix to generate
+}}
 }
 \description{
 ncell_merge_mats: Merge two matrix using their ids in scdb. See scm_merge_mats for details on batch management and policies on missing genes

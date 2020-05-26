@@ -4,8 +4,12 @@
 \alias{mcell_mc_reorder_hc}
 \title{Reorder metacells using hierarchical clustering}
 \usage{
-mcell_mc_reorder_hc(mc_id, gene_left = NULL, gene_right = NULL,
-  gset_blist_id = NULL)
+mcell_mc_reorder_hc(
+  mc_id,
+  gene_left = NULL,
+  gene_right = NULL,
+  gset_blist_id = NULL
+)
 }
 \arguments{
 \item{mc_id}{id of metacell object}

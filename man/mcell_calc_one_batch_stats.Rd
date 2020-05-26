@@ -7,9 +7,13 @@
 mcell_calc_one_batch_stats(scmat, batch_id)
 }
 \arguments{
-\item{scmat}{- a matrix object}
+\item{scmat}{\itemize{
+\item a matrix object
+}}
 
-\item{batch_id}{- the batch name to summarize}
+\item{batch_id}{\itemize{
+\item the batch name to summarize
+}}
 }
 \value{
 one row data frame for merging

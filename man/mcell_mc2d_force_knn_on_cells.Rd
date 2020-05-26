@@ -4,8 +4,13 @@
 \alias{mcell_mc2d_force_knn_on_cells}
 \title{Compute cells 2d coordinates based on the mc graph when the mc coordinates are supplied externally}
 \usage{
-mcell_mc2d_force_knn_on_cells(mc2d_id, mc_id, graph_id, mc_xy,
-  ignore_mismatch = F)
+mcell_mc2d_force_knn_on_cells(
+  mc2d_id,
+  mc_id,
+  graph_id,
+  mc_xy,
+  ignore_mismatch = F
+)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}

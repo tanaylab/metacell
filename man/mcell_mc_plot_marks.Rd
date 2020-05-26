@@ -4,11 +4,24 @@
 \alias{mcell_mc_plot_marks}
 \title{plot a marker heat map give a metacell object}
 \usage{
-mcell_mc_plot_marks(mc_id, gset_id, mat_id = mc_id, fig_fn = NULL,
-  lateral_gset_id = NULL, mc_ord = NULL, plot_cells = T,
-  zero_median = T, add_genes = NULL, add_metadata = NULL,
-  ext_metadata = NULL, md_level_colors = NULL, focus_mcs = NULL,
-  gene_list = NULL, reorder_marks = F, fold_burn = 3)
+mcell_mc_plot_marks(
+  mc_id,
+  gset_id,
+  mat_id = mc_id,
+  fig_fn = NULL,
+  lateral_gset_id = NULL,
+  mc_ord = NULL,
+  plot_cells = T,
+  zero_median = T,
+  add_genes = NULL,
+  add_metadata = NULL,
+  ext_metadata = NULL,
+  md_level_colors = NULL,
+  focus_mcs = NULL,
+  gene_list = NULL,
+  reorder_marks = F,
+  fold_burn = 3
+)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}

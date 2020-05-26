@@ -4,10 +4,15 @@
 \alias{scmat_read_scmat_10x}
 \title{Read a matrix from the output of a 10x run. Batches can be stripped from the cell identifier if in BARCODE-LANE format.}
 \usage{
-scmat_read_scmat_10x(matrix_fn, genes_fn, cells_fn,
+scmat_read_scmat_10x(
+  matrix_fn,
+  genes_fn,
+  cells_fn,
   paralogs_policy = get_param("scm_10x_paralogs_policy"),
   use_batches = get_param("scm_10x_batches"),
-  min_umis_n = get_param("scm_min_cell_umis"), dataset_id = "NS")
+  min_umis_n = get_param("scm_min_cell_umis"),
+  dataset_id = "NS"
+)
 }
 \arguments{
 \item{matrix_fn}{matrix input file name. Expecting a tab delimited file with 3 columns and a header: 'row', 'column', 'value'. row and column fields are the row and column matrix coordinates of the value.}
@@ -16,7 +21,9 @@ scmat_read_scmat_10x(matrix_fn, genes_fn, cells_fn,
 
 \item{cells_fn}{linking to the colnames.tab}
 
-\item{paralog_policy}{- how to treat entries with the same gene name. Currently supporting "sum" for adding up the umis and "remove" for removing the gene. TBA: "split".}
+\item{paralog_policy}{\itemize{
+\item how to treat entries with the same gene name. Currently supporting "sum" for adding up the umis and "remove" for removing the gene. TBA: "split".
+}}
 }
 \description{
 Read a matrix from the output of a 10x run. Batches can be stripped from the cell identifier if in BARCODE-LANE format.

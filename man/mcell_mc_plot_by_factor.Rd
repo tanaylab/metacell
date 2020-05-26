@@ -4,11 +4,20 @@
 \alias{mcell_mc_plot_by_factor}
 \title{plot a heatmap of number of cells per metacell and metadata factor (e.g. patient, condition, sample etc.)}
 \usage{
-mcell_mc_plot_by_factor(mc_id, meta_field, mat_id = mc_id,
-  fig_fn = NULL, meta_field_annotate_by = NULL,
-  meta_field_min_count = 0, norm_by_factor = T, hclust_mcs = F,
-  ord_mcs = NULL, filter_values = NULL, hclust_values = T,
-  custom_made_fields = NULL)
+mcell_mc_plot_by_factor(
+  mc_id,
+  meta_field,
+  mat_id = mc_id,
+  fig_fn = NULL,
+  meta_field_annotate_by = NULL,
+  meta_field_min_count = 0,
+  norm_by_factor = T,
+  hclust_mcs = F,
+  ord_mcs = NULL,
+  filter_values = NULL,
+  hclust_values = T,
+  custom_made_fields = NULL
+)
 }
 \arguments{
 \item{mc_id}{id of metacell object ina scdb}

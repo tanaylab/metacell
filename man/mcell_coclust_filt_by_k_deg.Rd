@@ -11,7 +11,7 @@ mcell_coclust_filt_by_k_deg(coc_id, K, alpha)
 
 \item{K}{the number of top-coclustering neighbors to consider per node}
 
-\item{alpha}{the relexation paramter to apply for filtering coclustering neighbors below the ttop K ones. A pair (n1,n2) with weight w will be filtered if knn(n1,K) > w*alpha or knn(n2,K) > w*alpha}
+\item{alpha}{the relexation paramter to apply for filtering coclustering neighbors below the ttop K ones. A pair (n1,n2) with weight w will be filtered if knn(n1,K) > w\emph{alpha or knn(n2,K) > w}alpha}
 }
 \description{
 Return a filter (boolean vector) selecting only coclust edges that are nearly as frequent as a user defined K-nn parameter

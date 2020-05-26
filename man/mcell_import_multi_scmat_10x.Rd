@@ -4,17 +4,24 @@
 \alias{mcell_import_multi_scmat_10x}
 \title{Load a matrix from a 10x multi-batch dataset. The scdb version of mcell_read_multi_scmat_10x}
 \usage{
-mcell_import_multi_scmat_10x(mat_nm, dataset_table_fn, base_dir,
-  force = FALSE)
+mcell_import_multi_scmat_10x(mat_nm, dataset_table_fn, base_dir, force = FALSE)
 }
 \arguments{
-\item{mat_nm}{- the name of the new matrix in scdb}
+\item{mat_nm}{\itemize{
+\item the name of the new matrix in scdb
+}}
 
-\item{dataset_table_fn}{- The index file of the 10x multi batch dataset. Fileds include: Batch.Set.ID, mat_fn, genes_fn, cells_fn. The first field must be specifieid for each row. The others may be NA, in which case the import process will search for base_dir/Batch.Set.ID/matrix.mtx, genes.tsv (or features.tsv), barcodes.tsv.}
+\item{dataset_table_fn}{\itemize{
+\item The index file of the 10x multi batch dataset. Fileds include: Batch.Set.ID, mat_fn, genes_fn, cells_fn. The first field must be specifieid for each row. The others may be NA, in which case the import process will search for base_dir/Batch.Set.ID/matrix.mtx, genes.tsv (or features.tsv), barcodes.tsv.
+}}
 
-\item{base_dir}{- directory where raw 10x files are located (dataset table points to subdirectories of this)}
+\item{base_dir}{\itemize{
+\item directory where raw 10x files are located (dataset table points to subdirectories of this)
+}}
 
-\item{force}{- if true, will import from 10x files even when the matrix is present in the DB}
+\item{force}{\itemize{
+\item if true, will import from 10x files even when the matrix is present in the DB
+}}
 }
 \description{
 Load a matrix from a 10x multi-batch dataset. The scdb version of mcell_read_multi_scmat_10x

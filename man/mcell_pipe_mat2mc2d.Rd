@@ -4,8 +4,15 @@
 \alias{mcell_pipe_mat2mc2d}
 \title{Linear simple pipeline for turning a matrix to a MC and plotting std figs}
 \usage{
-mcell_pipe_mat2mc2d(mat_id, T_vm = 0.2, T_tot = 200, T_top3 = 3,
-  Knn = 120, n_resamp = 500, T_weight = round(n_resamp * 0.75/8))
+mcell_pipe_mat2mc2d(
+  mat_id,
+  T_vm = 0.2,
+  T_tot = 200,
+  T_top3 = 3,
+  Knn = 120,
+  n_resamp = 500,
+  T_weight = round(n_resamp * 0.75/8)
+)
 }
 \arguments{
 \item{mat_id}{the id to start from}

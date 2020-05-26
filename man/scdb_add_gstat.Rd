@@ -7,9 +7,13 @@
 scdb_add_gstat(id, gstat)
 }
 \arguments{
-\item{id}{- id of gstat}
+\item{id}{\itemize{
+\item id of gstat
+}}
 
-\item{gstat}{- gstat data frame}
+\item{gstat}{\itemize{
+\item gstat data frame
+}}
 }
 \description{
 scdb_add_gstat - add gstat to the DB and cahce

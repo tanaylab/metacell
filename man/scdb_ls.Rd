@@ -7,7 +7,9 @@
 scdb_ls(objt)
 }
 \arguments{
-\item{objt}{- the object type}
+\item{objt}{\itemize{
+\item the object type
+}}
 }
 \description{
 List all object of a given type from the current scdb

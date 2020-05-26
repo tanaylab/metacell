@@ -4,9 +4,17 @@
 \alias{mcell_mc2d_plot_by_factor}
 \title{Plot mc+cells using pre-defined mc colorization, breakdown by given metadata field (e.g. patient)}
 \usage{
-mcell_mc2d_plot_by_factor(mc2d_id, mat_id, meta_field,
-  meta_data_vals = NULL, single_plot = T, filter_values = NULL,
-  filter_name = NULL, ncols = NULL, neto_points = F)
+mcell_mc2d_plot_by_factor(
+  mc2d_id,
+  mat_id,
+  meta_field,
+  meta_data_vals = NULL,
+  single_plot = T,
+  filter_values = NULL,
+  filter_name = NULL,
+  ncols = NULL,
+  neto_points = F
+)
 }
 \arguments{
 \item{mc2d_id}{mc2d object to use for plot}

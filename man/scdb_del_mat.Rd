@@ -7,7 +7,9 @@
 scdb_del_mat(id)
 }
 \arguments{
-\item{id}{-  matrix id to remove from the DB}
+\item{id}{\itemize{
+\item matrix id to remove from the DB
+}}
 }
 \description{
 scdb_del_mat - remove a matrix from the DB (not just the cache!)

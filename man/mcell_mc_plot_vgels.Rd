@@ -4,9 +4,16 @@
 \alias{mcell_mc_plot_vgels}
 \title{plot a "gel" like diagram showing expression of a gene of interest over metacells that are classified into types}
 \usage{
-mcell_mc_plot_vgels(mc_id, gene_nms, reorder_preset = NULL,
-  reorder = F, fig_fn = NULL, lane_w = 50, height = 350,
-  plot_title = F)
+mcell_mc_plot_vgels(
+  mc_id,
+  gene_nms,
+  reorder_preset = NULL,
+  reorder = F,
+  fig_fn = NULL,
+  lane_w = 50,
+  height = 350,
+  plot_title = F
+)
 }
 \arguments{
 \item{mc_id}{id of metacell object in scdb}

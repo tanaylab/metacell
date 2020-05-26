@@ -7,9 +7,13 @@
 scdb_add_cgraph(id, cgraph)
 }
 \arguments{
-\item{id}{- id of cgraph}
+\item{id}{\itemize{
+\item id of cgraph
+}}
 
-\item{cgraph}{- cgraph data frame}
+\item{cgraph}{\itemize{
+\item cgraph data frame
+}}
 }
 \description{
 scdb_add_cgraph - add cgraph to the DB and cahce

@@ -7,9 +7,13 @@
 scdb_add_mat(id, mat)
 }
 \arguments{
-\item{id}{-  matrix id. Will return null if does not exist}
+\item{id}{\itemize{
+\item matrix id. Will return null if does not exist
+}}
 
-\item{mat}{- matrix object}
+\item{mat}{\itemize{
+\item matrix object
+}}
 }
 \description{
 scdb_add_mat - add amatrix to the DB - will save it and cache

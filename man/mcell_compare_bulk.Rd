@@ -4,10 +4,24 @@
 \alias{mcell_compare_bulk}
 \title{Utility plot function to compare bulk expression of two batches/metadata factors}
 \usage{
-mcell_compare_bulk(mat_id, meta_field = NULL, v1 = NULL, v2 = NULL,
-  mc_id = NULL, mc1 = -1, mc2 = -1, mc_to_focus = NULL,
-  genes = NULL, cex = 0.5, text_cex = 1, n_reg = 5,
-  fig_nm = NULL, top_genes = 10, fig_h = 600, fig_w = 800)
+mcell_compare_bulk(
+  mat_id,
+  meta_field = NULL,
+  v1 = NULL,
+  v2 = NULL,
+  mc_id = NULL,
+  mc1 = -1,
+  mc2 = -1,
+  mc_to_focus = NULL,
+  genes = NULL,
+  cex = 0.5,
+  text_cex = 1,
+  n_reg = 5,
+  fig_nm = NULL,
+  top_genes = 10,
+  fig_h = 600,
+  fig_w = 800
+)
 }
 \arguments{
 \item{mat_id}{matrix id to use}

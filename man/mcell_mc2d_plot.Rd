@@ -4,8 +4,14 @@
 \alias{mcell_mc2d_plot}
 \title{Plot mc+cell graph using pre-defined mc colorization}
 \usage{
-mcell_mc2d_plot(mc2d_id, legend_pos = "topleft", plot_edges = T,
-  min_edge_l = 0, edge_w = 1, short_edge_w = 0)
+mcell_mc2d_plot(
+  mc2d_id,
+  legend_pos = "topleft",
+  plot_edges = T,
+  min_edge_l = 0,
+  edge_w = 1,
+  short_edge_w = 0
+)
 }
 \arguments{
 \item{mc2d_id}{mc2d object to plot}

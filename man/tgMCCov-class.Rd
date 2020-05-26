@@ -17,13 +17,8 @@ Representing a meta cell cover of a given cell graph (or more generally of a scR
 
 \item{\code{mc_fp}}{a matrix showing for each gene (row) the relative enrichment of umis}
 
-\item{\code{e_gc}}{a matrix showin
-
-
-
-
-
-                                                                                                                                                                                                                                    g for each gene (row) the mean umi count (without normalizing for cell size)}
+\item{\code{e_gc}}{a matrix showin\preformatted{                                                                                                                                                                                                                                g for each gene (row) the mean umi count (without normalizing for cell size)
+}}
 
 \item{\code{cov_gc}}{a matrix showing for each gene (row) the fraction of cells in the meta cell that are non zero for the umi}
 

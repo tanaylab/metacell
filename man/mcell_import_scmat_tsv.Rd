@@ -4,17 +4,28 @@
 \alias{mcell_import_scmat_tsv}
 \title{Load a matrix from a simple dense table with genes in rows and cells in columns. First column is the gene name}
 \usage{
-mcell_import_scmat_tsv(mat_nm, fn, genes_fn = NULL, meta_fn = NULL,
-  dset_nm = NULL, force = FALSE, paralogs_policy = "sum")
+mcell_import_scmat_tsv(
+  mat_nm,
+  fn,
+  genes_fn = NULL,
+  meta_fn = NULL,
+  dset_nm = NULL,
+  force = FALSE,
+  paralogs_policy = "sum"
+)
 }
 \arguments{
-\item{mat_nm}{- the name of the new matrix in scdb}
+\item{mat_nm}{\itemize{
+\item the name of the new matrix in scdb
+}}
 
 \item{fn}{path of the matrix to read (columns names should represent Cell.IDs, rownames should represent gene names, values are expected to represent number of UMIs per gene per Cell)}
 
 \item{meta_fn}{meta data table to read. If this is null, all cells will be onsidred as part of a single Amp.Batch and Dataset.ID. The table must include at least the fields "Cell.ID", "Amp.Batch.ID", "Seq.Batch.ID", "Batch.Set.ID", where Cell.ID should match the names of cells in the data matrix.}
 
-\item{force}{- if true, will import from 10x files even when the matrix is present in the DB}
+\item{force}{\itemize{
+\item if true, will import from 10x files even when the matrix is present in the DB
+}}
 }
 \description{
 Load a matrix from a simple dense table with genes in rows and cells in columns. First column is the gene name

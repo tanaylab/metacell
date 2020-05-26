@@ -7,7 +7,9 @@
 scdb_coclust(id)
 }
 \arguments{
-\item{id}{- id of coclust}
+\item{id}{\itemize{
+\item id of coclust
+}}
 }
 \description{
 scdb_coclust - get a coclust object

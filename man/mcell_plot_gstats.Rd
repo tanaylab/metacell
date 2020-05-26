@@ -4,8 +4,7 @@
 \alias{mcell_plot_gstats}
 \title{plot gene/feature statistics}
 \usage{
-mcell_plot_gstats(gstat_id, gset_id = NULL, fig_dir = NULL,
-  max_vm = 4)
+mcell_plot_gstats(gstat_id, gset_id = NULL, fig_dir = NULL, max_vm = 4)
 }
 \arguments{
 \item{gstat_id}{id of gene state object}

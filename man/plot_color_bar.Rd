@@ -4,8 +4,7 @@
 \alias{plot_color_bar}
 \title{Plot a color bar with values}
 \usage{
-plot_color_bar(vals, cols, fig_fn = NULL, title = "",
-  show_vals_ind = NULL)
+plot_color_bar(vals, cols, fig_fn = NULL, title = "", show_vals_ind = NULL)
 }
 \arguments{
 \item{vals}{to plot}

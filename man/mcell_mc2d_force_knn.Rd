@@ -4,11 +4,24 @@
 \alias{mcell_mc2d_force_knn}
 \title{Metacell layout using force directed projection of a low degree mc graph}
 \usage{
-mcell_mc2d_force_knn(mc2d_id, mc_id, graph_id, ignore_mismatch = F,
-  symmetrize = F, ignore_edges = NULL, feats_gset = NULL,
-  feats_exclude = NULL, graph_parametric = F, logist_loc = 1,
-  logist_scale = 0.2, logist_eps = 4e-05, max_d_fold = 3,
-  use_umap_for_2d_pos = F, umap_mgraph = F, uconf = NULL)
+mcell_mc2d_force_knn(
+  mc2d_id,
+  mc_id,
+  graph_id,
+  ignore_mismatch = F,
+  symmetrize = F,
+  ignore_edges = NULL,
+  feats_gset = NULL,
+  feats_exclude = NULL,
+  graph_parametric = F,
+  logist_loc = 1,
+  logist_scale = 0.2,
+  logist_eps = 4e-05,
+  max_d_fold = 3,
+  use_umap_for_2d_pos = F,
+  umap_mgraph = F,
+  uconf = NULL
+)
 }
 \arguments{
 \item{mc2d_id}{2d object to add}

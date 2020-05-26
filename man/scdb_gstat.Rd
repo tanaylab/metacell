@@ -7,7 +7,9 @@
 scdb_gstat(id)
 }
 \arguments{
-\item{id}{- id of gstat}
+\item{id}{\itemize{
+\item id of gstat
+}}
 }
 \description{
 scdb_gstat - get a gstat data frame. If it is missing and the id match an existing matrix, a gstat will be gerated for this matrix and added to scdb

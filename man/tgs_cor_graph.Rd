@@ -13,7 +13,7 @@ tgs_cor_graph(x, knn, k_expand, k_alpha, k_beta)
 
 \item{k_expand}{expansion parameter}
 
-\item{k_alpha}{used to threshold blanaced scores (k_alpha*K > rank_in*rank_out0}
+\item{k_alpha}{used to threshold blanaced scores (k_alpha\emph{K > rank_in}rank_out0}
 
 \item{k_beta}{used to threshold in-degree on k_beta*K before final thresholding of out-degree by K}
 }

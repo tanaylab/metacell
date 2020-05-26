@@ -9,7 +9,8 @@ Depends: R (>= 3.4.2)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
 Imports:
   data.table,
   dplyr,
@@ -36,7 +37,9 @@ Imports:
   tgstat,
   tgutil,
   tgconfig,
-  umap
+  umap,
+  R6,
+  jsonlite
 Collate:
   	'mc_plot_confusion.r'
 	'atlas_project.r'
@@ -44,6 +47,7 @@ Collate:
 	'cgraph_knn_mcnorm.r'
 	'coclust.r'
 	'coclust_graph_cov.r'
+	'matlas.r'
 	'mc2d_force_knn.r'
 	'mc2d_plot.r'
 	'mc_confusion.r'

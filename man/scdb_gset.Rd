@@ -7,7 +7,9 @@
 scdb_gset(id)
 }
 \arguments{
-\item{id}{- id of gset}
+\item{id}{\itemize{
+\item id of gset
+}}
 }
 \description{
 scdb_gset - get a gene set

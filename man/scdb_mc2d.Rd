@@ -7,7 +7,9 @@
 scdb_mc2d(id)
 }
 \arguments{
-\item{id}{- id of mc2d}
+\item{id}{\itemize{
+\item id of mc2d
+}}
 }
 \description{
 scdb_mc2d - get a mc2d object

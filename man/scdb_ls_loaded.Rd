@@ -7,7 +7,9 @@
 scdb_ls_loaded(objt)
 }
 \arguments{
-\item{objt}{- either mat,}
+\item{objt}{\itemize{
+\item either mat,
+}}
 }
 \description{
 scdb_ls_loaded - list loaded object of a certain type

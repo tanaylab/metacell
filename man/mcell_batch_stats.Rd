@@ -7,7 +7,9 @@
 mcell_batch_stats(scmat)
 }
 \arguments{
-\item{scmat}{- the matrix to work on}
+\item{scmat}{\itemize{
+\item the matrix to work on
+}}
 }
 \value{
 batch stats table

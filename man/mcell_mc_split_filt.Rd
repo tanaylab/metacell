@@ -4,8 +4,14 @@
 \alias{mcell_mc_split_filt}
 \title{Split and filter metacells using dbscan and outlier gene detection}
 \usage{
-mcell_mc_split_filt(new_mc_id, mc_id, mat_id, T_lfc, plot_mats = T,
-  dirichlet = F)
+mcell_mc_split_filt(
+  new_mc_id,
+  mc_id,
+  mat_id,
+  T_lfc,
+  plot_mats = T,
+  dirichlet = F
+)
 }
 \arguments{
 \item{new_mc_id}{id of metacells to create}

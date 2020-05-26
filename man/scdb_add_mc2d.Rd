@@ -7,9 +7,13 @@
 scdb_add_mc2d(id, mc2d)
 }
 \arguments{
-\item{id}{- id of mc2d}
+\item{id}{\itemize{
+\item id of mc2d
+}}
 
-\item{mc2d}{- mc2d data frame}
+\item{mc2d}{\itemize{
+\item mc2d data frame
+}}
 }
 \description{
 scdb_add_mc2d - add mc2d to the DB and cahce

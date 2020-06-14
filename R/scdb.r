@@ -10,7 +10,6 @@
 #  # we can see which objects are available
 #' scdb_ls("mat")
 #' }
-#' TBA
 #'
 #' @export
 scdb_init = function(base_dir, force_reinit=F)

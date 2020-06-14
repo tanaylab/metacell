@@ -10,9 +10,11 @@ scdb_init(base_dir, force_reinit = F)
 This initialize scdb to a certain directory. The object will then allow loading. chaching and saving of different objects, including matrix, gene statictics, cell graphs, metacell covers, and more
 }
 \examples{
+\dontrun{
 # we first initialize a db object
 scdb_init("workdir")
 scdb_ls("mat")
+}
 TBA
 
 }

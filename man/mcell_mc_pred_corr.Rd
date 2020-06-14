@@ -4,8 +4,13 @@
 \alias{mcell_mc_pred_corr}
 \title{Compute predictive value of MC cover as correlation of MC averages of sc umis}
 \usage{
-mcell_mc_pred_corr(mc_id, mat_id, do_log = F, focus_cells = NULL,
-  filt_genes = NULL)
+mcell_mc_pred_corr(
+  mc_id,
+  mat_id,
+  do_log = F,
+  focus_cells = NULL,
+  filt_genes = NULL
+)
 }
 \arguments{
 \item{mc_id}{id of metacells to analyze}

@@ -4,8 +4,17 @@
 \alias{mcell_gset_filter_multi}
 \title{Select/filter gene features from using multiple statistics from the gstat table. All genes passing the selected thresholds are included}
 \usage{
-mcell_gset_filter_multi(gstat_id, gset_id, T_tot, T_top3, T_szcor = NULL,
-  T_vm = NULL, T_niche = NULL, force_new = F, blacklist = c())
+mcell_gset_filter_multi(
+  gstat_id,
+  gset_id,
+  T_tot,
+  T_top3,
+  T_szcor = NULL,
+  T_vm = NULL,
+  T_niche = NULL,
+  force_new = F,
+  blacklist = c()
+)
 }
 \arguments{
 \item{gstat_id}{the ID of the gstat object to use}

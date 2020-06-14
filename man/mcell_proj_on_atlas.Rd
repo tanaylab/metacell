@@ -4,9 +4,19 @@
 \alias{mcell_proj_on_atlas}
 \title{Project a metacell object on a reference "atlas"}
 \usage{
-mcell_proj_on_atlas(mat_id, mc_id, atlas, fig_cmp_dir, ten2mars = T,
-  gene_name_map = NULL, recolor_mc_id = NULL, plot_all_mcs = F,
-  md_field = NULL, max_entropy = 2, burn_cor = 0.6)
+mcell_proj_on_atlas(
+  mat_id,
+  mc_id,
+  atlas,
+  fig_cmp_dir,
+  ten2mars = T,
+  gene_name_map = NULL,
+  recolor_mc_id = NULL,
+  plot_all_mcs = F,
+  md_field = NULL,
+  max_entropy = 2,
+  burn_cor = 0.6
+)
 }
 \arguments{
 \item{mat_id}{id of metacell object ina scdb}

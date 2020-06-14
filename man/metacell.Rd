@@ -3,8 +3,4 @@
 \docType{package}
 \name{metacell}
 \alias{metacell}
-\alias{metacell-package}
 \title{metacell}
-\description{
-metacell
-}

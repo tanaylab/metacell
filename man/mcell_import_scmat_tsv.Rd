@@ -4,8 +4,15 @@
 \alias{mcell_import_scmat_tsv}
 \title{Load a matrix from a simple dense table with genes in rows and cells in columns. First column is the gene name}
 \usage{
-mcell_import_scmat_tsv(mat_nm, fn, genes_fn = NULL, meta_fn = NULL,
-  dset_nm = NULL, force = FALSE, paralogs_policy = "sum")
+mcell_import_scmat_tsv(
+  mat_nm,
+  fn,
+  genes_fn = NULL,
+  meta_fn = NULL,
+  dset_nm = NULL,
+  force = FALSE,
+  paralogs_policy = "sum"
+)
 }
 \arguments{
 \item{mat_nm}{- the name of the new matrix in scdb}

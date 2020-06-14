@@ -4,8 +4,7 @@
 \alias{mcell_import_multi_scmat_10x}
 \title{Load a matrix from a 10x multi-batch dataset. The scdb version of mcell_read_multi_scmat_10x}
 \usage{
-mcell_import_multi_scmat_10x(mat_nm, dataset_table_fn, base_dir,
-  force = FALSE)
+mcell_import_multi_scmat_10x(mat_nm, dataset_table_fn, base_dir, force = FALSE)
 }
 \arguments{
 \item{mat_nm}{- the name of the new matrix in scdb}

@@ -4,10 +4,19 @@
 \alias{mcell_mc_plot_hierarchy}
 \title{plot super strucutre: super clust mc footprint, and selected genes}
 \usage{
-mcell_mc_plot_hierarchy(mc_id, graph_id, mc_order, sup_mcs, width, height,
-  fig_fn = NULL, min_nmc = 2, shades = colorRampPalette(c("white",
-  "pink", "red", "black", "brown", "orange")), plot_grid = T,
-  show_mc_ids = F)
+mcell_mc_plot_hierarchy(
+  mc_id,
+  graph_id,
+  mc_order,
+  sup_mcs,
+  width,
+  height,
+  fig_fn = NULL,
+  min_nmc = 2,
+  shades = colorRampPalette(c("white", "pink", "red", "black", "brown", "orange")),
+  plot_grid = T,
+  show_mc_ids = F
+)
 }
 \arguments{
 \item{mc_id}{id of metacell object}

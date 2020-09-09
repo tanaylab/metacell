@@ -4,8 +4,7 @@
 \alias{mcell_plot_cross_mc}
 \title{Plotting a matrix of co-occurences between two metacell covers of the same dataset}
 \usage{
-mcell_plot_cross_mc(mc_id1, mc_id2, ord_1 = NULL, ord_2 = NULL,
-  not_log = F)
+mcell_plot_cross_mc(mc_id1, mc_id2, ord_1 = NULL, ord_2 = NULL, not_log = F)
 }
 \arguments{
 \item{mc_id1}{first mc object to use}

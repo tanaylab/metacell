@@ -4,11 +4,26 @@
 \alias{mcell_mc_plot_gg}
 \title{Utility plot function to compare two genes based on mc_fp}
 \usage{
-mcell_mc_plot_gg(mc_id, g1, g2, cex = 2, text_cex = 0.5,
-  mc_colors = NULL, fig_fn = NULL, cell_md = NULL,
-  md_mode = "filter", use_egc = F, main = NULL, xlim = NULL,
-  ylim = NULL, add_grid = F, e_gc_eps = 1e-05, md = NULL,
-  md_regexp = NULL, md_field = NULL)
+mcell_mc_plot_gg(
+  mc_id,
+  g1,
+  g2,
+  cex = 2,
+  text_cex = 0.5,
+  mc_colors = NULL,
+  fig_fn = NULL,
+  cell_md = NULL,
+  md_mode = "filter",
+  use_egc = F,
+  main = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  add_grid = F,
+  e_gc_eps = 0.00001,
+  md = NULL,
+  md_regexp = NULL,
+  md_field = NULL
+)
 }
 \arguments{
 \item{mc_id}{metacell id in scdb}

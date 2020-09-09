@@ -4,8 +4,12 @@
 \alias{mcell_mc_split_by_color_group}
 \title{Splits input metacell object into sub-objects by color group, naming the new metacells <mc_id>_submc_<group>}
 \usage{
-mcell_mc_split_by_color_group(mc_id, mat_id, min_cells_per_sub_mc = 500,
-  col2grp = NULL)
+mcell_mc_split_by_color_group(
+  mc_id,
+  mat_id,
+  min_cells_per_sub_mc = 500,
+  col2grp = NULL
+)
 }
 \arguments{
 \item{mc_id}{input mc object}

@@ -4,8 +4,12 @@
 \alias{mcell_read_multi_scmat_mars}
 \title{read multiple MARS umi matrices and merge them, based on a table defining the datasets.}
 \usage{
-mcell_read_multi_scmat_mars(datasets_table_fn, base_dir,
-  patch_cell_name = F, md_filter = NULL)
+mcell_read_multi_scmat_mars(
+  datasets_table_fn,
+  base_dir,
+  patch_cell_name = F,
+  md_filter = NULL
+)
 }
 \arguments{
 \item{datasets_table_fn}{the index file of the MARS multi batch dataset. This is a tab delimited text file, with an arbitrary number of columns and a header line. The three mandatory fields are Amp.Batch.ID and Seq.Batch.ID, Batch.Set.ID. The first specify the ID of the batch defined by the row, and also the file name (without the .txt suffix) of the respective umi table in the base_dir provided. The second defines and ID of the sequencing batch (may be relevant for further noise cleanups beyond those done in the low-level pipeline). The third id group different batches into sets for downstream analysis (e.g. QC and more). This is specifically geared toward the output of the std MARS pipeline circa 2014...(bummer).}

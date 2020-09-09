@@ -2,15 +2,18 @@
 % Please edit documentation in R/scmat.r
 \name{scm_merge_mats}
 \alias{scm_merge_mats}
-\title{scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.}
+\title{Merge multiple single cell matrix object.}
 \usage{
-scm_merge_mats(scmat1, scmat2)
+scm_merge_mats(...)
 }
 \arguments{
-\item{scmat1}{tgScMat object.}
-
-\item{scmat2}{tgScMat object.}
+\item{...}{tgScMat objects to merge.
+Each parameter can be either a single tgScMat or a list of tgScMat (that will be merged)}
 }
 \description{
-scm_merge_mats: Merge two single cell matrix object. Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices. In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
+Merge multiple single cell matrix object.
+Return the merged matrix, with merged meta data and issues an error if there are overlapping cell names between the two matrices.
+}
+\details{
+In case genes sets differs between the matrices, the union is used, with zeros (not NAs!) filling up the missing genes in the respective matrix.
 }

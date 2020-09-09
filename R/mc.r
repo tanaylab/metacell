@@ -78,6 +78,7 @@ setMethod(
 #'
 #' @param mc_id id of scdb meta cell object ot be added
 #' @param mc assignment of metacell id to cell
+#' @param outliers the list of outliers 
 #' @param scmat a single cell RNA matrix object
 #' @export
 mcell_new_mc = function(mc_id, mc, outliers, scmat)

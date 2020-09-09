@@ -5,7 +5,7 @@
 #' @param plot_edges plot edges between metacells (true by default)
 #'
 #' @export
-mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge_l=0, edge_w = 1, short_edge_w=0)
+mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge_l=0, edge_w = 1, short_edge_w=0, colors=NULL, fn_suf="")
 {
 	mcp_2d_height = get_param("mcell_mc2d_height")
 	mcp_2d_width = get_param("mcell_mc2d_width")
@@ -21,10 +21,14 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge
 	if(is.null(mc)) {
 		stop("missing mc in mc2d object, id was, ", mc2d@mc_id)
 	}
-	fig_nm = scfigs_fn(mc2d_id, ifelse(plot_edges, "2d_graph_proj", "2d_proj"))
+	fig_nm = scfigs_fn(paste(mc2d_id,fn_suf,sep=""), ifelse(plot_edges, "2d_graph_proj", "2d_proj"))
 	.plot_start(fig_nm, w=mcp_2d_width, h = mcp_2d_height)
 	#png(fig_nm, width = mcp_2d_width, height = mcp_2d_height)
-	cols = mc@colors
+	if(is.null(colors)) {
+		cols = mc@colors
+	} else {
+		cols = colors
+	}
 	cols[is.na(cols)] = "gray"
 	plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]])
 	fr = mc2d@graph$mc1
@@ -81,7 +85,7 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge
 #' @param neto_points plot without a box and a title (relevant if single_plot=F)
 #'
 #' @export
-mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, meta_data_vals = NULL, single_plot = T, filter_values = NULL, filter_name = NULL, ncols=NULL, neto_points=F)
+mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, meta_data_vals = NULL, single_plot = T, filter_values = NULL, filter_name = NULL, ncols=NULL, neto_points=F, colors=NULL)
 {
   mcp_2d_height = get_param("mcell_mc2d_height")
   mcp_2d_width = get_param("mcell_mc2d_width")
@@ -122,7 +126,11 @@ mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, meta_data_vals
     c_by_f = c_by_f[names(c_by_f) %in% filter_values]
   }
 
-  cols = mc@colors
+	if(is.null(colors)) {
+		cols = mc@colors
+	} else {
+		cols = colors
+	}
   cols[is.na(cols)] = "white"
 
   if (single_plot) {

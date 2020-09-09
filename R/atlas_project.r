@@ -89,7 +89,7 @@ mcell_proj_on_atlas = function(mat_id, mc_id, atlas,
 	if(mean(!is.null(common_genes)) < 0.5) {
 		stop("less than half of the atlas feature genes can be mapped to reference gene names. Probably should provide a name conversion table")
 	}
-	browser()
+	#browser()
 	feats = mat@mat[common_genes, names(query_mc@mc)]
 	rownames(feats) = common_genes_ref
 
@@ -112,7 +112,7 @@ mcell_proj_on_atlas = function(mat_id, mc_id, atlas,
 	query_entropy = apply(mc_proj_col_p, 1, 
 					function(x) { p =x/sum(x); lp =log2(p+1e-6); return(sum(-p*lp)) })
 	
-	if(!is.null(recolor_mc_id) & !is.na(recolor_mc_id)) {
+	if(!is.null(recolor_mc_id)) {
 		proj_col=ref_mc@colors[as.numeric(unlist(best_ref))]
 		new_col=tapply(proj_col,
 						   query_mc@mc,
@@ -235,38 +235,3 @@ mcell_proj_on_atlas = function(mat_id, mc_id, atlas,
 	#plot compare_bulk
 }
 
-#' Generate mapping of 10x to mars names
-#'
-#'  Not more than finding which concatenated names (";" delimited) are related to 10x gene names. Should be replaced by something more systematic that will happen during import
-#'
-#' @param mars_mc_id metacell id of a mars-seq dataset
-#' @param tenx_mc_id metacell id of a 10x dataset
-#'
-#' @export
-gen_10x_mars_gene_match = function(mars_mc_id, tenx_mc_id)
-{
-	mc1 = scdb_mc(mars_mc_id) 
-	if(is.null(mc1)) {
-		stop("not mars mc ", mars_mc_id)
-	}
-	mc2 = scdb_mc(tenx_mc_id) 
-	if(is.null(mc2)) {
-		stop("not tenx mc ", tenx_mc_id)
-	}
-
-	mars_m_nms = rownames(mc1@e_gc)
-
-	mars_nms = strsplit(mars_m_nms, ";")
-	mars_n = unlist(lapply(mars_nms, length))
-	mars_v = rep(mars_m_nms,times=mars_n)
-	names(mars_v) = unlist(mars_nms)
-
-	nm10x = rownames(mc2@e_gc)
-	ten2mars = mars_v[nm10x]
-
-	f = !duplicated(ten2mars)
-	mars2ten = nm10x[f]
-	names(mars2ten) = ten2mars[f]
-
-	return(ten2mars)
-}

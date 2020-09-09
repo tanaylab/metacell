@@ -105,8 +105,18 @@ mcp_metadata_annot_colors: null
 
 mcp_colorize_by_seq_priority: false
 
+#mgraph knn defaults
+mcell_mgraph_K: 20
+mcell_mgraph_T_edge: 0.05
+mcell_mgraph_max_confu_deg: 5
+mcell_mgraph_max_fpcor_indeg: NULL
+mcell_mgraph_max_fpcor_outdeg: NULL
+mcell_mgraph_edge_asym: FALSE
+mcell_mgraph_k_expand_inout_factor: NULL
+
 #2d projection
 
+#first group is deprecated - moved to mgraph
 mcell_mc2d_K: 20
 mcell_mc2d_T_edge: 0.05
 mcell_mc2d_max_confu_deg: 5
@@ -114,6 +124,8 @@ mcell_mc2d_max_fpcor_indeg: NULL
 mcell_mc2d_max_fpcor_outdeg: NULL
 mcell_mc2d_edge_asym: FALSE
 mcell_mc2d_k_expand_inout_factor: NULL
+
+#cell to mgraph projection parameters
 mcell_mc2d_proj_blur: 0.02
 mcell_mc2d_K_cellproj: 20
 

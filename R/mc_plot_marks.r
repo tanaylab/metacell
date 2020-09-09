@@ -310,6 +310,7 @@ mcell_mc_plot_gg = function(mc_id, g1, g2,
 									cell_md = NULL, md_mode="filter", 
 									use_egc = F,
 									main=NULL,
+									cex.main=1,
 									xlim=NULL, ylim=NULL,
 									add_grid = F,
 									e_gc_eps = 1e-5,
@@ -348,7 +349,7 @@ mcell_mc_plot_gg = function(mc_id, g1, g2,
 	if(!is.null(fig_fn)) {
 		png(fig_fn, w=600, h=600)
 	}
-	plot(lfp[g1,mc_filt], lfp[g2,mc_filt], cex=cex, xlab=g1, ylab=g2, pch=21, bg=mc_colors[mc_filt], col=mc_outlines, lwd=lwd, xlim=xlim, ylim=ylim, main=main)
+	plot(lfp[g1,mc_filt], lfp[g2,mc_filt], cex=cex, xlab=g1, ylab=g2, pch=21, bg=mc_colors[mc_filt], col=mc_outlines, lwd=lwd, xlim=xlim, ylim=ylim, main=main, cex.main=cex.main)
 	if(!is.na(text_cex) & text_cex != 0) {
 		text(lfp[g1,mc_filt], lfp[g2,mc_filt], (1:ncol(lfp))[mc_filt], cex=text_cex)
 	}

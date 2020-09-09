@@ -2,7 +2,8 @@
 #'
 #' @param mc2d_id 2d object to add
 #' @param mc_id meta cell id to work with
-#' @param graph_id graph_id of the similarity graph on cells from the metacell
+#' @param graph_id graph_id of the similarity graph on cells from the metacell. This should always be specified, even if an mgraph is supplied since we use the obejct to position cells releative to metacels
+#' @param mgraph_id mgraph_id of the metacell graph to use. If this is null the function will compute an mgraph itself using the cell graph
 #' @param symetrize should the mc confusion matrix be symmetrized before computing layout?
 #' @param ignore_mismatch
 #' @param feats_gset gene set name for use in parametric graph and/or umap 2d projection
@@ -12,7 +13,8 @@
 #' @param logist_scale the "lscale" parametr of the logistic function used to determine parametric distances between metacelles
 #'
 #' @export
-mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id, 
+mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id,
+			mgraph_id = NULL,
 			ignore_mismatch=F, symmetrize=F, 
 			ignore_edges = NULL, 
 			feats_gset = NULL, 
@@ -25,6 +27,10 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id,
 	mc = scdb_mc(mc_id)
 	if (is.null(mc)) {
 		stop(sprintf("mc %s not found"), mc_id)
+	}
+	if(is.null(mgraph_id) & is.null(graph_id) & !graph_parametric) {
+		stop("to generate an mc2d object, supply one of the 3: an mgraph object, a cell graph object, or define the graph_parametric option as T")
+
 	}
 	feat_genes = NULL
 	if(!is.null(feats_gset)) {
@@ -40,7 +46,15 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id,
 	}
 
 	if(!graph_parametric) {
-		mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch, symmetrize=symmetrize)
+		if(!is.null(mgraph_id)) {
+			mgraph = scdb_mgraph(mgraph_id)
+			if(is.null(mgraph)) {
+				stop("bad mgraph id when trying to generate an mc2d object ", mgraph_id)
+			}
+			mgraph = mgraph@mgraph
+		} else {
+			mgraph = mc2d_comp_mgraph(mc_id, graph_id, ignore_mismatch=ignore_mismatch, symmetrize=symmetrize)
+		}
 	} else {
 		if(is.null(feat_genes)) {
 			stop("must specify feat gene set to build parametric mc2d graph")
@@ -61,7 +75,7 @@ mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id,
 		}
 		if(is.null(uconf)) {
 			#uconf = umap.defaults
-			uconf = 
+			uconf = list()
 			uconf$n_neighbors=6
 			uconf$min_dist=0.9
 			uconf$bandwidth=1.3

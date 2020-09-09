@@ -145,9 +145,14 @@ gset_new_restrict_gset = function(gset, filt_gset, inverse=F, desc)
 #' @param gset_id gene set in scdb
 #' @param mat_id mat in scdb
 #' @param downsamp if this is true the returned matrix is downsampled
+#' @param add_non+dsamp should cells with fewer umis than the downsampling threshold be added to hte matrix with their raw data
+#' @param downsample_n number of umis for downsampling (if this is NA, the system will pick up the default heuristic)
+#' @param gene_names_src_targ string pair, defining how to convert gene nmaes from the original matrix to the  naming scheme of the returned matrix (NA by default, in which case no conversion will be done)
 #'
 #' @export
-gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, add_non_dsamp=F)
+gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, 
+								add_non_dsamp=F, downsample_n = NA, 
+								gene_names_src_targ = NULL)
 {
 	gset = scdb_gset(gset_id)
 	if(is.null(gset)) {
@@ -158,8 +163,19 @@ gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, add_non_dsamp=F)
 		stop("MC-ERR non existing mat in gset_get_geat_mat, id ", mat_id)
 	}
 
+	if(!is.null(gene_names_src_targ)) {
+		gnames_df = scdb_gene_names_xref()
+		if(length(intersect(gene_names_src_targ, colnames(gnames_df)))!=2) {
+			stop("Gene names conversion src/targ ", 
+							paste(gene_names_src_targ, collapse="/"), 
+									" are not in the scdb translation table")
+		}
+	}
+
 	if(downsamp) {
-		downsample_n = scm_which_downsamp_n(mat)
+		if(is.na(downsample_n)) {
+			downsample_n = scm_which_downsamp_n(mat)
+		}
 		message("will downsample the matrix, N= ", downsample_n)
 		umis = scm_downsamp(mat@mat, downsample_n)
 		if(add_non_dsamp) {
@@ -181,5 +197,20 @@ gset_get_feat_mat = function(gset_id, mat_id, downsamp = F, add_non_dsamp=F)
 		stop("get feature matrix with zero overlap of gene names with gset_id ", gset_id, " mat ", mat_id)
 	}
 	feat_ds = umis[nms,]
+	if(!is.null(gene_names_src_targ)) {
+		gnames_df = scdb_gene_names_xref()
+		key_s = gene_names_src_targ[1]
+		key_t = gene_names_src_targ[2]
+		f = !is.na(gnames_df[,key_t]) & !duplicated(gnames_df[,key_t])
+		new_gnames = gnames_df[f,key_t]
+		names(new_gnames) = gnames_df[f, key_s]
+		nms_targ = intersect(rownames(feat_ds),names(new_gnames))
+		if(length(nms_targ) < 1) {
+			stop("get feature matrix with zero overlap of gene names that can be translated given keys ", key_s, " to ", key_t)
+		}
+		
+		feat_ds = feat_ds[nms_targ,]
+		rownames(feat_ds) = new_gnames[rownames(feat_ds)]
+	}
 	return(feat_ds)
 }

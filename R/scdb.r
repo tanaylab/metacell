@@ -26,12 +26,17 @@ scdb_init = function(base_dir, force_reinit=F)
 	}
 	.scdb_base <<- base_dir
 #init repos
-	.scdb <<- list("mat" = list(), 
+	.scdb <<- list(
+			  "gene_names_xref" = list(),
+			  "mat" = list(), 
 		     "gstat" = list(),
 		     "gset" = list(),
 		     "mc" = list(), 
 		     "cgraph" = list(), 
 		     "coclust" = list(),
+		     "mgraph" = list(),
+		     "mcatlas" = list(),
+		     "mctnetwork" = list(),
 		     "mc2d" = list())
 }
 
@@ -59,7 +64,7 @@ scdb_is_valid = function()
 #' @param objt - the object type
 #' @export
 #'
-scdb_ls = function(objt)
+scdb_ls = function(objt, regexp=".")
 {
 	if(!exists(".scdb")) {
 		message("scdb not initialized")
@@ -68,7 +73,7 @@ scdb_ls = function(objt)
 					list.files(sprintf("%s/", .scdb_base)), 
 					v=T)
 		fns = sub(".Rda","", fns)
-		print(fns)
+		print(grep(regexp, fns, v=T))
 	}
 }
 
@@ -163,6 +168,43 @@ scdb_add_mat= function(id, mat)
 scdb_del_mat= function(id)
 {
 	.scdb_del_obj(id, "mat");
+}
+
+#' scdb_gene_names_xref - get gene names convertor table from db
+#'
+#' @param id -  id of convertor, default is "DB"
+#'
+#' @export
+
+scdb_gene_names_xref = function(id="DB") 
+{
+	return(.scdb_get_obj(id, "gene_names_xref"));
+}
+
+#' scdb_add_gene_names_xref - add a gene name xref tab to the DB - will save it and cache
+#'
+#' @param id - xref id. Will return null if does not exist
+#' @param mat  - xref object
+#'
+#' @export
+#'
+scdb_add_gene_names_xref= function(id="DB", gene_names_xref) 
+{
+#	if(typeof(gene_names_xref) != "tgScMat") {
+#		stop("Cannot add non tgScMat object as a gene_names_xref in scdb")
+#	}
+	.scdb_add_obj(id, "gene_names_xref", gene_names_xref);
+}
+
+#' scdb_del_gene_names_xref - remove a gene names xref from the DB (not just the cache!)
+#'
+#' @param id -  xref id to remove from the DB
+#'
+#' @export
+#'
+scdb_del_gene_names_xref= function(id)
+{
+	.scdb_del_obj(id, "gene_names_xref");
 }
 
 #' scdb_gstat - get a gstat data frame. If it is missing and the id match an existing matrix, a gstat will be gerated for this matrix and added to scdb
@@ -379,4 +421,112 @@ scdb_add_coclust = function(id, coclust)
 scdb_del_coclust = function(id)
 {
 	.scdb_del_obj(id, "coclust");
+}
+
+#' scdb_mgraph - get a mgraph object
+#'
+#' @param id - id of mgraph
+#'
+#' @export
+#'
+scdb_mgraph = function(id) 
+{
+	return(.scdb_get_obj(id, "mgraph"))
+}
+
+#' scdb_add_mgraph - add mgraph to the DB and cahce
+#'
+#' @param id - id of mgraph
+#' @param mgraph - mgraph data frame
+#'
+#' @export
+#'
+scdb_add_mgraph = function(id, mgraph) 
+{
+	if(class(mgraph)[1] != "tgMCManifGraph") {
+		stop("Cannot add non tgMCManifGraph object as a mgraph in scdb")
+	}
+	.scdb_add_obj(id, "mgraph", mgraph);
+}
+
+#' scdb_del_mgraph - del mgraph from the DB and cahce
+#'
+#' @param id - id of mgraph
+#'
+#' @export
+scdb_del_mgraph = function(id)
+{
+	.scdb_del_obj(id, "mgraph");
+}
+
+#' scdb_mcatlas - get a mcatlas object
+#'
+#' @param id - id of mcatlas
+#'
+#' @export
+#'
+scdb_mcatlas = function(id) 
+{
+	return(.scdb_get_obj(id, "mcatlas"))
+}
+
+#' scdb_add_mcatlas - add mcatlas to the DB and cahce
+#'
+#' @param id - id of mcatlas
+#' @param mcatlas - mcatlas object to add
+#'
+#' @export
+#'
+scdb_add_mcatlas = function(id, mcatlas) 
+{
+	if(class(mcatlas)[1] != "tgMCAtlas") {
+		stop("Cannot add non tgMCAtlas object as a mcatlas in scdb")
+	}
+	.scdb_add_obj(id, "mcatlas", mcatlas);
+}
+
+#' scdb_del_mcatlas - del mcatlas from the DB and cahce
+#'
+#' @param id - id of mcatlas
+#'
+#' @export
+scdb_del_mcatlas = function(id)
+{
+	.scdb_del_obj(id, "mcatlas");
+}
+
+#' scdb_mctnetwork - get a mctnetwork object
+#'
+#' @param id - id of mctnetwork
+#'
+#' @export
+#'
+scdb_mctnetwork = function(id) 
+{
+	return(.scdb_get_obj(id, "mctnetwork"))
+}
+
+#' scdb_add_mctnetwork - add mctnetwork to the DB and cahce
+#'
+#' @param id - id of mctnetwork
+#' @param mctnetwork - mctnetwork data frame
+#'
+#' @export
+#'
+scdb_add_mctnetwork = function(id, mctnetwork) 
+{
+	if(class(mctnetwork)[1] != "tgMCTNetwork") {
+		stop("Cannot add non tgMCTNetwork object as a mctnetwork in scdb")
+	}
+	.scdb_add_obj(id, "mctnetwork", mctnetwork);
+}
+
+#' scdb_del_mctnetwork - del mctnetwork from the DB and cahce
+#'
+#' @param id - id of mctnetwork
+#'
+#' @export
+scdb_del_mctnetwork = function(id)
+{
+	.scdb_del_obj(id, "mctnetwork");
 }

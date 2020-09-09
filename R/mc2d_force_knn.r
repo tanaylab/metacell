@@ -5,12 +5,12 @@
 #' @param graph_id graph_id of the similarity graph on cells from the metacell. This should always be specified, even if an mgraph is supplied since we use the obejct to position cells releative to metacels
 #' @param mgraph_id mgraph_id of the metacell graph to use. If this is null the function will compute an mgraph itself using the cell graph
 #' @param symetrize should the mc confusion matrix be symmetrized before computing layout?
-#' @param ignore_mismatch
+#' @param ignore_mismatch determine if mismatch in mc names are to be ignored.
 #' @param feats_gset gene set name for use in parametric graph and/or umap 2d projection
 #' @param feats_exclude list of genes to exclude from the features gene set
 #' @param graph_parametric if this is True, mc edges will be determined using parametric distances and not the cells k-nn graph.
-#' @param logist_loc the "location" parametr of the logistic function used to determine parametric distances between metacelles
-#' @param logist_scale the "lscale" parametr of the logistic function used to determine parametric distances between metacelles
+#' @param logist_loc the location parametr of the logistic function used to determine parametric distances between metacelles
+#' @param logist_scale the lscale parametr of the logistic function used to determine parametric distances between metacelles
 #'
 #' @export
 mcell_mc2d_force_knn = function(mc2d_id, mc_id, graph_id,

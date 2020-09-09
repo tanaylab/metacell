@@ -4,10 +4,12 @@
 #' 
 #'
 #' @examples
+#' \dontrun{
 #' # we first initialize a db object
 #' scdb_init("workdir")
 #  # we can see which objects are available
 #' scdb_ls("mat")
+#' }
 #' TBA
 #'
 #' @export

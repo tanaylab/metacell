@@ -9,7 +9,7 @@ Depends: R (>= 3.4.2)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Imports:
   data.table,
   dplyr,
@@ -87,12 +87,13 @@ Collate:
 	'stat_utils.r'
 	'utils.r'
 	'scdb.r'
+	'mc_apx_qc_cv.r'
+   'mc_hierarchy.r'
+   'mc_plot_vgels.r'
+   'scmat_import.r'
+	'gene_names_xref_util.r'
 	'metacell-package.r'
 	'zzz.r'
-	'mc_apx_qc_cv.r'
-    'mc_hierarchy.r'
-    'mc_plot_vgels.r'
-    'scmat_import.r'
 Remotes: tanaylab/tgstat, tanaylab/tgutil, tanaylab/tgconfig
 Suggests: knitr,
     rmarkdown,

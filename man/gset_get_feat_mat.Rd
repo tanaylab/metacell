@@ -4,7 +4,14 @@
 \alias{gset_get_feat_mat}
 \title{extract umi matrix for the genes in the set, possibly donwsampling}
 \usage{
-gset_get_feat_mat(gset_id, mat_id, downsamp = F, add_non_dsamp = F)
+gset_get_feat_mat(
+  gset_id,
+  mat_id,
+  downsamp = F,
+  add_non_dsamp = F,
+  downsample_n = NA,
+  gene_names_src_targ = NULL
+)
 }
 \arguments{
 \item{gset_id}{gene set in scdb}
@@ -12,6 +19,12 @@ gset_get_feat_mat(gset_id, mat_id, downsamp = F, add_non_dsamp = F)
 \item{mat_id}{mat in scdb}
 
 \item{downsamp}{if this is true the returned matrix is downsampled}
+
+\item{downsample_n}{number of umis for downsampling (if this is NA, the system will pick up the default heuristic)}
+
+\item{gene_names_src_targ}{string pair, defining how to convert gene nmaes from the original matrix to the  naming scheme of the returned matrix (NA by default, in which case no conversion will be done)}
+
+\item{add_non+dsamp}{should cells with fewer umis than the downsampling threshold be added to hte matrix with their raw data}
 }
 \description{
 extract umi matrix for the genes in the set, possibly donwsampling

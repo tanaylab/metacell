@@ -11,6 +11,8 @@ mcell_new_mc(mc_id, mc, outliers, scmat)
 
 \item{mc}{assignment of metacell id to cell}
 
+\item{outliers}{the list of outliers}
+
 \item{scmat}{a single cell RNA matrix object}
 }
 \description{

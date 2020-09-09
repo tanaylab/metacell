@@ -16,6 +16,7 @@ mcell_mc_plot_gg(
   md_mode = "filter",
   use_egc = F,
   main = NULL,
+  cex.main = 1,
   xlim = NULL,
   ylim = NULL,
   add_grid = F,

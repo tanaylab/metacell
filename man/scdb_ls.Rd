@@ -4,7 +4,7 @@
 \alias{scdb_ls}
 \title{List all object of a given type from the current scdb}
 \usage{
-scdb_ls(objt)
+scdb_ls(objt, regexp = ".")
 }
 \arguments{
 \item{objt}{- the object type}

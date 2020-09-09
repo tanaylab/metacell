@@ -15,6 +15,5 @@ This initialize scdb to a certain directory. The object will then allow loading.
 scdb_init("workdir")
 scdb_ls("mat")
 }
-TBA
 
 }

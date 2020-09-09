@@ -13,7 +13,8 @@ mcell_mc2d_plot_by_factor(
   filter_values = NULL,
   filter_name = NULL,
   ncols = NULL,
-  neto_points = F
+  neto_points = F,
+  colors = NULL
 )
 }
 \arguments{

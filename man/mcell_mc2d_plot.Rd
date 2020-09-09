@@ -10,7 +10,9 @@ mcell_mc2d_plot(
   plot_edges = T,
   min_edge_l = 0,
   edge_w = 1,
-  short_edge_w = 0
+  short_edge_w = 0,
+  colors = NULL,
+  fn_suf = ""
 )
 }
 \arguments{

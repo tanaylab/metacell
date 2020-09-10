@@ -60,8 +60,6 @@ mcell_add_gene_stat = function(mat_id, gstat_id, force=F)
 # #' ds_var_meanpk
 #'
 #'
-#' @import zoo
-#'
 #' @export
 #'
 scm_gene_stat = function(mat_id,

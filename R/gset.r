@@ -6,8 +6,6 @@
 #' @slot set_names possible annotations of gene sets
 #' @slot gene_set set per gene
 #'
-#' @import Matrix
-#'
 #' @export tgGeneSets
 #' @exportClass tgGeneSets
 tgGeneSets <- setClass(

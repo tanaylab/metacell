@@ -249,9 +249,6 @@ if(0) {
 }
 
 
-#' @importClassesFrom graph graphNEL
-#' @importFrom graph plot addEdge addNode nodeRenderInfo
-#' @importFrom Rgraphviz layoutGraph
 #' @export
 mc2d_comp_graph_coord = function(mc_graph, N)
 {

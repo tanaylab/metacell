@@ -8,8 +8,6 @@
 #'
 #' @export
 #'
-#' @import RCurl
-
 mcell_import_multi_scmat_10x = function(mat_nm,
 							dataset_table_fn,
 							base_dir,

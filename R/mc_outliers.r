@@ -8,8 +8,6 @@
 #'
 #' @export
 #'
-#' @import dbscan
-#' @import entropy
 #'
 mcell_mc_screen_outliers_1gene_fold = function(new_mc_id, mc_id, mat_id, T_lfc)
 {

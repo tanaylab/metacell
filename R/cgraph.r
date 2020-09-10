@@ -6,8 +6,6 @@
 #' @slot edges data frame specifiying the graph weighted edges as returned from tgs_cor_graph
 #' @slot nodes vector of node names
 #'
-#' @import Matrix
-#'
 #' @export tgCellGraph
 #' @exportClass tgCellGraph
 tgCellGraph <- setClass(

@@ -1,105 +1,126 @@
 Package: metacell
 Title: Meta cell analysis for single cell RNA-seq data
 Version: 0.3.5
-Authors@R: person("Amos", "Tanay", email = "amos.tanay@weizmann.ac.il", role = c("aut", "cre"))
-Description: The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices by computing partitions of a cell similarity graph into small (~20-200 typically) homogeneous groups of cells which are defined as metacells (MCs). The derived MCs are then used for building different representations of the data, allowing matrix or 2D graph visualization forming a basis for analysis of cell types, subtypes, transcriptional gradients, cell-cycle variation, gene modules and their regulatory models and more. More details on the usage of the MetaCell pipeline is available in the package vignettes, and in papers using it.
+Authors@R: 
+    person(given = "Amos",
+           family = "Tanay",
+           role = c("aut", "cre"),
+           email = "amos.tanay@weizmann.ac.il")
+Description: The MetaCell R package facilitates analysis of
+    single cell RNA-seq UMI matrices by computing partitions of a cell
+    similarity graph into small (~20-200 typically) homogeneous groups of
+    cells which are defined as metacells (MCs). The derived MCs are then
+    used for building different representations of the data, allowing
+    matrix or 2D graph visualization forming a basis for analysis of cell
+    types, subtypes, transcriptional gradients, cell-cycle variation, gene
+    modules and their regulatory models and more. More details on the
+    usage of the MetaCell pipeline is available in the package vignettes,
+    and in papers using it.
+License: MIT + file LICENSE
 URL: https://github.com/tanaylab/metacell
 BugReports: https://github.com/tanaylab/metacell/issues
-Depends: R (>= 3.5.0)
-License: MIT + file LICENSE
+Depends: 
+    R (>= 3.5.0)
+Imports:
+    cluster,
+    cowplot,
+    data.table,
+    dbscan,
+    doMC,
+    dplyr,
+    entropy,
+    ggplot2,
+    graph,
+    igraph,
+    KernSmooth,
+    lpSolve,
+    lpSolveAPI,
+    lpsymphony,
+    magrittr,
+    Matrix,
+    matrixStats,
+    methods,
+    parallel,
+    pdist,
+    pheatmap,
+    RColorBrewer,
+    RCurl,
+    Rgraphviz,
+    RSvgDevice,
+    slam,
+    tgconfig,
+    tgstat,
+    tgutil,
+    umap,
+    zoo
+Suggests: 
+    knitr,
+    rmarkdown,
+    SingleCellExperiment
+VignetteBuilder: 
+    knitr
+Remotes: 
+    tanaylab/tgconfig,
+    tanaylab/tgstat,
+    tanaylab/tgutil
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
-Imports:
-    data.table,
-    dplyr,
-    graph,
-    methods,
-    Matrix,
-    matrixStats,
-    pheatmap,
-    RColorBrewer,
-    Rgraphviz,
-    KernSmooth,
-    zoo,
-    ggplot2,
-    cluster,
-    cowplot,
-    pdist,
-    doMC,
-    RCurl,
-    igraph,
-    RSvgDevice,
-    dbscan,
-    entropy,
-    parallel,
-    tgstat,
-    tgutil,
-    tgconfig,
-    umap,
-    lpsymphony,
-    lpSolve,
-    lpSolveAPI,
-    magrittr
 Collate:
-  	'mc_plot_confusion.r'
-	'atlas_project.r'
-	'atlas.r'
-	'cgraph_gcor_norm.r'
-	'cgraph_knn_mcnorm.r'
-	'coclust.r'
-	'coclust_graph_cov.r'
-	'mc2d_force_knn.r'
-	'mc2d_plot.r'
-	'mc_confusion.r'
-	'mc_from_coclust.r'
-	'mc_outliers.r'
-	'mc_apx_qc.r'
-	'mc_plot_cross_mc.r'
-	'pipe_vanila.r'
-	'scmat_gcors.r'
-	'cgraph.r'
-	'cgraph_knn.r'
-	'cgraph_extmat.r'
-	'gset_mc.r'
-	'mc.r'
-	'mc2d.r'
-	'mc_colorize.r'
-	'mc_export_tab.r'
-	'mc_graphcov.r'
-	'mc_plot_marks.r'
-	'mc_plot_by_factor.r'
-	'mgraph.r'
-	'mgraph_knn.r'
-	'mgraph_logistic.r'
-	'mincost_flow.r'
-	'mctnetwork.r'
-	'mctnetwork_clust.r'
-	'mctnetwork_plot_net.r'
-	'gset.r'
-	'gset_clust.r'
-	'gset_feat_select.r'
-	'gset_plot_mats.r'
-	'gstats_report.r'
-	'scmat_ccor.r'
-	'scmat_10x.r'
-	'scmat_mars.r'
-	'scmat_batch_stat.r'
-	'scmat.r'
-	'scfigs.r'
-	'gstats.r'
-	'stat_utils.r'
-	'utils.r'
-	'scdb.r'
-	'mc_apx_qc_cv.r'
-   'mc_hierarchy.r'
-   'mc_plot_vgels.r'
-   'scmat_import.r'
-	'gene_names_xref_util.r'
-	'metacell-package.r'
-	'zzz.r'
-Remotes: tanaylab/tgstat, tanaylab/tgutil, tanaylab/tgconfig
-Suggests: knitr,
-    rmarkdown,
-    SingleCellExperiment
-VignetteBuilder: knitr
+    'utils-pipe.R'
+    'mc_plot_confusion.r'
+    'atlas_project.r'
+    'atlas.r'
+    'cgraph_gcor_norm.r'
+    'cgraph_knn_mcnorm.r'
+    'coclust.r'
+    'coclust_graph_cov.r'
+    'mc2d_force_knn.r'
+    'mc2d_plot.r'
+    'mc_confusion.r'
+    'mc_from_coclust.r'
+    'mc_outliers.r'
+    'mc_apx_qc.r'
+    'mc_plot_cross_mc.r'
+    'pipe_vanila.r'
+    'scmat_gcors.r'
+    'cgraph.r'
+    'cgraph_knn.r'
+    'cgraph_extmat.r'
+    'gset_mc.r'
+    'mc.r'
+    'mc2d.r'
+    'mc_colorize.r'
+    'mc_export_tab.r'
+    'mc_graphcov.r'
+    'mc_plot_marks.r'
+    'mc_plot_by_factor.r'
+    'mgraph.r'
+    'mgraph_knn.r'
+    'mgraph_logistic.r'
+    'mincost_flow.r'
+    'mctnetwork.r'
+    'mctnetwork_clust.r'
+    'mctnetwork_plot_net.r'
+    'gset.r'
+    'gset_clust.r'
+    'gset_feat_select.r'
+    'gset_plot_mats.r'
+    'gstats_report.r'
+    'scmat_ccor.r'
+    'scmat_10x.r'
+    'scmat_mars.r'
+    'scmat_batch_stat.r'
+    'scmat.r'
+    'scfigs.r'
+    'gstats.r'
+    'stat_utils.r'
+    'utils.r'
+    'scdb.r'
+    'mc_apx_qc_cv.r'
+    'mc_hierarchy.r'
+    'mc_plot_vgels.r'
+    'scmat_import.r'
+    'gene_names_xref_util.r'
+    'metacell-package.r'
+    'zzz.r'

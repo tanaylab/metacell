@@ -1,10 +1,4 @@
-library("lpSolve")
-library(tidyverse)
-library(igraph)
-library(magrittr)
-library("slam")
 
-	
 #edges should be a data frame with
 #from
 #to,
@@ -84,8 +78,6 @@ network_lp_constraints <- function(net, total_flow, k_inf_cap)
     rhs = c(rhs_cap_constr, rhs_flow_constr, rhs_src_constr, rhs_sink_constr))
 	return(constraints)
 }
-
-library("lpSolveAPI")
 
 gen_lp_from_net = function(net, ncnstr) 
 {

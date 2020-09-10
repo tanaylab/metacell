@@ -1,7 +1,3 @@
-# this is important for running this package from scripts
-#' @import methods
-NULL
-
 #' Single cell RNA-seq matrix
 #'
 #' a single cell RNA matrix interface. Does not do much beyond adding
@@ -13,9 +9,6 @@ NULL
 #' @slot cells list of all cells. By default the matrix col names are used
 #' @slot stat_type Type of statistic. Currently only "umi" is supported
 #' @slot cell_metadata dataframe with metadata on the cells. Rownames correspond to the cell names. By default a table consisting of only a "Batch" field is added with a trivial batch number. If the cell_metadata does not include a Batch field, it will be added with a trivial value. Additional standard fields spike_umis - the number of (filtered_) spike umis for the cell
-#'
-#' @importClassesFrom Matrix Matrix dgCMatrix dgeMatrix
-#' @import Matrix
 #'
 #' @export tgScMat
 #' @exportClass tgScMat

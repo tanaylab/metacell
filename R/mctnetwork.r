@@ -13,10 +13,6 @@
 #' @slot edge_flows - flow of mincost solution
 #' @slot mc_t_infer - inferred fraction ofcells per mc and time
 #'
-#' @import Matrix
-#' @import parallel
-#' @import lpsymphony
-#'
 #' @export tgMCTNetwork
 #' @exportClass tgMCTNetwork
 tgMCTNetwork <- setClass(
@@ -152,7 +148,6 @@ mctnetwork_comp_manifold_costs = function(mct, t_exp = 1, T_cost = 1000)
 #'
 #' @param mct mct network object
 #' @param mc_leak the fraciton of frequency loss per mc per time step. All zero if you don't know what to expect.
-#' @param 
 #'
 #' @return an updated mct object
 #' @export
@@ -402,11 +397,9 @@ build_growth_mats = function(mct, mc_leak)
 #'
 #' @param mct mct network object
 #' @param flow_tolerance how much flow we should miss per time
-#' @param 
 #'
 #' @return an updated mct object
 #' @export
-
 mctnetwork_gen_mincost_flows= function(mct, flow_tolerance=0.01)
 {
 	net = mct@network

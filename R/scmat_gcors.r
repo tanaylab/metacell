@@ -31,6 +31,13 @@ mcell_mat_rpt_cor_anchors = function(mat_id, gene_anchors, gene_anti = c(), cor_
 	mat_ds = scm_downsamp(umis, downsample_n)
 	mat_ds = mat_ds[rowSums(mat_ds)>10,]
 
+	gene_exists = gene_anchors %in% rownames(mat_ds)
+	if (any(!gene_exists)) {
+		warning(gene_anchors[!gene_exists], " does not exist in the downsampled matrix (it has less than 10 UMIs)")
+	}
+
+	gene_anchors = gene_anchors[gene_exists]
+
 	csize = colSums(mat@mat[,colnames(mat_ds)])
 	gcors = data.frame(sz_cor = apply(mat_ds, 1, cor, csize))
 	for(g in gene_anchors) {

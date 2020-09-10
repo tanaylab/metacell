@@ -43,11 +43,13 @@ Imports:
     parallel,
     pdist,
     pheatmap,
+    plyr,
     RColorBrewer,
     RCurl,
     Rgraphviz,
     RSvgDevice,
     slam,
+    tidyr,
     tgconfig,
     tgstat,
     tgutil,
@@ -56,7 +58,8 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    SingleCellExperiment
+    SingleCellExperiment,
+    S4Vectors
 VignetteBuilder: 
     knitr
 Remotes: 

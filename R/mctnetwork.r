@@ -406,7 +406,7 @@ mctnetwork_gen_mincost_flows= function(mct, flow_tolerance=0.01)
 	ncnstr = network_lp_constraints(net, 1-flow_tolerance, 100)
 
 	edge_costs = net$cost[order(net$ID)]
-	sol = lpsymphony_solve_LP(obj = edge_costs,
+	sol = lpsymphony::lpsymphony_solve_LP(obj = edge_costs,
 										mat = ncnstr$lhs, 
 										rhs = ncnstr$rhs, 
 										dir = ncnstr$dir)

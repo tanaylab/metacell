@@ -71,7 +71,7 @@ network_lp_constraints <- function(net, total_flow, k_inf_cap)
   lhs_df = rbind(rbind(lhs_cap_constr, lhs_flow_constr_o), lhs_flow_constr_i)
   lhs_df = rbind(rbind(lhs_df, lhs_src_constr), lhs_sink_constr)
 #  lhs = sparseMatrix(i = lhs_df$id, lhs_df$edge, x= lhs_df$coef)
-  lhs = simple_triplet_matrix(i = lhs_df$id, lhs_df$edge, v= lhs_df$coef)
+  lhs = slam::simple_triplet_matrix(i = lhs_df$id, lhs_df$edge, v= lhs_df$coef)
   constraints <- list(
     lhs = lhs,
     dir = c(dir_cap_constr, dir_flow_constr, dir_src_constr, dir_sink_constr),

@@ -203,7 +203,7 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 			dst = matrix(NA, nrow=L, ncol=L)
 			for(i in 1:(L-1)) {
 				for(j in (i+1):L) {
-					dst[i,j] = KL.Dirichlet(mc_mat[,i], mc_mat[,j], reg, reg)
+					dst[i,j] = entropy::KL.Dirichlet(mc_mat[,i], mc_mat[,j], reg, reg)
 				}
 			}
 			dst[is.na(dst)] = t(dst)[is.na(dst)]

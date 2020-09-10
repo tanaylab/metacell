@@ -1,3 +1,6 @@
-vignettes/*
+vignettes/*.R
+vignettes/*.html
+vignettes/testdb
+vignettes/figs
 doc
 Meta

@@ -7,6 +7,9 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/allrow_cor.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/gen_10x_mars_gene_match.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/gset_add_genes.html</loc>
   </url>
   <url>
@@ -43,7 +46,16 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/initialize-tgMC2D-method.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/initialize-tgMCAtlas-method.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/initialize-tgMCCov-method.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/initialize-tgMCManifGraph-method.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/initialize-tgMCTNetwork-method.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mc_colorize.html</loc>
@@ -76,10 +88,28 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/mc_reorder.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mc_restrict.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mc_set_outlier_mc.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mc_update_stats.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcatlas_annotate_mc_by_mc2mc_projection.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcatlas_annotate_mc_by_sc2mc_projection.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcatlas_annotate_mc_by_sc2sc_projection.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcatlas_comp_adj_type_n.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcatlas_project_query.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_add_cgraph_bknn_norm_mc.html</loc>
@@ -92,6 +122,9 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_add_cgraph_from_mat_raw_knn.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_add_gene_names_xref_mars10x.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_add_gene_stat.html</loc>
@@ -116,6 +149,12 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_coclust_from_graph_resamp.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_compare_bulk.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_gen_atlas.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_gen_cell_cor_gset.html</loc>
@@ -187,6 +226,9 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc2d_plot_gene.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc2d_rotate.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_add_annot.html</loc>
   </url>
   <url>
@@ -232,13 +274,13 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_confusion.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_gg.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_hierarchy.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_marks.html</loc>
-  </url>
-  <url>
-    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_subheats.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_vgels.html</loc>
@@ -262,10 +304,25 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_merge_mats.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mgraph_knn.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mgraph_logistic.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_new_mc.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_new_mc2d.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_new_mc_mgraph.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_new_mcatlas.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_new_mctnetwork.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_pipe_mat2mc2d.html</loc>
@@ -289,6 +346,9 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_plot_umis_per_cell.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_proj_on_atlas.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_read_multi_scmat_10x.html</loc>
   </url>
   <url>
@@ -301,7 +361,40 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_wgtmc_pred_corr.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_clust_flows.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_comp_manifold_costs.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_comp_propagation.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_gen_e_gmt_p.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_gen_gmod_mc_t.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_gen_mincost_flows.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_gen_network.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_get_flow_mat.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_get_type_flows.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mctnetwork_propogate_from_t.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/metacell.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/pipe.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/plot_color_bar.html</loc>
@@ -319,6 +412,9 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_coclust.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_gene_names_xref.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_gset.html</loc>
   </url>
   <url>
@@ -334,6 +430,15 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_mc2d.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_mcatlas.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_mctnetwork.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_add_mgraph.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_cgraph.html</loc>
   </url>
   <url>
@@ -344,6 +449,9 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_coclust.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_gene_names_xref.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_gset.html</loc>
@@ -359,6 +467,18 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_mc2d.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_mcatlas.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_mctnetwork.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_del_mgraph.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_gene_names_xref.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_gset.html</loc>
@@ -386,6 +506,15 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scdb_mc2d.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_mcatlas.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_mctnetwork.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/scdb_mgraph.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/scfigs_dir.html</loc>
@@ -448,7 +577,16 @@
     <loc>http://tanaylab.github.io/metacell-r/reference/tgMC2D-class.html</loc>
   </url>
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/tgMCAtlas-class.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/tgMCCov-class.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/tgMCManifGraph-class.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/tgMCTNetwork-class.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/tgScMat-class.html</loc>

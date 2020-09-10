@@ -1,5 +1,5 @@
 pandoc: 1.19.2.1
-pkgdown: 1.4.0
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   a-basic_pbmc8k: a-basic_pbmc8k.html
@@ -7,6 +7,7 @@ articles:
   c-metacell_annotation: c-metacell_annotation.html
   d-amphimedon: d-amphimedon.html
   e-data_convert: e-data_convert.html
+last_built: 2020-09-10T15:48Z
 urls:
   reference: http://tanaylab.github.io/metacell-r/reference
   article: http://tanaylab.github.io/metacell-r/articles

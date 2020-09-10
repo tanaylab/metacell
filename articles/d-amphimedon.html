@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analyzing whole-organism scRNA-seq data with metacell • metacell</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Analyzing whole-organism scRNA-seq data with metacell">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="metacell">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.41</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
       </span>
     </div>
 
@@ -94,10 +94,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Analyzing whole-organism scRNA-seq data with metacell</h1>
+      <h1 data-toc-skip>Analyzing whole-organism scRNA-seq data with metacell</h1>
                         <h4 class="author">Arnau Sebe-Pedros</h4>
             
-            <h4 class="date">2019-10-13</h4>
+            <h4 class="date">2020-09-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tanaylab/metacell/blob/master/vignettes/d-amphimedon.Rmd"><code>vignettes/d-amphimedon.Rmd</code></a></small>
       <div class="hidden name"><code>d-amphimedon.Rmd</code></div>
@@ -111,15 +111,15 @@
 <div id="initialize-and-load-umi-matrix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initialize-and-load-umi-matrix" class="anchor"></a>Initialize and load UMI matrix</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(metacell)</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">metacell</span>)</pre></body></html></div>
 <p>To start using metacell, we first need to initialize a database. This links the package to a directory (in this case <em>aquedb</em>) that stores all the objects:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span>(<span class="st">"aquedb"</span>)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"aquedb/"</span>)
-<span class="kw"><a href="../reference/scdb_init.html">scdb_init</a></span>(<span class="st">"aquedb/"</span>, <span class="dt">force_reinit=</span>T)
-<span class="co">#&gt; initializing scdb to aquedb/</span></code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="kw">if</span>(!<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span>(<span class="st">"aquedb"</span>)) <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"aquedb/"</span>)
+<span class="fu"><a href="../reference/scdb_init.html">scdb_init</a></span>(<span class="st">"aquedb/"</span>, <span class="kw">force_reinit</span><span class="kw">=</span><span class="no">T</span>)
+<span class="co">#&gt; initializing scdb to aquedb/</span></pre></body></html></div>
 <p><strong>force_reinit=T</strong> instructs the system to override existing database objects. Otherwise, metacell reuses loaded objects to save time on reading and initializing them from the disk.</p>
 <p>Next we load the UMI matrix to the system. In this case, we will import multiple MARS-seq batches and, for this, we also need to provide a table describing these experimental batches (to be downloaded).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/MARS_Batches.txt"</span>,<span class="st">"MARS_Batches.txt"</span>)
-<span class="kw"><a href="../reference/mcell_import_multi_mars.html">mcell_import_multi_mars</a></span>(<span class="st">"aque"</span>, <span class="st">"MARS_Batches.txt"</span>, <span class="dt">base_dir=</span><span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/umi_tables"</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/MARS_Batches.txt"</span>,<span class="st">"MARS_Batches.txt"</span>)
+<span class="fu"><a href="../reference/mcell_import_multi_mars.html">mcell_import_multi_mars</a></span>(<span class="st">"aque"</span>, <span class="st">"MARS_Batches.txt"</span>, <span class="kw">base_dir</span><span class="kw">=</span><span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/umi_tables"</span>)
 <span class="co">#&gt; will read AQFR0001</span>
 <span class="co">#&gt; will read AQFR0002</span>
 <span class="co">#&gt; will read AQFR0003</span>
@@ -147,13 +147,13 @@
 <span class="co">#&gt; will read AQFR0035</span>
 <span class="co">#&gt; will read AQFR0036</span>
 <span class="co">#&gt; [1] TRUE</span>
-mat =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"aque"</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mat<span class="op">@</span>mat))
-<span class="co">#&gt; [1] 49905  4992</span></code></pre></div>
+<span class="no">mat</span> <span class="kw">=</span> <span class="fu"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"aque"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">mat</span>@<span class="kw">mat</span>))
+<span class="co">#&gt; [1] 49905  4992</span></pre></body></html></div>
 <p>The <strong>scdb_mat()</strong> command is returning a matrix object, which has one slot containing the count matrix (<a href="mailto:mat@mat">mat@mat</a>), as well as additional features.</p>
 <p>Before starting to analyze the data, we link the package to a figure directory:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span>(<span class="st">"figs"</span>)) <span class="kw"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"figs/"</span>)
-<span class="kw"><a href="../reference/scfigs_init.html">scfigs_init</a></span>(<span class="st">"figs/"</span>)</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="kw">if</span>(!<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span>(<span class="st">"figs"</span>)) <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="st">"figs/"</span>)
+<span class="fu"><a href="../reference/scfigs_init.html">scfigs_init</a></span>(<span class="st">"figs/"</span>)</pre></body></html></div>
 <p>MetaCell uses a standardized naming scheme for the figures, to make it easier to archive and link analysis figures to the database objects. In principle, figures in the figures directory are named after the object data type they refer to (for example, mat for matrices, mc for metacells, and more, see below). The figure name then includes also the object name they refer to, and a suffix describing the actual figure type.</p>
 <hr>
 </div>
@@ -161,47 +161,47 @@ mat =<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.ht
 <h2 class="hasAnchor">
 <a href="#exploring-and-filtering-the-umi-matrix" class="anchor"></a>Exploring and filtering the UMI matrix</h2>
 <p>In MARS-seq we use ERCC standards, so we will first remove them from our UMI matrix. We start by identifying the ERCC gene IDs (rownames in the UMI matrix) and then we use a dedicated function to remove them from the original matrix and store a new matrix without them, under the name <em>aque_noercc</em>. We load this new matrix as our new <em>mat</em> object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">erccs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(mat<span class="op">@</span>mat)[<span class="kw"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(<span class="st">"ERCC"</span>,<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(mat<span class="op">@</span>mat))]
-<span class="kw"><a href="../reference/mcell_mat_ignore_genes.html">mcell_mat_ignore_genes</a></span>(<span class="dt">new_mat_id=</span><span class="st">"aque_noercc"</span>,<span class="dt">mat_id=</span><span class="st">"aque"</span>,<span class="dt">ig_genes=</span>erccs)
-mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"aque_noercc"</span>)</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="no">erccs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">mat</span>@<span class="kw">mat</span>)[<span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(<span class="st">"ERCC"</span>,<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">mat</span>@<span class="kw">mat</span>))]
+<span class="fu"><a href="../reference/mcell_mat_ignore_genes.html">mcell_mat_ignore_genes</a></span>(<span class="kw">new_mat_id</span><span class="kw">=</span><span class="st">"aque_noercc"</span>,<span class="kw">mat_id</span><span class="kw">=</span><span class="st">"aque"</span>,<span class="kw">ig_genes</span><span class="kw">=</span><span class="no">erccs</span>)
+<span class="no">mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"aque_noercc"</span>)</pre></body></html></div>
 <p>To get a basic undersatnding of the new data, we will plot the distribution of umi count per cell:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_plot_umis_per_cell.html">mcell_plot_umis_per_cell</a></span>(<span class="st">"aque"</span>,<span class="dt">min_umis_cutoff =</span> <span class="dv">200</span>)
-<span class="co">#&gt; [1] 200</span></code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_plot_umis_per_cell.html">mcell_plot_umis_per_cell</a></span>(<span class="st">"aque"</span>,<span class="kw">min_umis_cutoff</span> <span class="kw">=</span> <span class="fl">200</span>)
+<span class="co">#&gt; [1] 200</span></pre></body></html></div>
 <div class="figure">
 <img src="figs/aque.total_umi_distr.png" alt="Umi distribution plot" width="300"><p class="caption">Umi distribution plot</p>
 </div>
 <p>As expected in a whole-organism dataset, we observe a very broad distribution of cell sizes (UMIs/cell). Before continuing we want to filter out very small cells (in this case &lt;200 UMIs) and extremely large cells (in this case &gt;12000 UMIs, which might represent doublets or FACS-sorting errors). Again, we store this new matrix (now with only filtered cells) under the name <em>aque_filt</em>. We can iteratively modify our filtering decisions given results of the downstream analysis.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cell_sizes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(mat<span class="op">@</span>mat))
-large_cells &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(cell_sizes<span class="op">&gt;</span><span class="dv">12000</span>))
-small_cells &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(cell_sizes<span class="op">&lt;</span><span class="dv">200</span>))
-<span class="kw"><a href="../reference/mcell_mat_ignore_cells.html">mcell_mat_ignore_cells</a></span>(<span class="st">"aque_filt"</span>,<span class="st">"aque_noercc"</span>,<span class="dt">ig_cells=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(small_cells,large_cells))
-mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"aque_filt"</span>)
-<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(mat<span class="op">@</span>mat))
-<span class="co">#&gt; [1] 49813  4743</span></code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="no">cell_sizes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">mat</span>@<span class="kw">mat</span>))
+<span class="no">large_cells</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="no">cell_sizes</span><span class="kw">&gt;</span><span class="fl">12000</span>))
+<span class="no">small_cells</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="no">cell_sizes</span><span class="kw">&lt;</span><span class="fl">200</span>))
+<span class="fu"><a href="../reference/mcell_mat_ignore_cells.html">mcell_mat_ignore_cells</a></span>(<span class="st">"aque_filt"</span>,<span class="st">"aque_noercc"</span>,<span class="kw">ig_cells</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">small_cells</span>,<span class="no">large_cells</span>))
+<span class="no">mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scdb_mat.html">scdb_mat</a></span>(<span class="st">"aque_filt"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">mat</span>@<span class="kw">mat</span>))
+<span class="co">#&gt; [1] 49813  4743</span></pre></body></html></div>
 <hr>
 </div>
 <div id="selecting-gene-markers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#selecting-gene-markers" class="anchor"></a>Selecting gene markers</h2>
 <p>We will next select the marker genes for the downstream MetaCell analysis. First, we need to compute statistics on the distributions of each gene in the data, which is going to be our main tool for selecting informative markergenes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_add_gene_stat.html">mcell_add_gene_stat</a></span>(<span class="dt">gstat_id=</span><span class="st">"aque"</span>, <span class="dt">mat_id=</span><span class="st">"aque_filt"</span>, <span class="dt">force=</span>T)
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_add_gene_stat.html">mcell_add_gene_stat</a></span>(<span class="kw">gstat_id</span><span class="kw">=</span><span class="st">"aque"</span>, <span class="kw">mat_id</span><span class="kw">=</span><span class="st">"aque_filt"</span>, <span class="kw">force</span><span class="kw">=</span><span class="no">T</span>)
 <span class="co">#&gt; Calculating gene statistics...</span>
 <span class="co">#&gt; will downsamp</span>
 <span class="co">#&gt; done downsamp</span>
 <span class="co">#&gt; will gen mat_n</span>
 <span class="co">#&gt; done gen mat_n</span>
 <span class="co">#&gt; done computing basic gstat, will compute trends</span>
-<span class="co">#&gt; ..done</span></code></pre></div>
-<p>This generates a new object of type gstat under the name <em>aque</em>, by analyzing the count matrix with id <em>aque_filt</em>. We can explore interesting genes and their distributions (to do this, load the gene stats: <strong>gstats=scdb_gstat(“aque”)</strong>), or move directly to select a gene set for downstream analysis. For now, let’s to the latter.</p>
+<span class="co">#&gt; ..done</span></pre></body></html></div>
+<p>This generates a new object of type gstat under the name <em>aque</em>, by analyzing the count matrix with id <em>aque_filt</em>. We can explore interesting genes and their distributions (to do this, load the gene stats: <strong>gstats=scdb_gstat("aque")</strong>), or move directly to select a gene set for downstream analysis. For now, let's to the latter.</p>
 <p>We create a new object of type gene set, called <em>aque_feats</em>, to which all potential gene markers that show a scaled size correlation below a certain threshold (<strong>T_szcor</strong>) are added. We can also use and combine other gene feature selection metrics such are downsampled varmean. But in the case of whole-organism datasets (with highly heterogeneous cell sizes, see above) this is not recommended. In addition, in this case we will also select genes based on third strategy (<strong>T_niche</strong>) that looks for genes with very restricted expression in a small group of cells. These genes are added to the list selected by size correlation.</p>
-<p>We further refine our marker gene selection by asking (1) a minimum total of observed UMIs across the entire dataset (<strong>T_tot</strong>, &gt;200 in this case) and (2) by also requiring selected genes to be detected in least three cells and with 3 or more UMIs in each of these cells (<strong>T_top3</strong>). Finally, we will exclude from our marker gene selection a list of genes (<strong>blacklist</strong>) that we defined as potentially problematic, such as ribosomal proteins. In general, it’s a good a idea to only do this after initial analyses with all genes and then identifying these potentially problematic genes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bl&lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/scan.html">scan</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/bl_genes"</span>,<span class="dt">what=</span><span class="st">""</span>)
-<span class="kw"><a href="../reference/mcell_gset_filter_multi.html">mcell_gset_filter_multi</a></span>(<span class="dt">gset_id =</span> <span class="st">"aque_feats"</span>,<span class="dt">gstat_id=</span><span class="st">"aque"</span>,<span class="dt">T_tot=</span><span class="dv">200</span>,<span class="dt">T_top3=</span><span class="dv">2</span>,<span class="dt">T_szcor=</span><span class="op">-</span><span class="fl">0.1</span>,<span class="dt">T_niche=</span><span class="fl">0.08</span>,<span class="dt">force_new=</span>T,<span class="dt">blacklist=</span>bl)
-<span class="co">#&gt; Selected 1005 markers</span></code></pre></div>
+<p>We further refine our marker gene selection by asking (1) a minimum total of observed UMIs across the entire dataset (<strong>T_tot</strong>, &gt;200 in this case) and (2) by also requiring selected genes to be detected in least three cells and with 3 or more UMIs in each of these cells (<strong>T_top3</strong>). Finally, we will exclude from our marker gene selection a list of genes (<strong>blacklist</strong>) that we defined as potentially problematic, such as ribosomal proteins. In general, it's a good a idea to only do this after initial analyses with all genes and then identifying these potentially problematic genes.</p>
+<div class="sourceCode"><html><body><pre class="r"><span class="no">bl</span><span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scan.html">scan</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/bl_genes"</span>,<span class="kw">what</span><span class="kw">=</span><span class="st">""</span>)
+<span class="fu"><a href="../reference/mcell_gset_filter_multi.html">mcell_gset_filter_multi</a></span>(<span class="kw">gset_id</span> <span class="kw">=</span> <span class="st">"aque_feats"</span>,<span class="kw">gstat_id</span><span class="kw">=</span><span class="st">"aque"</span>,<span class="kw">T_tot</span><span class="kw">=</span><span class="fl">200</span>,<span class="kw">T_top3</span><span class="kw">=</span><span class="fl">2</span>,<span class="kw">T_szcor</span><span class="kw">=</span>-<span class="fl">0.1</span>,<span class="kw">T_niche</span><span class="kw">=</span><span class="fl">0.08</span>,<span class="kw">force_new</span><span class="kw">=</span><span class="no">T</span>,<span class="kw">blacklist</span><span class="kw">=</span><span class="no">bl</span>)
+<span class="co">#&gt; Selected 1006 markers</span></pre></body></html></div>
 <p>We can modify our parameters by plotting all genes and our selected gene set (shown in red). In this case, we plot the normalized size correlation statistic versus the mean expression of each gene:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_plot_gstats.html">mcell_plot_gstats</a></span>(<span class="dt">gstat_id=</span><span class="st">"aque"</span>, <span class="dt">gset_id=</span><span class="st">"aque_feats"</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_plot_gstats.html">mcell_plot_gstats</a></span>(<span class="kw">gstat_id</span><span class="kw">=</span><span class="st">"aque"</span>, <span class="kw">gset_id</span><span class="kw">=</span><span class="st">"aque_feats"</span>)
 <span class="co">#&gt; png </span>
-<span class="co">#&gt;   2</span></code></pre></div>
+<span class="co">#&gt;   2</span></pre></body></html></div>
 <div class="figure">
 <img src="figs/aque.szcor.png" alt="size correlation plot" width="250"><p class="caption">size correlation plot</p>
 </div>
@@ -211,14 +211,13 @@ mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_ma
 <h2 class="hasAnchor">
 <a href="#building-the-balanced-cell-graph" class="anchor"></a>Building the balanced cell graph</h2>
 <p>Assuming we are happy with the selected genes, we will move forward to create a similarity graph (cgraph), using a construction called balanced K-nn graph:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_add_cgraph_from_mat_bknn.html">mcell_add_cgraph_from_mat_bknn</a></span>(<span class="dt">mat_id=</span><span class="st">"aque_filt"</span>, 
-                <span class="dt">gset_id =</span> <span class="st">"aque_feats"</span>, 
-                <span class="dt">graph_id=</span><span class="st">"aque_graph"</span>,
-                <span class="dt">K=</span><span class="dv">150</span>,
-                <span class="dt">dsamp=</span>F)
-<span class="co">#&gt; will build balanced knn graph on 4743 cells and 1005 genes, this can be a bit heavy for &gt;20,000 cells</span>
-<span class="co">#&gt; 100%</span>
-<span class="co">#&gt; sim graph is missing 9 nodes, out of 4743</span></code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_add_cgraph_from_mat_bknn.html">mcell_add_cgraph_from_mat_bknn</a></span>(<span class="kw">mat_id</span><span class="kw">=</span><span class="st">"aque_filt"</span>,
+                <span class="kw">gset_id</span> <span class="kw">=</span> <span class="st">"aque_feats"</span>,
+                <span class="kw">graph_id</span><span class="kw">=</span><span class="st">"aque_graph"</span>,
+                <span class="kw">K</span><span class="kw">=</span><span class="fl">150</span>,
+                <span class="kw">dsamp</span><span class="kw">=</span><span class="no">F</span>)
+<span class="co">#&gt; will build balanced knn graph on 4743 cells and 1006 genes, this can be a bit heavy for &gt;20,000 cells</span>
+<span class="co">#&gt; sim graph is missing 8 nodes, out of 4743</span></pre></body></html></div>
 <p>This adds to the database a new cell graph object named <em>aque_graph</em>. The K=100 parameter is important, as it defines the initial attempt of the system to assign neighbors for each cell and ultimately affects the size distribution of derived metacells. Note that constructing the graph can become computationally intensive if going beyond 20-30,000 cells.</p>
 <hr>
 </div>
@@ -226,52 +225,50 @@ mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_ma
 <h2 class="hasAnchor">
 <a href="#resampling-and-generating-the-co-clustering-graph" class="anchor"></a>Resampling and generating the co-clustering graph</h2>
 <p>The next step will use the cgraph to sample one thousand metacell partitions, each covering 75% of the cells and organizing them in dense subgraphs:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_coclust_from_graph_resamp.html">mcell_coclust_from_graph_resamp</a></span>(
-                <span class="dt">coc_id=</span><span class="st">"aque_coc1000"</span>, 
-                <span class="dt">graph_id=</span><span class="st">"aque_graph"</span>,
-                <span class="dt">min_mc_size=</span><span class="dv">20</span>, 
-                <span class="dt">p_resamp=</span><span class="fl">0.75</span>, <span class="dt">n_resamp=</span><span class="dv">1000</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_coclust_from_graph_resamp.html">mcell_coclust_from_graph_resamp</a></span>(
+                <span class="kw">coc_id</span><span class="kw">=</span><span class="st">"aque_coc1000"</span>,
+                <span class="kw">graph_id</span><span class="kw">=</span><span class="st">"aque_graph"</span>,
+                <span class="kw">min_mc_size</span><span class="kw">=</span><span class="fl">20</span>,
+                <span class="kw">p_resamp</span><span class="kw">=</span><span class="fl">0.75</span>, <span class="kw">n_resamp</span><span class="kw">=</span><span class="fl">1000</span>)
 <span class="co">#&gt; running bootstrap to generate cocluster</span>
-<span class="co">#&gt; 0%...2%...9%...17%...23%...30%...37%...44%...51%...58%...64%...71%...78%...85%...91%...100%</span>
-<span class="co">#&gt; done resampling</span></code></pre></div>
+<span class="co">#&gt; done resampling</span></pre></body></html></div>
 <p>The typical size distribution of the resampled metacells will be largely determined by the K parameter used for computing the cgraph. The resampling process may take a while if the graphs are very large. You can modify <strong>n_resamp</strong> to generate fewer resamples.</p>
 <p>The resampling procedures creates a new coclust object in the database, named <em>aque_coc1000</em>, and storesthe number of times each pair of cells end up being part of the same metacells. The co-clustering statistics are used to generate a new similarity graph, based on which accurate calling of the final set of metacells is done:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc_from_coclust_balanced.html">mcell_mc_from_coclust_balanced</a></span>(
-                <span class="dt">coc_id=</span><span class="st">"aque_coc1000"</span>, 
-                <span class="dt">mat_id=</span> <span class="st">"aque_filt"</span>,
-                <span class="dt">mc_id=</span> <span class="st">"aque_mc"</span>, 
-                <span class="dt">K=</span><span class="dv">20</span>, <span class="dt">min_mc_size=</span><span class="dv">20</span>, <span class="dt">alpha=</span><span class="dv">2</span>)
-<span class="co">#&gt; filtered 1162180 left with 361418 based on co-cluster imbalance</span>
-<span class="co">#&gt; building metacell object, #mc 47</span>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_mc_from_coclust_balanced.html">mcell_mc_from_coclust_balanced</a></span>(
+                <span class="kw">coc_id</span><span class="kw">=</span><span class="st">"aque_coc1000"</span>,
+                <span class="kw">mat_id</span><span class="kw">=</span> <span class="st">"aque_filt"</span>,
+                <span class="kw">mc_id</span><span class="kw">=</span> <span class="st">"aque_mc"</span>,
+                <span class="kw">K</span><span class="kw">=</span><span class="fl">20</span>, <span class="kw">min_mc_size</span><span class="kw">=</span><span class="fl">20</span>, <span class="kw">alpha</span><span class="kw">=</span><span class="fl">2</span>)
+<span class="co">#&gt; filtered 1188359 left with 359944 based on co-cluster imbalance</span>
+<span class="co">#&gt; building metacell object, #mc 45</span>
 <span class="co">#&gt; add batch counts</span>
 <span class="co">#&gt; compute footprints</span>
 <span class="co">#&gt; compute absolute ps</span>
 <span class="co">#&gt; compute coverage ps</span>
 <span class="co">#&gt; reordering metacells by hclust and most variable two markers</span>
-<span class="co">#&gt; reorder on Aqu2.1.42789_001 vs Contig13211_51996</span></code></pre></div>
-<p>We created a metacell object <em>aque_mc</em>, based on analysis of the co-clustering graph. The paramaetr K determine the number of neighbors we wish to minimally associate with each cell. <strong>alpha=2</strong> is defining how harsh the filtering of co-cluster edges will be prior to running the metacell partition on them - e.g. alpha=2 will eliminate co-cluster relationships whenever one of the neighboring cells have K partners with more than twice as many co-cluster relationships. So the smaller the alpha, the harsher the filtering.</p>
+<span class="co">#&gt; reorder on Aqu2.1.42789_001 vs Aqu2.1.33784_001</span></pre></body></html></div>
+<p>We created a metacell object <em>aque_mc</em>, based on analysis of the co-clustering graph. The paramaetr K determine the number of neighbors we wish to minimally associate with each cell. <strong>alpha=2</strong> is defining how harsh the filtering of co-cluster edges will be prior to running the metacell partition on them - e.g. alpha=2 will eliminate co-cluster relationships whenever one of the neighboring cells have K partners with more than twice as many co-cluster relationships. So the smaller the alpha, the harsher the filtering.</p>
 <hr>
 </div>
 <div id="removing-outlier-cells" class="section level2">
 <h2 class="hasAnchor">
 <a href="#removing-outlier-cells" class="anchor"></a>Removing outlier cells</h2>
 <p>We now have a preliminary metacell object. It is a good practice to make sure all metacells within it are homogeneous. This is done by the outlier scan procedure, which splits metacells whose underlying similarity structure supports the existence of multiple sub-clusters, and removes outlier cells that strongly deviate from their metacell?s expression profile.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_plot_outlier_heatmap.html">mcell_plot_outlier_heatmap</a></span>(<span class="dt">mc_id=</span><span class="st">"aque_mc"</span>, <span class="dt">mat_id =</span> <span class="st">"aque_filt"</span>, <span class="dt">T_lfc=</span><span class="dv">3</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_plot_outlier_heatmap.html">mcell_plot_outlier_heatmap</a></span>(<span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc"</span>, <span class="kw">mat_id</span> <span class="kw">=</span> <span class="st">"aque_filt"</span>, <span class="kw">T_lfc</span><span class="kw">=</span><span class="fl">3</span>)
 <span class="co">#&gt; png </span>
 <span class="co">#&gt;   2</span>
-<span class="kw"><a href="../reference/mcell_mc_split_filt.html">mcell_mc_split_filt</a></span>(<span class="dt">new_mc_id=</span><span class="st">"aque_mc_f"</span>, 
-            <span class="dt">mc_id=</span><span class="st">"aque_mc"</span>, 
-            <span class="dt">mat_id=</span><span class="st">"aque_filt"</span>,
-            <span class="dt">T_lfc=</span><span class="dv">3</span>, <span class="dt">plot_mats=</span>F)
+<span class="fu"><a href="../reference/mcell_mc_split_filt.html">mcell_mc_split_filt</a></span>(<span class="kw">new_mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>,
+            <span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc"</span>,
+            <span class="kw">mat_id</span><span class="kw">=</span><span class="st">"aque_filt"</span>,
+            <span class="kw">T_lfc</span><span class="kw">=</span><span class="fl">3</span>, <span class="kw">plot_mats</span><span class="kw">=</span><span class="no">F</span>)
 <span class="co">#&gt; starting split outliers</span>
-<span class="co">#&gt; splitting metacell 16</span>
-<span class="co">#&gt; splitting metacell 46</span>
-<span class="co">#&gt; splitting metacell 47</span>
-<span class="co">#&gt; splitting metacell 47</span>
+<span class="co">#&gt; splitting metacell 12</span>
+<span class="co">#&gt; splitting metacell 21</span>
+<span class="co">#&gt; splitting metacell 24</span>
 <span class="co">#&gt; add batch counts</span>
 <span class="co">#&gt; compute footprints</span>
 <span class="co">#&gt; compute absolute ps</span>
-<span class="co">#&gt; compute coverage ps</span></code></pre></div>
+<span class="co">#&gt; compute coverage ps</span></pre></body></html></div>
 <p>The first command generates a heatmap summarizing the detected outlier behaviors. This is possible only for datasets with modest size. The second command generates a new MC object <em>aque_mc_f</em> that we will use in dowstream analyses.</p>
 <div class="figure">
 <img src="figs/aque_mc.outlier.png" alt="outliers fig" width="350"><p class="caption">outliers fig</p>
@@ -281,22 +278,23 @@ mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_ma
 <div id="creating-heatmaps-of-metacells-and-genes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#creating-heatmaps-of-metacells-and-genes" class="anchor"></a>Creating heatmaps of metacells and genes</h2>
-<p>We will first assign random colors to our clusters (these can later be modified with custom color definitions, e.g. based on cell type assignments).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mc_f&lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_mc.html">scdb_mc</a></span>(<span class="st">"aque_mc_f"</span>)
-mc_f<span class="op">@</span>colors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"darkgray"</span>, <span class="st">"burlywood1"</span>, <span class="st">"chocolate4"</span>,<span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"purple"</span>, <span class="st">"blue"</span>,<span class="st">"darkgoldenrod3"</span>, <span class="st">"cyan"</span>))(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(mc_f<span class="op">@</span>mc_fp))
-<span class="kw"><a href="../reference/scdb_add_mc.html">scdb_add_mc</a></span>(<span class="st">"aque_mc_f"</span>,mc_f)
-mc_f &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_mc.html">scdb_mc</a></span>(<span class="st">"aque_mc_f"</span>)</code></pre></div>
+<p>We will first assign random colors to our clusters (these can later be modified with custom color definitions, e.g. based on cell type assignments).</p>
+<div class="sourceCode"><html><body><pre class="r"><span class="no">mc_f</span><span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scdb_mc.html">scdb_mc</a></span>(<span class="st">"aque_mc_f"</span>)
+<span class="no">mc_f</span>@<span class="kw">colors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"darkgray"</span>, <span class="st">"burlywood1"</span>, <span class="st">"chocolate4"</span>,<span class="st">"orange"</span>, <span class="st">"red"</span>, <span class="st">"purple"</span>, <span class="st">"blue"</span>,<span class="st">"darkgoldenrod3"</span>, <span class="st">"cyan"</span>))(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">mc_f</span>@<span class="kw">mc_fp</span>))
+<span class="fu"><a href="../reference/scdb_add_mc.html">scdb_add_mc</a></span>(<span class="st">"aque_mc_f"</span>,<span class="no">mc_f</span>)
+<span class="no">mc_f</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scdb_mc.html">scdb_mc</a></span>(<span class="st">"aque_mc_f"</span>)</pre></body></html></div>
 <p>The filtered metacell object <em>aque_mc_f</em> can now be visualized. In order to do this effectively, we usually go through one or two iterations of selecting informative marker genes. The package can select markers for you automatically - by simply looking for genes that are strongly enriched in any of the metacells:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_gset_from_mc_markers.html">mcell_gset_from_mc_markers</a></span>(<span class="dt">gset_id=</span><span class="st">"aque_markers"</span>, <span class="dt">mc_id=</span><span class="st">"aque_mc_f"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mcell_mc_plot_marks.html">mcell_mc_plot_marks</a></span>(<span class="dt">mc_id=</span><span class="st">"aque_mc_f"</span>, <span class="dt">gset_id=</span><span class="st">"aque_markers"</span>, <span class="dt">mat_id=</span><span class="st">"aque_filt"</span>,<span class="dt">plot_cells =</span> F)</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_gset_from_mc_markers.html">mcell_gset_from_mc_markers</a></span>(<span class="kw">gset_id</span><span class="kw">=</span><span class="st">"aque_markers"</span>, <span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>)</pre></body></html></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/mcell_mc_plot_marks.html">mcell_mc_plot_marks</a></span>(<span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>, <span class="kw">gset_id</span><span class="kw">=</span><span class="st">"aque_markers"</span>, <span class="kw">mat_id</span><span class="kw">=</span><span class="st">"aque_filt"</span>,<span class="kw">plot_cells</span> <span class="kw">=</span> <span class="no">F</span>)
+<span class="co">#&gt; setting fig h to 2298 md levels 0 num of marks 103</span></pre></body></html></div>
 <div class="figure">
 <img src="figs/aque_mc_f.mc_heat_marks.png" alt="heatmap_marks" width="350"><p class="caption">heatmap_marks</p>
 </div>
 <p>Note that the values plotted are color coded log2(fold enrichment) value of the metacell over the median of all other metacells. It can be useful to explore these values directly and visualize them in different ways - e.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lfp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(mc_f<span class="op">@</span>mc_fp)
-<span class="kw"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span>(<span class="st">"figs/example_barplot.png"</span>,<span class="dt">h=</span><span class="dv">400</span>,<span class="dt">w=</span><span class="dv">1500</span>);<span class="kw"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(lfp[<span class="st">"Aqu2.1.37150_001"</span>,],<span class="dt">col=</span>mc_f<span class="op">@</span>colors,<span class="dt">las=</span><span class="dv">2</span>,<span class="dt">main=</span><span class="st">"Cadherin"</span>,<span class="dt">cex.main=</span><span class="dv">3</span>,<span class="dt">cex.axis=</span><span class="dv">1</span>,<span class="dt">ylab=</span><span class="st">"log2FC"</span>,<span class="dt">xlab=</span><span class="st">"metacells"</span>);<span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()
+<div class="sourceCode"><html><body><pre class="r"><span class="no">lfp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(<span class="no">mc_f</span>@<span class="kw">mc_fp</span>)
+<span class="fu"><a href="https://rdrr.io/r/grDevices/png.html">png</a></span>(<span class="st">"figs/example_barplot.png"</span>,<span class="kw">h</span><span class="kw">=</span><span class="fl">400</span>,<span class="kw">w</span><span class="kw">=</span><span class="fl">1500</span>);<span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(<span class="no">lfp</span>[<span class="st">"Aqu2.1.37150_001"</span>,],<span class="kw">col</span><span class="kw">=</span><span class="no">mc_f</span>@<span class="kw">colors</span>,<span class="kw">las</span><span class="kw">=</span><span class="fl">2</span>,<span class="kw">main</span><span class="kw">=</span><span class="st">"Cadherin"</span>,<span class="kw">cex.main</span><span class="kw">=</span><span class="fl">3</span>,<span class="kw">cex.axis</span><span class="kw">=</span><span class="fl">1</span>,<span class="kw">ylab</span><span class="kw">=</span><span class="st">"log2FC"</span>,<span class="kw">xlab</span><span class="kw">=</span><span class="st">"metacells"</span>);<span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()
 <span class="co">#&gt; png </span>
-<span class="co">#&gt;   2</span></code></pre></div>
+<span class="co">#&gt;   2</span></pre></body></html></div>
 <div class="figure">
 <img src="figs/example_barplot.png" alt="fold_enrichment_barplot" width="650"><p class="caption">fold_enrichment_barplot</p>
 </div>
@@ -307,37 +305,38 @@ mc_f &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_m
 <a href="#projecting-metacells-and-cells-in-2d" class="anchor"></a>Projecting metacells and cells in 2D</h2>
 <p>Heat maps are useful but sometimes hard to interprets, and so we may want to visualize the similarity structure among metacells (or among cells within metacells). To this end we construct a 2D projection of the metacells, and use it to plot the metacells and key similarities between them (shown as connecting edges), as well as the cells. This plot will use the same metacell coloring we established before (and in case we improve the coloring based on additional analysis, the plot can be regenerated).</p>
 <p>First we download the configuration file adapted to the Amphimedon dataset (parameters can be further modified and it is usually recommended to try different combinations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/config.yaml"</span>,<span class="st">"config.yaml"</span>)</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://www.wisdom.weizmann.ac.il/~arnau/metacell_data/Amphimedon_adult/config.yaml"</span>,<span class="st">"config.yaml"</span>)</pre></body></html></div>
 <p>Now we override the default parameters, project the graph and plot the 2D projection:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tgconfig<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tgconfig/man/override_params.html">override_params</a></span>(<span class="st">"config.yaml"</span>,<span class="st">"metacell"</span>)
-<span class="kw"><a href="../reference/mcell_mc2d_force_knn.html">mcell_mc2d_force_knn</a></span>(<span class="dt">mc2d_id=</span><span class="st">"aque_2dproj"</span>,<span class="dt">mc_id=</span><span class="st">"aque_mc_f"</span>, <span class="dt">graph_id=</span><span class="st">"aque_graph"</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="kw pkg">tgconfig</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/tgconfig/man/override_params.html">override_params</a></span>(<span class="st">"config.yaml"</span>,<span class="st">"metacell"</span>)
+<span class="fu"><a href="../reference/mcell_mc2d_force_knn.html">mcell_mc2d_force_knn</a></span>(<span class="kw">mc2d_id</span><span class="kw">=</span><span class="st">"aque_2dproj"</span>,<span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>, <span class="kw">graph_id</span><span class="kw">=</span><span class="st">"aque_graph"</span>)
 <span class="co">#&gt; comp mc graph using the graph aque_graph and K 40</span>
-<span class="kw"><a href="../reference/mcell_mc2d_plot.html">mcell_mc2d_plot</a></span>(<span class="dt">mc2d_id=</span><span class="st">"aque_2dproj"</span>)
+<span class="co">#&gt; Missing coordinates in some cells that are not ourliers or ignored - check this out! (total 4 cells are missing, maybe you used the wrong graph object? first nodes WASP0001284WASP0002096WASP0002157WASP0018044</span>
+<span class="fu"><a href="../reference/mcell_mc2d_plot.html">mcell_mc2d_plot</a></span>(<span class="kw">mc2d_id</span><span class="kw">=</span><span class="st">"aque_2dproj"</span>)
 <span class="co">#&gt; png </span>
-<span class="co">#&gt;   2</span></code></pre></div>
+<span class="co">#&gt;   2</span></pre></body></html></div>
 <div class="figure">
-<img src="figs/aque_2dproj.2d_proj.png" alt="proj2d mean plot" width="450"><p class="caption">proj2d mean plot</p>
+<img src="figs/aque_2dproj.2d_graph_proj.png" alt="proj2d mean plot" width="450"><p class="caption">proj2d mean plot</p>
 </div>
 <hr>
 </div>
 <div id="visualizing-the-metacell-confusion-matrix-" class="section level2">
 <h2 class="hasAnchor">
 <a href="#visualizing-the-metacell-confusion-matrix-" class="anchor"></a>Visualizing the metacell confusion matrix.</h2>
-<p>While 2D projections are popular and intuitive (albeit sometimes misleading) ways to visualize scRNA-seq results, we can also summarize the similarity structure among metacells using a “confusion matrix”" which encodes the pairwise similarities between all metacells. This matrix may capture hierarchical structures or other complex organizations among metacells.</p>
+<p>While 2D projections are popular and intuitive (albeit sometimes misleading) ways to visualize scRNA-seq results, we can also summarize the similarity structure among metacells using a "confusion matrix"" which encodes the pairwise similarities between all metacells. This matrix may capture hierarchical structures or other complex organizations among metacells.</p>
 <p>We first create a hierarchical clustering of metacells, based on the number of similarity relations between their cells:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mc_hc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mcell_mc_hclust_confu.html">mcell_mc_hclust_confu</a></span>(<span class="dt">mc_id=</span><span class="st">"aque_mc_f"</span>, <span class="dt">graph_id=</span><span class="st">"aque_graph"</span>)</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="no">mc_hc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mcell_mc_hclust_confu.html">mcell_mc_hclust_confu</a></span>(<span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>, <span class="kw">graph_id</span><span class="kw">=</span><span class="st">"aque_graph"</span>)</pre></body></html></div>
 <p>Next, we generate clusters of metacells based on this hierarchy, and visualize the confusion matrix and these clusters. The confusion matrix is shown at the bottom, and the top panel encodes the cluster hierarchy (subtrees in blue, sibling subtrees in gray):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mc_sup &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mcell_mc_hierarchy.html">mcell_mc_hierarchy</a></span>(<span class="dt">mc_id=</span><span class="st">"aque_mc_f"</span>,<span class="dt">mc_hc=</span>mc_hc, <span class="dt">T_gap=</span><span class="fl">0.04</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="no">mc_sup</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mcell_mc_hierarchy.html">mcell_mc_hierarchy</a></span>(<span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>,<span class="kw">mc_hc</span><span class="kw">=</span><span class="no">mc_hc</span>, <span class="kw">T_gap</span><span class="kw">=</span><span class="fl">0.04</span>)
 
-<span class="kw"><a href="../reference/mcell_mc_plot_hierarchy.html">mcell_mc_plot_hierarchy</a></span>(<span class="dt">mc_id=</span><span class="st">"aque_mc_f"</span>, 
-                        <span class="dt">graph_id=</span><span class="st">"aque_graph"</span>, 
-                        <span class="dt">mc_order=</span>mc_hc<span class="op">$</span>order, 
-                        <span class="dt">sup_mc =</span> mc_sup, 
-                        <span class="dt">width=</span><span class="dv">2800</span>, 
-                        <span class="dt">height=</span><span class="dv">2000</span>, 
-                        <span class="dt">min_nmc=</span><span class="dv">2</span>)
+<span class="fu"><a href="../reference/mcell_mc_plot_hierarchy.html">mcell_mc_plot_hierarchy</a></span>(<span class="kw">mc_id</span><span class="kw">=</span><span class="st">"aque_mc_f"</span>,
+                        <span class="kw">graph_id</span><span class="kw">=</span><span class="st">"aque_graph"</span>,
+                        <span class="kw">mc_order</span><span class="kw">=</span><span class="no">mc_hc</span>$<span class="no">order</span>,
+                        <span class="kw">sup_mc</span> <span class="kw">=</span> <span class="no">mc_sup</span>,
+                        <span class="kw">width</span><span class="kw">=</span><span class="fl">2800</span>,
+                        <span class="kw">height</span><span class="kw">=</span><span class="fl">2000</span>,
+                        <span class="kw">min_nmc</span><span class="kw">=</span><span class="fl">2</span>)
 <span class="co">#&gt; png </span>
-<span class="co">#&gt;   2</span></code></pre></div>
+<span class="co">#&gt;   2</span></pre></body></html></div>
 <div class="figure">
 <img src="figs/aque_mc_f.supmc_confu.png" alt="clustered confusion matrix" width="550"><p class="caption">clustered confusion matrix</p>
 </div>
@@ -345,24 +344,11 @@ mc_f &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_m
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#initialize-and-load-umi-matrix">Initialize and load UMI matrix</a></li>
-      <li><a href="#exploring-and-filtering-the-umi-matrix">Exploring and filtering the UMI matrix</a></li>
-      <li><a href="#selecting-gene-markers">Selecting gene markers</a></li>
-      <li><a href="#building-the-balanced-cell-graph">Building the balanced cell graph</a></li>
-      <li><a href="#resampling-and-generating-the-co-clustering-graph">Resampling and generating the co-clustering graph</a></li>
-      <li><a href="#removing-outlier-cells">Removing outlier cells</a></li>
-      <li><a href="#creating-heatmaps-of-metacells-and-genes">Creating heatmaps of metacells and genes</a></li>
-      <li><a href="#projecting-metacells-and-cells-in-2d">Projecting metacells and cells in 2D</a></li>
-      <li><a href="#visualizing-the-metacell-confusion-matrix-">Visualizing the metacell confusion matrix.</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -373,7 +359,7 @@ mc_f &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scdb_m
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

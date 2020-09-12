@@ -285,6 +285,48 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	
 }
 
+#' plot a marker heat map for a subset of metacells - selecting relevant genes for separation
+#'
+#' @param mc_id id of metacell object ina scdb
+#' @param mat_id matrix object to us (default is the mc_id - assuming they use the same ID), if some cells in mc@mc are missing from the matrix, the function will generate an error
+#' @param foc_mcs list of metacell ids to focus on
+#' @param fig_fn file name for the figure (if null it will be call heat_marks in the fig directory)
+#' @param n_max_mark number of markers for separation on each metacell
+#' @param ddd_genes specific list of genes to add to the marker list
+#' @param zero_median should median expression be used for trimming low umi counts
+#' @param h height
+#' @param w height
+
+mcell_mc_plot_submc_marks = function(mc_id, mat_id, foc_mcs, fig_fn, n_max_marks=10, add_genes=NULL, zero_median=F, h = 800, w= 600)
+{
+
+	mc = scdb_mc(mc_id)
+	mc = mc_restrict(mc, foc_mcs)
+	lfp = log2(mc@mc_fp)
+	alfp = abs(log2(mc@mc_fp))
+	min_gene_fold = 1
+   marks = unique(as.vector(unlist(
+         apply(alfp,
+            2,
+            function(x)  {
+               names(head(sort(-x[x>min_gene_fold]),n=n_max_marks)) })
+           )))
+	message("got ", length(marks))
+	if(!is.null(add_genes)) {
+		marks = c(add_genes, marks)
+	}
+
+	hc = hclust(tgs_dist(tgs_cor(t(lfp[marks,]))), "ward.D2")
+	marks = marks[hc$order] 
+
+	tgconfig::set_param("mcp_heatmap_height", h, "metacell")
+	tgconfig::set_param("mcp_heatmap_width", w, "metacell")
+
+	mcell_mc_plot_marks(mc_id, gset_id = mat_id, mat_id = mat_id,
+								focus_mcs = foc_mcs, gene_list = marks,
+								fig_fn = fig_fn, zero_median=zero_median)
+}
+
 #' Utility plot function to compare two genes based on mc_fp 
 #'
 #' @param mc_id metacell id in scdb

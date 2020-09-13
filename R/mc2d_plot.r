@@ -3,9 +3,15 @@
 #' @param mc2d_id mc2d object to plot
 #' @param legend_pos position of legend
 #' @param plot_edges plot edges between metacells (true by default)
+#' @param min_edge_l (defulat 0) length of edges that are consider long
+#' @param edge_w width of long edges
+#' @param short_edge_w with of short edges
+#' @param show_mcid should metacell id be plotted
+#' @param cell_outline should single cell be drawn with outline
+#' @param 
 #'
 #' @export
-mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge_l=0, edge_w = 1, short_edge_w=0, colors=NULL, fn_suf="")
+mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge_l=0, edge_w = 1, short_edge_w=0, show_mcid = T, cell_outline=F, colors=NULL, fn_suf="", sc_cex=1, filt_mc=NULL)
 {
 	mcp_2d_height = get_param("mcell_mc2d_height")
 	mcp_2d_width = get_param("mcell_mc2d_width")
@@ -21,6 +27,13 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge
 	if(is.null(mc)) {
 		stop("missing mc in mc2d object, id was, ", mc2d@mc_id)
 	}
+	if(!is.null(filt_mc)) {
+		f_sc = filt_mc[mc@mc[names(mc2d@sc_x)]]
+		mc2d@sc_x[!f_sc] = NA
+		mc2d@sc_y[!f_sc] = NA
+		mc2d@mc_x[!filt_mc] = NA
+		mc2d@mc_y[!filt_mc] = NA
+	}
 	fig_nm = scfigs_fn(paste(mc2d_id,fn_suf,sep=""), ifelse(plot_edges, "2d_graph_proj", "2d_proj"))
 	.plot_start(fig_nm, w=mcp_2d_width, h = mcp_2d_height)
 	#png(fig_nm, width = mcp_2d_width, height = mcp_2d_height)
@@ -30,7 +43,11 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge
 		cols = colors
 	}
 	cols[is.na(cols)] = "gray"
-	plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]])
+	if(cell_outline) {
+		plot(mc2d@sc_x, mc2d@sc_y, pch=21, bg=cols[mc@mc[names(mc2d@sc_x)]], cex=sc_cex, lwd=0.5)
+	} else {
+		plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]], cex=sc_cex)
+	}
 	fr = mc2d@graph$mc1
 	to = mc2d@graph$mc2
 	if (plot_edges) {
@@ -41,7 +58,9 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge
 					lwd=ifelse(f, edge_w, short_edge_w))
 	}
 	points(mc2d@mc_x, mc2d@mc_y, cex= 3*mcp_2d_cex, col="black", pch=21, bg=cols)
-	text(mc2d@mc_x, mc2d@mc_y, 1:length(mc2d@mc_x), cex=mcp_2d_cex)
+	if(show_mcid) {
+		text(mc2d@mc_x, mc2d@mc_y, 1:length(mc2d@mc_x), cex=mcp_2d_cex)
+	}
 
 	if(nrow(mc@color_key)!=0 & mcp_2d_plot_key) {
 		key = mc@color_key[ mc@color_key$color %in% mc@colors, ]

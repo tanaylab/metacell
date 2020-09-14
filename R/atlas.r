@@ -750,7 +750,7 @@ gen_fig_cmp_dir = function(fig_cmp_dir, qmc_id, atlas_id)
 {
 	if(is.null(fig_cmp_dir)) {
 		fig_cmp_dir = paste(qmc_id, atlas_id, sep=".")
-		fig_cmp_dir = paste(.scfigs_base, fig_cmp_dir,sep="")
+		fig_cmp_dir = paste(.scfigs_base, fig_cmp_dir,sep="/")
 	}
 	if(!dir.exists(fig_cmp_dir)) {
 			dir.create(fig_cmp_dir)

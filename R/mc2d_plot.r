@@ -220,13 +220,20 @@ mcell_mc2d_plot_by_factor = function(mc2d_id, mat_id, meta_field, meta_data_vals
 #' @param show_mc_ids plot metacell ids (false by default)
 #' @param show_legend plot color bar legend (true by default)
 #' @param neto_points do not plot box, title and legend
+#' @param color_cells (F default) should cells be colored by UMIs
+#' @param mat_ds downsampled matrix for coloring cells
+#' @param zero_sc_v num of umis to consdier as 0 for cell coloring (def 0)
+#' @param one_sc_v num of umis to consdier as 1 for cell coloring (def 1)
+#' @param tw_sc_v num of umis to consdier as 1 for cell coloring (def 2)
+#' @param filt_mc (defulat is NULL) - factor to determine which metacells to plot
 #'
 #' @export
 #'
 mcell_mc2d_plot_gene = function(mc2d_id, gene, 
 		show_mc_ids=F, show_legend=T, neto_points=F, 
 		max_lfp = NA, min_lfp=NA, color_cells = F, mat_ds = NULL,
-		zero_sc_v = 0, one_sc_v = 1, two_sc_v=2)
+		zero_sc_v = 0, one_sc_v = 1, two_sc_v=2, 
+		filt_mc = NULL)
 {
 	height = get_param("mcell_mc2d_gene_height")
 	width = get_param("mcell_mc2d_gene_width")
@@ -245,6 +252,13 @@ mcell_mc2d_plot_gene = function(mc2d_id, gene,
 	mc = scdb_mc(mc2d@mc_id)
 	if(is.null(mc)) {
 		stop("missing mc in mc2d object, id was, ", mc2d@mc_id)
+	}
+	if(!is.null(filt_mc)) {
+		f_sc = filt_mc[mc@mc[names(mc2d@sc_x)]]
+		mc2d@sc_x[!f_sc] = NA
+		mc2d@sc_y[!f_sc] = NA
+		mc2d@mc_x[!filt_mc] = NA
+		mc2d@mc_y[!filt_mc] = NA
 	}
 	
 	if (!(gene %in% rownames(mc@mc_fp))) {

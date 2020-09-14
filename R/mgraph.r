@@ -6,10 +6,6 @@
 #' @slot times_nms names of the time points (Default 1:T)
 #' @slot mc_t distribution of metacells (rows) over time points (cols)
 #' @slot mc_manifold a data frame defining triplets mc1, mc2, distance.
-#' @slot 
-#'
-#' @import Matrix
-#' @import parallel
 #'
 #' @export tgMCManifGraph
 #' @exportClass tgMCManifGraph

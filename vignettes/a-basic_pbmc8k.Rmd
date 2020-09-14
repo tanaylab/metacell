@@ -244,7 +244,7 @@ mcell_mc2d_plot(mc2d_id="test_2dproj")
 
 Note that we changed the metacell parameters "mcell_mc2d_height/width" to get a reasonably-sized figure. There are many additional parameters that can be tuned in MetaCell, and more of those meant for routine tuning will be discussed in other vignettes. We obtain the following figure:
 
-![proj2d mean plot](figs/test_2dproj.2d_proj.png)
+![proj2d mean plot](figs/test_2dproj.2d_graph_proj.png)
 
 ## Visualizing the MC confusion matrix
 

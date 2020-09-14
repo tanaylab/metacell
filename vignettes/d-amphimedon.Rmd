@@ -230,7 +230,7 @@ tgconfig::override_params("config.yaml","metacell")
 mcell_mc2d_force_knn(mc2d_id="aque_2dproj",mc_id="aque_mc_f", graph_id="aque_graph")
 mcell_mc2d_plot(mc2d_id="aque_2dproj")
 ```
-![proj2d mean plot](figs/aque_2dproj.2d_proj.png){width=450px}
+![proj2d mean plot](figs/aque_2dproj.2d_graph_proj.png){width=450px}
 
 ***
 

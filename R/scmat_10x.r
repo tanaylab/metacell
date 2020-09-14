@@ -8,8 +8,6 @@
 #'
 #' @export
 #'
-#' @import RCurl
-
 mcell_import_multi_scmat_10x = function(mat_nm,
 							dataset_table_fn,
 							base_dir,
@@ -169,9 +167,9 @@ scmat_read_scmat_10x = function(matrix_fn,
 {
 	remote_mode = F
 	if(grepl("^http", matrix_fn)) {
-		if(!url.exists(matrix_fn) |
-			!url.exists(genes_fn) |
-			!url.exists(cells_fn)) {
+		if(!RCurl::url.exists(matrix_fn) |
+			!RCurl::url.exists(genes_fn) |
+			!RCurl::url.exists(cells_fn)) {
 			stop("MC-ERR: missing 10x matrix urls, links: ", matrix_fn, " ", genes_fn, " ", cells_fn)
 		} else {
 			message("remote mode")

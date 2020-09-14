@@ -18,9 +18,6 @@
 #' @slot colors colors of metacells
 #' @slot color_key data.frame defining color per markers genes
 #'
-#' @import Matrix
-#' @import parallel
-#'
 #' @export tgMCCov
 #' @exportClass tgMCCov
 tgMCCov <- setClass(

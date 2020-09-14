@@ -42,7 +42,7 @@ mcell_mc_plot_by_factor = function(mc_id, meta_field, mat_id = mc_id, fig_fn = N
 	if (!is.null(filter_values)) {
 		diff_values = setdiff(filter_values, colnames(mc_t))
 		if (length(diff_values) > 0) {
-			stop(sprintf("Missing values (%s) in mcell_mc_plot_by_factor", past0(diff_values, collapse=", ")))
+			stop(sprintf("Missing values (%s) in mcell_mc_plot_by_factor", paste0(diff_values, collapse=", ")))
 		}
 		mc_t = mc_t[, filter_values]
 	}

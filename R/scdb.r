@@ -12,12 +12,16 @@
 #' }
 #'
 #' @export
-scdb_init = function(base_dir, force_reinit=F)
+scdb_init = function(base_dir, force_reinit=F, allow_skip=F)
 {
 	if(exists(".scdb") & !force_reinit) {
-		stop("scdb already init to ", 
+		if(allow_skip) {
+			return(0)
+		} else {
+			stop("scdb already init to ", 
 				ifelse(exists(".scdb_base"), .scdb_base, "NA"), 
 				" use force reinit to restart it")
+		}
 	}
 	if(!dir.exists(base_dir)) {
 		stop("cannot initialize db to non existing directory base_dir")

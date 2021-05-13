@@ -509,9 +509,8 @@ mcatlas_annotate_mc_by_mc2mc_projection = function(atlas_id,
 #' @param qmat_naming_type naming scheme of query matrix/mc
 #' @param fig_cmp_dir name of directory to put figures per MC 
 #' @param q_gset_id query gene set id object (optional) - to restrict features used in comaprison to the intersection of atlas and query gsets
-#' @param md_field metadata field too use as additional factor for plotting subsets
 #' @param recolor_mc_id if this is specified,  the atlas colors will be projected on the query MCCs and updated to the scdb object  named recolor_mc
-#'	@param plot_all_mc set this to T if you want a plot per metacell to show comparison of query pooled umi's and projected pooled umis.
+#' @param pull_all_atlas_genes return mean expression of all atlas genes (not only features) over query metacells based on best metacell hit of each query cell in the atlas
 #'
 #' @export
 #'
@@ -522,8 +521,7 @@ mcatlas_annotate_mc_by_sc2mc_projection = function(atlas_id,
 				q_gset_id = NULL,
 				new_qmc_id = NULL,
 				atlas_mc2d_id = NULL,
-				plot_all_mcs = F,
-				md_field=NULL,
+				pull_all_atlas_genes = F,
 				max_entropy=2,
 				burn_cor=0.6)
 {
@@ -537,7 +535,7 @@ mcatlas_annotate_mc_by_sc2mc_projection = function(atlas_id,
 	}
 	q_mc = scdb_mc(qmc_id)
 	if(is.null(q_mc)) {
-		stop("mc id ", mc_id, " is missing")
+		stop("mc id ", qmc_id, " is missing")
 	}
 	q_mat = scdb_mat(qmat_id)
 	if(is.null(q_mat)) {
@@ -643,35 +641,42 @@ mcatlas_annotate_mc_by_sc2mc_projection = function(atlas_id,
 	dev.off()
 
 #comparing mean umis from projected mcs to mean umis on query mcs	
-	q_mc_on_ref = t(tgs_matrix_tapply(a_egc[,best_ref], q_mc@mc, mean))
-	rownames(q_mc_on_ref) = a_gnms
+	if(pull_all_atlas_genes) {
+		q_mc_on_ref = t(tgs_matrix_tapply(a_mc@e_gc[,best_ref], q_mc@mc, mean))
+		rownames(q_mc_on_ref) = rownames(a_mc@e_gc)
+	} else {
+		q_mc_on_ref = t(tgs_matrix_tapply(a_egc[,best_ref], q_mc@mc, mean))
+		rownames(q_mc_on_ref) = a_gnms
 
-	cmp_lfp_1 = log2(1e-6+q_mc_on_ref)
-	cmp_lfp_1n = cmp_lfp_1 - rowMeans(cmp_lfp_1)
-	cmp_lfp_2 = log2(1e-6+q_egc)
-	cmp_lfp_2n = cmp_lfp_2 - rowMeans(cmp_lfp_2)
+		cmp_lfp_1 = log2(1e-6+q_mc_on_ref)
+		cmp_lfp_1n = cmp_lfp_1 - rowMeans(cmp_lfp_1)
+		cmp_lfp_2 = log2(1e-6+q_egc)
+		cmp_lfp_2n = cmp_lfp_2 - rowMeans(cmp_lfp_2)
 
-	cross = tgs_cor(cmp_lfp_1n, cmp_lfp_2n)
+		cross = tgs_cor(cmp_lfp_1n, cmp_lfp_2n)
 	
-	n = ncol(cmp_lfp_1)
-
-	png(sprintf("%s/sc2mc_query_ref_cmp.png", fig_cmp_dir),w=600,h=600)
-	shades = colorRampPalette(c("black", "darkblue", "white", "darkred", "yellow"))(1000)
-	layout(matrix(c(1,4,2,3),nrow=2), h=c(10,1), w=c(1,10))
-	par(mar=c(0,3,2,0))
-	query_ref_colors = table(q_mc@mc, a_mc@colors[best_ref])
-	query_mc_top_color = colnames(query_ref_colors)[apply(query_ref_colors,1,which.max)]
-	image(t(as.matrix(1:length(q_mc@colors),nrow=1)), 
+		n = ncol(cmp_lfp_1)
+	
+		png(sprintf("%s/sc2mc_query_ref_cmp.png", fig_cmp_dir),w=600,h=600)
+		shades = colorRampPalette(c("black", "darkblue", "white", "darkred", "yellow"))(1000)
+		layout(matrix(c(1,4,2,3),nrow=2), h=c(10,1), w=c(1,10))
+		par(mar=c(0,3,2,0))
+		query_ref_colors = table(q_mc@mc, a_mc@colors[best_ref])
+		query_mc_top_color = colnames(query_ref_colors)[apply(query_ref_colors,1,which.max)]
+		image(t(as.matrix(1:length(q_mc@colors),nrow=1)), 
 									col=query_mc_top_color, yaxt='n', xaxt='n')
-	mtext(1:n,at=seq(0,1,l=n),side=2, las=1)
-	par(mar=c(0,0,2,2))
-	image(pmin(pmax(cross, -burn_cor),burn_cor), col=shades,xaxt='n', 
+		mtext(1:n,at=seq(0,1,l=n),side=2, las=1)
+		par(mar=c(0,0,2,2))
+		image(pmin(pmax(cross, -burn_cor),burn_cor), col=shades,xaxt='n', 
 									yaxt='n', zlim=c(-burn_cor, burn_cor))
-	par(mar=c(3,0,0,2))
-	image(as.matrix(1:length(q_mc@colors),nrow=1), 
+		par(mar=c(3,0,0,2))
+		image(as.matrix(1:length(q_mc@colors),nrow=1), 
 									col=q_mc@colors, yaxt='n', xaxt='n')
-	mtext(1:n,at=seq(0,1,l=n),side=1, las=1)
-	dev.off()
+		mtext(1:n,at=seq(0,1,l=n),side=1, las=1)
+		dev.off()
+	}
+
+	return(q_mc_on_ref)
 }
 
 tba = function()

@@ -338,7 +338,8 @@ mcell_mc_plot_submc_marks = function(mc_id, mat_id, foc_mcs, fig_fn, n_max_marks
 #' @param fig_fn file name for the figure (optional - default is current device)
 #' @param cell_md  a factor/logical vector defining which cells are in the focus. If this is unspecified all cells/metacells will be included
 #' @param md_mode one of "filter", "highlight"
-#' @param use_egc plot log of absolute expression instead of the log of relative expression (normalized to the median over all MCs)
+#' @param use_egc plot log of absolute expression instead of the log of relative expression (normalized to the median over all MCs)	
+#' @param mc_filt potential facator filtering metacell ids (default NULL)
 #' @param md metadata to use for highlighting/filtering
 #' @param md_regexp regular expression to filter/highlight metadata
 #' @param md_field metadata field to use
@@ -356,6 +357,7 @@ mcell_mc_plot_gg = function(mc_id, g1, g2,
 									xlim=NULL, ylim=NULL,
 									add_grid = F,
 									e_gc_eps = 1e-5,
+									mc_filt = NULL,
 									md = NULL, md_regexp = NULL, md_field = NULL)
 {
 	mc = scdb_mc(mc_id)
@@ -372,7 +374,9 @@ mcell_mc_plot_gg = function(mc_id, g1, g2,
 	}
 	mc_outlines = "black"
 	lwd=0.5
-	mc_filt = rep(T, ncol(lfp))
+	if(is.null(mc_filt)) {
+		mc_filt = rep(T, ncol(lfp))
+	}
 	if(!is.null(md) & !is.null(md_regexp) & !is.null(md_field)) {
 		cell_md = grepl(md_regexp, md[, md_field])
 		names(cell_md) = rownames(md)

@@ -16,7 +16,9 @@ mcell_mc2d_plot_gene(
   mat_ds = NULL,
   zero_sc_v = 0,
   one_sc_v = 1,
-  two_sc_v = 2
+  two_sc_v = 2,
+  base_dir = NULL,
+  filt_mc = NULL
 )
 }
 \arguments{
@@ -29,6 +31,20 @@ mcell_mc2d_plot_gene(
 \item{show_legend}{plot color bar legend (true by default)}
 
 \item{neto_points}{do not plot box, title and legend}
+
+\item{color_cells}{(F default) should cells be colored by UMIs}
+
+\item{mat_ds}{downsampled matrix for coloring cells}
+
+\item{zero_sc_v}{num of umis to consdier as 0 for cell coloring (def 0)}
+
+\item{one_sc_v}{num of umis to consdier as 1 for cell coloring (def 1)}
+
+\item{base_dir}{override the default base directory if not null}
+
+\item{filt_mc}{(defulat is NULL) - factor to determine which metacells to plot}
+
+\item{tw_sc_v}{num of umis to consdier as 1 for cell coloring (def 2)}
 }
 \description{
 Plot the (log2) metacell footprint value of the selected gene on the 2d projection

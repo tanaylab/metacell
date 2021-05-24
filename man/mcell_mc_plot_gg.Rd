@@ -20,7 +20,8 @@ mcell_mc_plot_gg(
   xlim = NULL,
   ylim = NULL,
   add_grid = F,
-  e_gc_eps = 0.00001,
+  e_gc_eps = 1e-05,
+  mc_filt = NULL,
   md = NULL,
   md_regexp = NULL,
   md_field = NULL
@@ -46,6 +47,8 @@ mcell_mc_plot_gg(
 \item{md_mode}{one of "filter", "highlight"}
 
 \item{use_egc}{plot log of absolute expression instead of the log of relative expression (normalized to the median over all MCs)}
+
+\item{mc_filt}{potential facator filtering metacell ids (default NULL)}
 
 \item{md}{metadata to use for highlighting/filtering}
 

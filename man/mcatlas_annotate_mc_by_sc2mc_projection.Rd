@@ -13,8 +13,7 @@ mcatlas_annotate_mc_by_sc2mc_projection(
   q_gset_id = NULL,
   new_qmc_id = NULL,
   atlas_mc2d_id = NULL,
-  plot_all_mcs = F,
-  md_field = NULL,
+  pull_all_atlas_genes = F,
   max_entropy = 2,
   burn_cor = 0.6
 )
@@ -32,11 +31,9 @@ mcatlas_annotate_mc_by_sc2mc_projection(
 
 \item{q_gset_id}{query gene set id object (optional) - to restrict features used in comaprison to the intersection of atlas and query gsets}
 
-\item{md_field}{metadata field too use as additional factor for plotting subsets}
+\item{pull_all_atlas_genes}{return mean expression of all atlas genes (not only features) over query metacells based on best metacell hit of each query cell in the atlas}
 
 \item{recolor_mc_id}{if this is specified,  the atlas colors will be projected on the query MCCs and updated to the scdb object  named recolor_mc}
-
-\item{plot_all_mc}{set this to T if you want a plot per metacell to show comparison of query pooled umi's and projected pooled umis.}
 }
 \description{
 This will take each cell in the query MC and find its to correlated

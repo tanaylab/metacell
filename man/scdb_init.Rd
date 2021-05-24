@@ -4,7 +4,7 @@
 \alias{scdb_init}
 \title{Initializing scdb}
 \usage{
-scdb_init(base_dir, force_reinit = F)
+scdb_init(base_dir, force_reinit = F, allow_skip = F)
 }
 \description{
 This initialize scdb to a certain directory. The object will then allow loading. chaching and saving of different objects, including matrix, gene statictics, cell graphs, metacell covers, and more

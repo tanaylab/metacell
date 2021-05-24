@@ -11,8 +11,13 @@ mcell_mc2d_plot(
   min_edge_l = 0,
   edge_w = 1,
   short_edge_w = 0,
+  show_mcid = T,
+  cell_outline = F,
   colors = NULL,
-  fn_suf = ""
+  fig_fn = NULL,
+  fn_suf = "",
+  sc_cex = 1,
+  filt_mc = NULL
 )
 }
 \arguments{
@@ -21,6 +26,24 @@ mcell_mc2d_plot(
 \item{legend_pos}{position of legend}
 
 \item{plot_edges}{plot edges between metacells (true by default)}
+
+\item{min_edge_l}{(defulat 0) length of edges that are consider long}
+
+\item{edge_w}{width of long edges}
+
+\item{short_edge_w}{with of short edges}
+
+\item{show_mcid}{should metacell id be plotted}
+
+\item{cell_outline}{should single cell be drawn with outline}
+
+\item{colors}{can provide color vector to overide the default mc@colors}
+
+\item{fig_fn}{override the default file name in the scfig directory}
+
+\item{sc_cex}{size of single cell points}
+
+\item{filt_mc}{optionally a factor defining which MCs to plot}
 }
 \description{
 Plot mc+cell graph using pre-defined mc colorization

@@ -12,7 +12,7 @@ mcell_mgraph_logistic(
   feats_exclude = NULL,
   logist_loc = 1,
   logist_scale = 0.2,
-  logist_eps = 0.00004,
+  logist_eps = 4e-05,
   max_d_fold = 3
 )
 }

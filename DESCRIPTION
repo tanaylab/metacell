@@ -1,6 +1,6 @@
 Package: metacell
 Title: Meta cell analysis for single cell RNA-seq data
-Version: 0.3.5
+Version: 0.3.6
 Authors@R: 
     person(given = "Amos",
            family = "Tanay",

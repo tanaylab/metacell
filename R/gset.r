@@ -72,7 +72,7 @@ gset_import_table = function(fn, desc=NULL)
 	}
 	if("gene" %in% colnames(sets) & "set" %in% colnames(sets)) {
 		gs = sets$set
-		names(gs) = set$gene
+		names(gs) = sets$gene
 		return(tgGeneSets(gs, desc))
 	} else {
 		stop("cannot initialize gset from ", fn, " file must be a tab delim table with a header including the fields gene and set\n")

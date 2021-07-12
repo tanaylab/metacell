@@ -66,10 +66,9 @@ mcell_coclust_filt_by_k_deg = function(coc_id, K, alpha)
 	
 	deg_wgt = as.matrix(table(c(edges$node1, edges$node2), c(edges$cnt,edges$cnt)))
 	deg_cum = t(apply(deg_wgt, 1, function(x) cumsum(rev(x))))
-	thresh_Kr = rowSums(deg_cum > K)
-	thresh_K = rep(NA, length(levels(edges$node1)))
-	names(thresh_K) = levels(edges$node1)
-	thresh_K[as.numeric(names(thresh_Kr))] = thresh_Kr
+	thresh_K = rowSums(deg_cum > K)
+
+	names(thresh_K) <- levels(edges$node1)
 
 	filt_edges = thresh_K[edges$node1] < edges$cnt * alpha | 
 							thresh_K[edges$node2] < edges$cnt * alpha

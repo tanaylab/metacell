@@ -66,8 +66,8 @@ scm_10x_paralogs_policy: sum
 scm_spike_regexp: null
 
 # heat map parameters
-mcp_heatmap_height: null
-mcp_heatmap_width: null
+mcp_heatmap_height: 1000
+mcp_heatmap_width: 1000
 mcp_heatmap_ideal_umi: null
 
 #mcp_heatmap_fp_shades: !expr c("white", "lightsteelblue", "blue", "darkblue", "purple", "brown", "black","yellow")
@@ -100,8 +100,6 @@ mcp_heatmap_alt_side_text: FALSE
 mcp_heatmap_latgene_color: red
 mcp_heatmap_lwd: 0
 mcp_ord_cells_by_color_first: false
-mcp_heatmap_width: 1000
-mcp_heatmap_height: 1000
 
 mcp_metadata_annot_colors: null
 

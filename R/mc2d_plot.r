@@ -12,7 +12,6 @@
 #' @param fig_fn override the default file name in the scfig directory
 #' @param filt_mc optionally a factor defining which MCs to plot
 #' @param colors can provide color vector to overide the default mc@colors
-#' @param 
 #'
 #' @export
 mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge_l=0, edge_w = 1, short_edge_w=0, show_mcid = T, cell_outline=F, colors=NULL, fig_fn = NULL, fn_suf="", sc_cex=1, filt_mc=NULL)

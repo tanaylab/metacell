@@ -20,7 +20,7 @@ mcell_mc_plot_gg(
   xlim = NULL,
   ylim = NULL,
   add_grid = F,
-  e_gc_eps = 1e-05,
+  e_gc_eps = 0.00001,
   mc_filt = NULL,
   md = NULL,
   md_regexp = NULL,

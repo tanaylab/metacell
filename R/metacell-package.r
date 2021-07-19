@@ -18,7 +18,6 @@
 #' @importFrom graph plot addEdge addNode nodeRenderInfo
 #' @importFrom Rgraphviz layoutGraph
 #' @importFrom umap umap
-#' @importFrom lpSolveAPI add.column get.constr.type lp.control make.lp set.constr.type set.constr.value set.objfn set.rhs
 #' @name metacell
 #' @docType package
 NULL

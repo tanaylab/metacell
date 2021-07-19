@@ -17,7 +17,7 @@ mcell_mc2d_force_knn(
   graph_parametric = F,
   logist_loc = 1,
   logist_scale = 0.2,
-  logist_eps = 4e-05,
+  logist_eps = 0.00004,
   max_d_fold = 3,
   use_umap_for_2d_pos = F,
   umap_mgraph = F,

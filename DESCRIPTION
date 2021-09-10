@@ -1,6 +1,6 @@
 Package: metacell
 Title: Meta cell analysis for single cell RNA-seq data
-Version: 0.3.6
+Version: 0.3.7
 Authors@R: 
     person(given = "Amos",
            family = "Tanay",
@@ -44,7 +44,7 @@ Imports:
     RColorBrewer,
     RCurl,
     Rgraphviz,
-    RSvgDevice,
+    svglite,
     slam,
     tidyr,
     tgconfig,

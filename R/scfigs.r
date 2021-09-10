@@ -96,7 +96,7 @@ plot_color_bar = function(vals, cols, fig_fn=NULL, title="", show_vals_ind=NULL)
 		pdf(file=sub("png$", "pdf", fn), width=w/res, height=h/res)
 	}
   else if (device == "svg") {
-  	RSvgDevice::devSVG(file=sub("png$", "svg", fn), width=w/res, height=h/res)
+  	svglite::svglite(filename =sub("png$", "svg", fn), width=w/res, height=h/res)
   }
   
 	else {

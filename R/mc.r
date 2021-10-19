@@ -132,6 +132,7 @@ mc_set_outlier_mc = function(mc, mc_ids)
 	mc@mc_fp = mc@mc_fp[,drop_f]
 	colnames(mc@mc_fp) = 1:newN
 	mc@e_gc = mc@e_gc[,drop_f]
+	colnames(mc@e_gc) = 1:newN
 	mc@cov_gc = mc@cov_gc[,drop_f]
 	colnames(mc@cov_gc) = 1:newN
 

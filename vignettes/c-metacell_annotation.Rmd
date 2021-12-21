@@ -24,7 +24,7 @@ Annotation of metacells is done by assigning a color to each metacell in the @co
 
 ## Setting up
 
-The metacells partitioning we use here was generated from the transcript per million reads (TPM) input table Guo et al. supply. For more details see the guo2018.r script at [Li_et_al_Cell_2018_Melanoma_scRNA](https://bitbucket.org/tanaylab/li_et_al_cell_2018_melanoma_scrna/src/default/) code repository.
+The metacells partitioning we use here was generated from the transcript per million reads (TPM) input table Guo et al. supply. For more details see the guo2018.r script at [Li_et_al_Cell_2018_Melanoma_scRNA](https://github.com/tanaylab/li_et_al_cell_2018_melanoma_scrna) code repository.
 We'll first download the input objects, specifically the unannotated metacell object.
 #```{r, eval=TRUE, warning=FALSE}
 #download.file("http://www.wisdom.weizmann.ac.il/~lubling/metac_data/metacell_annotation/lung_db.tar.gz", destfile = #"lung_db.tar.gz")
@@ -41,7 +41,7 @@ for (f in c("cgraph.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda",
             "mat.guo2018_tpm_scaled_filt_guo2018_lateral.Rda",
             "mat.guo2018_tpm_scaled_filt_Tumor_Normal_Blood.Rda",
             "mc.guo2018_tpm_scaled_filt_Tumor_Normal_Blood_outClean_nonAnn.Rda")) {
-    download.file(paste0("http://www.wisdom.weizmann.ac.il/~lubling/metac_data/metacell_annotation/", f), destfile=paste0("lung_db/", f))
+    download.file(paste0("https://schic2.s3.eu-west-1.amazonaws.com/metac_data/metacell_annotation/", f), destfile=paste0("lung_db/", f))
 }
 ```
 Now let's load the metacell package and define the output directories:

@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">metacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
       </span>
     </div>
 
@@ -76,7 +78,8 @@
       <a href="articles/c-metacell_annotation.html">Annotation of metacells</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Misc</li>
+    </li>
+<li class="dropdown-header">Misc</li>
     <li>
       <a href="articles/d-amphimedon.html">Analyzing whole-organism scRNA-seq data with metacell</a>
     </li>
@@ -104,36 +107,37 @@
   <div class="contents col-md-9">
 
 
-<div id="metacell" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#metacell" class="anchor"></a>metacell</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="metacell">metacell<a class="anchor" aria-label="anchor" href="#metacell"></a>
+</h1></div>
 <p>The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices by computing partitions of a cell similarity graph into small (~20-200 typically) homogeneous groups of cells which are defined as metacells (MCs). The derived MCs are then used for building different representations of the data, allowing matrix or 2D graph visualization forming a basis for analysis of cell types, subtypes, transcriptional gradients, cell-cycle variation, gene modules and their regulatory models and more. More details on the usage of the MetaCell pipeline is available in the package vignettes, and in papers using it.</p>
-<div id="references" class="section level4">
-<h4 class="hasAnchor">
-<a href="#references" class="anchor"></a>References:</h4>
-<p>Method: Baran et al. 2018 (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1812-2">Genome Biology</a>, <a href="https://www.biorxiv.org/content/early/2018/10/08/437665">bioarxiv</a>).</p>
-<p>Functions reference and usage vignettes are available in the package <a href="https://tanaylab.github.io/metacell">homepage</a>.</p>
+<div class="section level4">
+<h4 id="references">References:<a class="anchor" aria-label="anchor" href="#references"></a>
+</h4>
+<p>Method: Baran et al. 2018 (<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1812-2" class="external-link">Genome Biology</a>, <a href="https://www.biorxiv.org/content/early/2018/10/08/437665" class="external-link">bioarxiv</a>).</p>
+<p>Functions reference and usage vignettes are available in the package <a href="https://tanaylab.github.io/metacell" class="external-link">homepage</a>.</p>
 <p>Examples of applications:</p>
 <ul>
 <li>
-<a href="https://www.sciencedirect.com/science/article/pii/S009286741831568X">Li et al., Cell 2018</a> (scRNA-seq of immune cells from human melanoma tumors)</li>
+<a href="https://www.sciencedirect.com/science/article/pii/S009286741831568X" class="external-link">Li et al., Cell 2018</a> (scRNA-seq of immune cells from human melanoma tumors)</li>
 <li>
-<a href="http://www.nature.com/articles/s41556-018-0121-4">Giladi et al., Nat Cell Biol 2018</a> (Mouse hematopoiesis scRNA-seq)</li>
+<a href="http://www.nature.com/articles/s41556-018-0121-4" class="external-link">Giladi et al., Nat Cell Biol 2018</a> (Mouse hematopoiesis scRNA-seq)</li>
 <li>
-<a href="https://www.nature.com/articles/s41559-018-0575-6">Sebe-pedros et al., NEE 2018</a> (whole organisms scRNA-seq)</li>
+<a href="https://www.nature.com/articles/s41559-018-0575-6" class="external-link">Sebe-pedros et al., NEE 2018</a> (whole organisms scRNA-seq)</li>
 <li>
-<a href="https://www.cell.com/cell/abstract/S0092-8674(18)30596-8">Sebe-pedros et al., Cell 2018</a> (whole organism scRNA-seq)</li>
+<a href="https://www.cell.com/cell/abstract/S0092-8674(18)30596-8" class="external-link">Sebe-pedros et al., Cell 2018</a> (whole organism scRNA-seq)</li>
 <li>
-<a href="https://www.nature.com/articles/s41586-018-0346-1">Bornstein et al., Nature 2018</a> (thymic stroma scRNA-seq)</li>
+<a href="https://www.nature.com/articles/s41586-018-0346-1" class="external-link">Bornstein et al., Nature 2018</a> (thymic stroma scRNA-seq)</li>
 <li>
-<a href="https://www.cell.com/cell/fulltext/S0092-8674(18)31181-4">Cohen et al., Cell 2018</a> (lung scRNA-seq)</li>
+<a href="https://www.cell.com/cell/fulltext/S0092-8674(18)31181-4" class="external-link">Cohen et al., Cell 2018</a> (lung scRNA-seq)</li>
 </ul>
 </div>
-<div id="installation" class="section level4">
-<h4 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h4>
-<div class="sourceCode"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"BiocManager"</span>)) <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'BiocManager'</span>)
-<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"tanaylab/metacell"</span>)</pre></div>
+<div class="section level4">
+<h4 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h4>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'BiocManager'</span><span class="op">)</span> 
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"tanaylab/metacell"</span><span class="op">)</span></code></pre></div>
 <p><strong>Note</strong>: Metacell is implemented in R and C++. In particular it uses the Tanay group tgstat library that utilizes shared memory and distributed computing (as well as some specific optional CPU features). The package is tested on linux and macbooks, and is currently not compatible on Windows. A typical application will require at least 16G RAM. For heavier applications (100K cells) we recommend a dual CPU multi-core workstation with 128GM RAM or more.</p>
 </div>
 </div>
@@ -142,46 +146,57 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/tanaylab/metacell/">https://​github.com/​tanaylab/​metacell/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/tanaylab/metacell/issues">https://​github.com/​tanaylab/​metacell/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>
-<a href="http://compgenomics.weizmann.ac.il/tanay/">Amos Tanay</a> <br><small class="roles"> Author, maintainer </small>  </li>
+<li><a href="https://github.com/tanaylab/metacell/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/tanaylab/metacell/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://zenodo.org/badge/latestdoi/196806305"><img src="https://zenodo.org/badge/196806305.svg" alt="DOI"></a></li>
-<li><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing metacell</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>
+<a href="http://compgenomics.weizmann.ac.il/tanay/" class="external-link">Amos Tanay</a> <br><small class="roles"> Author, maintainer </small>  </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://zenodo.org/badge/latestdoi/196806305" class="external-link"><img src="https://zenodo.org/badge/196806305.svg" alt="DOI"></a></li>
+<li><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/">Amos Tanay</a>.</p>
+  <p></p>
+<p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/" class="external-link">Amos Tanay</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -189,6 +204,8 @@
 
   
 
+
+  
 
   </body>
 </html>

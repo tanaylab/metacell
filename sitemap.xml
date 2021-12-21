@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://tanaylab.github.io/metacell-r/404.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/articles/a-basic_pbmc8k.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/articles/b-geneset_by_anchor_pbmc8k.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/articles/c-metacell_annotation.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/articles/d-amphimedon.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/articles/e-data_convert.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/authors.html</loc>
+  </url>
+  <url>
     <loc>http://tanaylab.github.io/metacell-r/index.html</loc>
   </url>
   <url>
@@ -32,6 +62,9 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/gset_write_table.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/index.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/initialize-tgCellGraph-method.html</loc>
@@ -281,6 +314,9 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_marks.html</loc>
+  </url>
+  <url>
+    <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_submc_marks.html</loc>
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/mcell_mc_plot_vgels.html</loc>
@@ -593,20 +629,5 @@
   </url>
   <url>
     <loc>http://tanaylab.github.io/metacell-r/reference/tgs_cor_graph.html</loc>
-  </url>
-  <url>
-    <loc>http://tanaylab.github.io/metacell-r/articles/a-basic_pbmc8k.html</loc>
-  </url>
-  <url>
-    <loc>http://tanaylab.github.io/metacell-r/articles/b-geneset_by_anchor_pbmc8k.html</loc>
-  </url>
-  <url>
-    <loc>http://tanaylab.github.io/metacell-r/articles/c-metacell_annotation.html</loc>
-  </url>
-  <url>
-    <loc>http://tanaylab.github.io/metacell-r/articles/d-amphimedon.html</loc>
-  </url>
-  <url>
-    <loc>http://tanaylab.github.io/metacell-r/articles/e-data_convert.html</loc>
   </url>
 </urlset>

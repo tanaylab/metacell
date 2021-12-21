@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metacell</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.7</span>
       </span>
     </div>
 
@@ -67,7 +69,8 @@
       <a href="../articles/c-metacell_annotation.html">Annotation of metacells</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Misc</li>
+    </li>
+<li class="dropdown-header">Misc</li>
     <li>
       <a href="../articles/d-amphimedon.html">Analyzing whole-organism scRNA-seq data with metacell</a>
     </li>
@@ -95,39 +98,42 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Interoperability with other scRNA formats</h1>
-                        <h4 class="author">Yaniv Lubling</h4>
+                        <h4 data-toc-skip class="author">Yaniv Lubling</h4>
             
-            <h4 class="date">13-02-2019</h4>
+            <h4 data-toc-skip class="date">13-02-2019</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/tanaylab/metacell/blob/master/vignettes/e-data_convert.Rmd"><code>vignettes/e-data_convert.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tanaylab/metacell/blob/HEAD/vignettes/e-data_convert.Rmd" class="external-link"><code>vignettes/e-data_convert.Rmd</code></a></small>
       <div class="hidden name"><code>e-data_convert.Rmd</code></div>
 
     </div>
 
     
     
-<p>Metacell supports conversion of the umi matrix object to/from Bioconductor's <a href="https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html">SingleCellExperiment</a> object (a format that can be imported into Seurat).</p>
-<div id="convert-a-metacell-umi-matrix-object-to-a-singlecellexperiment-object" class="section level2">
-<h2 class="hasAnchor">
-<a href="#convert-a-metacell-umi-matrix-object-to-a-singlecellexperiment-object" class="anchor"></a>Convert a metacell umi matrix object to a SingleCellExperiment object</h2>
+<p>Metacell supports conversion of the umi matrix object to/from Bioconductor's <a href="https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a> object (a format that can be imported into Seurat).</p>
+<div class="section level2">
+<h2 id="convert-a-metacell-umi-matrix-object-to-a-singlecellexperiment-object">Convert a metacell umi matrix object to a SingleCellExperiment object<a class="anchor" aria-label="anchor" href="#convert-a-metacell-umi-matrix-object-to-a-singlecellexperiment-object"></a>
+</h2>
 <p>The export function creates a SingleCellExperiment object and stores in it the raw umi counts and the metadata data.frame. The function expects the ID of the mat object to be exported:</p>
-<div class="sourceCode"><html><body><pre class="r"><span class="no">sce</span> <span class="kw">=</span> <span class="fu"><a href="../reference/scm_export_mat_to_sce.html">scm_export_mat_to_sce</a></span>(<span class="no">mat_id</span>)</pre></body></html></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="../reference/scm_export_mat_to_sce.html">scm_export_mat_to_sce</a></span><span class="op">(</span><span class="va">mat_id</span><span class="op">)</span></code></pre></div>
 <p>If you wish to import the SingleCellExperiment object into Seurat you should also export the log-normalized umi matrix (and then specify the number of umis to scale each cell to before taking the log).</p>
-<div class="sourceCode"><html><body><pre class="r"><span class="no">sce</span> <span class="kw">=</span> <span class="fu"><a href="../reference/scm_export_mat_to_sce.html">scm_export_mat_to_sce</a></span>(<span class="no">mat_id</span>, <span class="kw">add_log_counts</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">scale_to</span><span class="kw">=</span><span class="fl">10000</span>)
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sce</span> <span class="op">=</span> <span class="fu"><a href="../reference/scm_export_mat_to_sce.html">scm_export_mat_to_sce</a></span><span class="op">(</span><span class="va">mat_id</span>, add_log_counts<span class="op">=</span><span class="cn">TRUE</span>, scale_to<span class="op">=</span><span class="fl">10000</span><span class="op">)</span>
 
 <span class="co"># To convert the sce into a Seurat object (Seurat v2.0):</span>
 <span class="co"># library(Seurat)</span>
-<span class="co"># seurat_obj = Convert(sce, to="seurat")</span></pre></body></html></div>
+<span class="co"># seurat_obj = Convert(sce, to="seurat")</span></code></pre></div>
 </div>
-<div id="convert-a-singlecellexperiment-object-into-a-metacell-umi-matrix-one" class="section level2">
-<h2 class="hasAnchor">
-<a href="#convert-a-singlecellexperiment-object-into-a-metacell-umi-matrix-one" class="anchor"></a>Convert a SingleCellExperiment object into a metacell umi matrix one</h2>
+<div class="section level2">
+<h2 id="convert-a-singlecellexperiment-object-into-a-metacell-umi-matrix-one">Convert a SingleCellExperiment object into a metacell umi matrix one<a class="anchor" aria-label="anchor" href="#convert-a-singlecellexperiment-object-into-a-metacell-umi-matrix-one"></a>
+</h2>
 <p>The import function expects a SingleCellExperiment object with the raw umi counts in an assay named "counts" (can be changed by the <em>counts_slot</em> parameter) and it also imports the cells metadata table:</p>
-<div class="sourceCode"><html><body><pre class="r"><span class="no">mat</span> <span class="kw">=</span> <span class="fu"><a href="../reference/scm_import_sce_to_mat.html">scm_import_sce_to_mat</a></span>(<span class="no">sce</span>)
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mat</span> <span class="op">=</span> <span class="fu"><a href="../reference/scm_import_sce_to_mat.html">scm_import_sce_to_mat</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>
 
 <span class="co"># The sce object can be converted from a Seurat object:</span>
 <span class="co"># libray(Seurat)</span>
-<span class="co"># sce = Convert(seurat_obj, "sce")</span></pre></body></html></div>
+<span class="co"># sce = Convert(seurat_obj, "sce")</span></code></pre></div>
 </div>
   </div>
 
@@ -142,11 +148,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/">Amos Tanay</a>.</p>
+  <p></p>
+<p>Developed by <a href="http://compgenomics.weizmann.ac.il/tanay/" class="external-link">Amos Tanay</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -154,6 +162,8 @@
 
   
 
+
+  
 
   </body>
 </html>

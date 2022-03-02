@@ -176,7 +176,7 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 		e = rowMeans(mc_mat)
 		v = apply(mc_mat, 1, var)
 		gs = (v+0.1)/(e+0.1) > 1.2 & apply(mc_mat, 1, max)>2
-		if(sum(gs) < 2 | sum(colSums(mc_mat[gs,] > 3)) < 20) {
+		if(sum(gs) < 2 || sum(colSums(mc_mat[gs, ] > 3)) < 20) {
 #			message("no genes for ", id)
 			clst = rep(1, times=length(nms))
 			names(clst) = nms
@@ -228,7 +228,7 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 	}
 	mc_cores = get_param("mc_cores")
 	nms_mc = split(names(mc@mc), mc@mc)
-	message("starting split outliers ")
+	message("starting split outliers ") 
 #	all_clst = lapply(nms_mc, split_dbscan)
 	all_clst = mclapply(nms_mc, split_dbscan, mc.cores=mc_cores)
 

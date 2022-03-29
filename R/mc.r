@@ -47,7 +47,7 @@ setMethod(
   "initialize",
   signature = "tgMCCov",
   definition =
-    function(.Object, mc, outliers = c(), scmat) {
+    function(.Object, mc, outliers = character(length = 0), scmat) {
 		all_cells = colnames(scmat@mat)
 		.Object@mc = mc
 		.Object@outliers = outliers

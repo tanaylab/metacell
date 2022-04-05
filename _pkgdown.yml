@@ -2,6 +2,7 @@ url: http://tanaylab.github.io/metacell-r
 
 template:
   params:
+    bootstrap: 5
     bootswatch: cosmo
 
 authors:

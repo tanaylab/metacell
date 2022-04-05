@@ -2,6 +2,11 @@ vignettes/*.R
 vignettes/*.html
 vignettes/testdb
 vignettes/figs
+vignettes/aquedb
+vignettes/lung_db
+vignettes/lung_figs
 doc
 Meta
 .Rhistory
+vignettes/MARS_Batches.txt
+vignettes/config.yaml

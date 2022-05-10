@@ -60,8 +60,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
-    tanaylab/tgconfig,
-    tanaylab/tgstat,
+    tanaylab/tgconfig,    
     tanaylab/tgutil
 Encoding: UTF-8
 LazyData: true

@@ -11,7 +11,7 @@ mcell_gset_filter_cov(gstat_id, gset_id, T_tot, T_top3, force_new = F)
 
 \item{gset_id}{if this exists, filter_varmean will restrict hte current genes in the set with genes matching the var mean threshold, if not, it will generate a new gene sets object with one set including all high variance genes}
 
-\item{T_tot}{total down sampled coverage threhsold}
+\item{T_tot}{total coverage threhsold}
 
 \item{T_top3}{threshold value for the third highest umi count for the gene (only genes with top3>T_top3 are used)}
 }

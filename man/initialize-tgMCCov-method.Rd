@@ -4,7 +4,7 @@
 \alias{initialize,tgMCCov-method}
 \title{Construct a meta cell object}
 \usage{
-\S4method{initialize}{tgMCCov}(.Object, mc, outliers = c(), scmat)
+\S4method{initialize}{tgMCCov}(.Object, mc, outliers = character(length = 0), scmat)
 }
 \arguments{
 \item{mc}{assignment of metacell id to cell}

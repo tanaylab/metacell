@@ -105,7 +105,7 @@ mcell_mc_hierarchy = function(mc_id, mc_hc, T_gap)
 	for(i in which(gaps > T_gap)) {
 		j = parent[i]
 		mincells = cells[i] + n_min_outcells
-		while(j != -1 & cells[j] < mincells) {
+		while(j != -1 && cells[j] < mincells) {
 			j = parent[j]	
 		}
 		if(j != -1) { 

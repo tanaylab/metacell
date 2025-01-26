@@ -1,9 +1,9 @@
 [![DOI](https://zenodo.org/badge/196806305.svg)](https://zenodo.org/badge/latestdoi/196806305) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## **NOTE:** _This is the old (original) package written in R. It has been superseded by the [Python metacells](https://github.com/tanaylab/metacells) package, which includes significant algorithmic improvements, and scales to analyzing millions of cells._
+
 metacell
 ========
-
-**NOTE:** _This is the old (original) package written in R. It has been superseded by the [Python metacells](https://github.com/tanaylab/metacells) package, which includes significant algorithmic improvements, and scales to analyzing millions of cells._
 
 The MetaCell R package facilitates analysis of single cell RNA-seq UMI matrices by computing partitions of a cell similarity graph into small (~20-200 typically) homogeneous groups of cells which are defined as metacells (MCs). The derived MCs are then used for building different representations of the data, allowing matrix or 2D graph visualization forming a basis for analysis of cell types, subtypes, transcriptional gradients, cell-cycle variation, gene modules and their regulatory models and more. More details on the usage of the MetaCell pipeline is available in the package vignettes, and in papers using it.
 

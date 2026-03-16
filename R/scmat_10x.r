@@ -50,7 +50,11 @@ mcell_import_scmat_10x = function(mat_nm,
 	if(!is.null(base_dir)) {
 		matrix_fn = sprintf("%s/matrix.mtx", base_dir)
 		genes_fn = sprintf("%s/genes.tsv", base_dir)
-		if(!file.exists(genes_fn) & !grepl("^http", genes_fn)) {
+		if(grepl("^http", base_dir)) {
+			if(!RCurl::url.exists(genes_fn)) {
+				genes_fn = sprintf("%s/features.tsv", base_dir)
+			}
+		} else if(!file.exists(genes_fn)) {
 			genes_fn = sprintf("%s/features.tsv", base_dir)
 		}
 		cells_fn = sprintf("%s/barcodes.tsv", base_dir)
@@ -191,7 +195,9 @@ scmat_read_scmat_10x = function(matrix_fn,
 	}
 	umis = fread_mm(fname = matrix_fn, row.names = genes_fn, col.names = cells_fn)
 	genes = as.data.frame(fread(genes_fn, header=F, stringsAsFactors = F))
-
+	if(ncol(genes) > 2) {
+		genes = genes[, 1:2, drop = FALSE]
+	}
 	colnames(genes) = c('id', 'name')
 	rownames(genes) = genes$id
 
@@ -203,13 +209,17 @@ scmat_read_scmat_10x = function(matrix_fn,
 	}
 	else if (paralogs_policy == 'sum') {
 		non_unique_genes = setdiff(genes$name, unique_genes)
-		umis2 = as.matrix(umis[genes$name %in% non_unique_genes, ])
+		if(length(non_unique_genes) > 0) {
+			umis2 = as.matrix(umis[genes$name %in% non_unique_genes, ])
 
-		message(sprintf("summing up total of %d paralog genes into %d unique genes", nrow(umis2), length(non_unique_genes)))
+			message(sprintf("summing up total of %d paralog genes into %d unique genes", nrow(umis2), length(non_unique_genes)))
 
-		umis2s = apply(umis2, 2, function(x) { tapply(x, INDEX=genes[rownames(umis2), 'name'], FUN=sum) } )
+			umis2s = apply(umis2, 2, function(x) { tapply(x, INDEX=genes[rownames(umis2), 'name'], FUN=sum) } )
 
-		umis = rbind(umis1, umis2s)
+			umis = rbind(umis1, umis2s)
+		} else {
+			umis = umis1
+		}
 	}
 	else {
 		stop(sprintf("MC-ERR: Loading 10x data, unknown paralogs policy (%s), supprting remove/sum", paralogs_policy))

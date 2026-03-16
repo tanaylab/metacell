@@ -60,7 +60,7 @@ mc_compute_outlier_fc = function(mc, mat)
 		if(to < fr + 2) {
 			fr = fr - 1
 		}
-		ishigh_g[fr:to] = apply(u_gi[fr:to,],1,max) >= min_outlier_u
+		ishigh_g[fr:to] = apply(u_gi[fr:to, , drop=FALSE],1,max) >= min_outlier_u
 	}
 	u_gi = u_gi[ishigh_g,]
 
@@ -231,6 +231,11 @@ mcell_mc_split_filt = function(new_mc_id, mc_id, mat_id, T_lfc, plot_mats=T, dir
 	message("starting split outliers ") 
 #	all_clst = lapply(nms_mc, split_dbscan)
 	all_clst = mclapply(nms_mc, split_dbscan, mc.cores=mc_cores)
+	has_errors = any(sapply(all_clst, function(x) is.null(x) || inherits(x, "try-error")))
+	if(has_errors) {
+		message("parallel split_filt failed on some cores, retrying sequentially")
+		all_clst = lapply(nms_mc, split_dbscan)
+	}
 
 	new_mc = rep(NA, length(mc@mc))
 	names(new_mc) = names(mc@mc)

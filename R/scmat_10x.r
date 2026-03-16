@@ -51,7 +51,7 @@ mcell_import_scmat_10x = function(mat_nm,
 		matrix_fn = sprintf("%s/matrix.mtx", base_dir)
 		genes_fn = sprintf("%s/genes.tsv", base_dir)
 		if(grepl("^http", base_dir)) {
-			if(!RCurl::url.exists(genes_fn)) {
+			if(!RCurl::url.exists(genes_fn, .opts = list(followlocation = TRUE))) {
 				genes_fn = sprintf("%s/features.tsv", base_dir)
 			}
 		} else if(!file.exists(genes_fn)) {
@@ -171,9 +171,9 @@ scmat_read_scmat_10x = function(matrix_fn,
 {
 	remote_mode = F
 	if(grepl("^http", matrix_fn)) {
-		if(!RCurl::url.exists(matrix_fn) |
-			!RCurl::url.exists(genes_fn) |
-			!RCurl::url.exists(cells_fn)) {
+		if(!RCurl::url.exists(matrix_fn, .opts = list(followlocation = TRUE)) |
+			!RCurl::url.exists(genes_fn, .opts = list(followlocation = TRUE)) |
+			!RCurl::url.exists(cells_fn, .opts = list(followlocation = TRUE))) {
 			stop("MC-ERR: missing 10x matrix urls, links: ", matrix_fn, " ", genes_fn, " ", cells_fn)
 		} else {
 			message("remote mode")

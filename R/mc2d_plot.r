@@ -48,10 +48,12 @@ mcell_mc2d_plot = function(mc2d_id, legend_pos="topleft", plot_edges=T, min_edge
 		cols = colors
 	}
 	cols[is.na(cols)] = "gray"
+	xlim = range(c(mc2d@sc_x, mc2d@mc_x), na.rm=TRUE)
+	ylim = range(c(mc2d@sc_y, mc2d@mc_y), na.rm=TRUE)
 	if(cell_outline) {
-		plot(mc2d@sc_x, mc2d@sc_y, pch=21, bg=cols[mc@mc[names(mc2d@sc_x)]], cex=sc_cex, lwd=0.5)
+		plot(mc2d@sc_x, mc2d@sc_y, pch=21, bg=cols[mc@mc[names(mc2d@sc_x)]], cex=sc_cex, lwd=0.5, xlim=xlim, ylim=ylim)
 	} else {
-		plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]], cex=sc_cex)
+		plot(mc2d@sc_x, mc2d@sc_y, pch=19, col=cols[mc@mc[names(mc2d@sc_x)]], cex=sc_cex, xlim=xlim, ylim=ylim)
 	}
 	fr = mc2d@graph$mc1
 	to = mc2d@graph$mc2
@@ -324,7 +326,9 @@ mcell_mc2d_plot_gene = function(mc2d_id, gene,
 		sc_cols = ifelse(sc_umi<=zero_sc_v,"gray80",ifelse(sc_umi<=one_sc_v, collow, ifelse(sc_umi<=two_sc_v, colmid, colhigh)))
 	}
 
-	plot(mc2d@sc_x, mc2d@sc_y, pch=19, cex=sc_cex, col=sc_cols, xlab="", ylab="", main=ifelse(neto_points, "", gene), cex.main=mc_cex, bty=ifelse(neto_points, 'n', 'o'), xaxt=ifelse(neto_points, 'n', 's'), yaxt=ifelse(neto_points, 'n', 's'))
+	xlim = range(c(mc2d@sc_x, mc2d@mc_x), na.rm=TRUE)
+	ylim = range(c(mc2d@sc_y, mc2d@mc_y), na.rm=TRUE)
+	plot(mc2d@sc_x, mc2d@sc_y, pch=19, cex=sc_cex, col=sc_cols, xlab="", ylab="", main=ifelse(neto_points, "", gene), cex.main=mc_cex, bty=ifelse(neto_points, 'n', 'o'), xaxt=ifelse(neto_points, 'n', 's'), yaxt=ifelse(neto_points, 'n', 's'), xlim=xlim, ylim=ylim)
 	points(mc2d@mc_x, mc2d@mc_y, pch=21, bg=mc_cols, cex=mc_cex)
 	
 	if (show_mc_ids) {

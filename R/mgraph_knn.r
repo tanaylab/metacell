@@ -78,7 +78,7 @@ mgraph_comp_knn = function(mc_id, graph_id, mctnetwork_id,
 	}
 # k_expand_inout_factor=k_expand_inout_factor
 
-	csize = as.matrix(table(mc@mc))
+	csize = as.matrix(tabulate(mc@mc, nbins = nrow(confu)))
 	csize = pmax(csize, 20)
 	csize2 = csize %*% t(csize)
 	csize2 = csize2 / median(csize)**2

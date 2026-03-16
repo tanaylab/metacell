@@ -139,7 +139,7 @@ mc2d_comp_mgraph = function(mc_id, graph_id, ignore_mismatch=F, symmetrize=F)
 		}
 # k_expand_inout_factor=k_expand_inout_factor
 
-		csize = as.matrix(table(mc@mc))
+		csize = as.matrix(tabulate(mc@mc, nbins = nrow(confu)))
 		csize = pmax(csize, 20)
 		csize2 = csize %*% t(csize)
 		csize2 = csize2 / median(csize)**2

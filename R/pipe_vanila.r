@@ -18,7 +18,8 @@ mcell_pipe_mat2mc2d = function(mat_id,
 	T_top3=3,
 	Knn=120,
 	n_resamp=500,
-	T_weight=round(n_resamp*0.75/8))
+	T_weight=round(n_resamp*0.75/8),
+	mark_fn=NULL)
 {
 	id = mat_id
 	id_plot_marks = sprintf("%s.plot_marks", id)

@@ -122,7 +122,7 @@ scm_gene_stat = function(mat_id,
 			ds_top1 = matrixStats::rowMaxs(mat_ds_gi) ,
 			ds_top2 = matrixStats::rowOrderStats(mat_ds_gi, which = n_ds-1) ,
 			ds_top3 = matrixStats::rowOrderStats(mat_ds_gi, which = n_ds-2) ,
-			is_on_count = matrixStats::rowCounts(mat_ds_gi > 0),
+			is_on_count = matrixStats::rowCounts(mat_gi > 0),
 			ds_is_on_count = matrixStats::rowCounts(mat_ds_gi > 0),
 			ds_var = round(matrixStats::rowVars(mat_ds_gi),7),
 			ds_mean = round(matrixStats::rowMeans2(mat_ds_gi),7))

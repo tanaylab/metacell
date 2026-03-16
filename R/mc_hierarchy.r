@@ -183,6 +183,7 @@ mcell_mc_plot_hierarchy = function(mc_id, graph_id, mc_order, sup_mcs, width, he
 	c_confu = colSums(confu)
 	norm = r_confu %*% t(c_confu)
 	confu_n = confu/norm
+	confu_n[is.nan(confu_n)] = 0
 
 	confu_n = confu_n[mc_order, mc_order]
 	colors = colors[mc_order]

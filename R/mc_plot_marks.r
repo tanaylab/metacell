@@ -233,8 +233,9 @@ mcell_mc_plot_marks = function(mc_id, gset_id, mat_id = mc_id,
 	if(plot_cells) {
 		#image(as.matrix(1:length(cell_ord),nrow=1), col=mc@colors[sort(mc@mc)], xaxt='n', yaxt='n')
 		if(!is.null(focus_mcs)) {
-			mc_fact = as.numeric(as.factor(mc@mc[cell_ord]))
-			cols = mc@colors[sort(names(mc@colors))]
+			mc_f = as.factor(mc@mc[cell_ord])
+			mc_fact = as.numeric(mc_f)
+			cols = mc@colors[levels(mc_f)]
 			image(as.matrix(mc_fact,nrow=1), col=cols, xaxt='n', yaxt='n')
 		} else {
 			image(as.matrix(mc@mc[cell_ord],nrow=1), col=mc@colors, xaxt='n', yaxt='n')

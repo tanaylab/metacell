@@ -281,7 +281,7 @@ mc2d_comp_cell_coord = function(mc_id, graph_id, mgraph, cl_xy, skip_missing=F, 
 
 	N_mc = length(x_cl)
 	N_c = length(mc@mc)+length(mc@outliers)
-	if(N_mc != length(mc@colors)) {
+	if(N_mc != ncol(mc@mc_fp)) {
 		stop("MC-ERR: Length mismatch in number of projected MC and overal mc")
 	}
 

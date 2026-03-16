@@ -57,6 +57,11 @@ scm_downsamp = function(umis, n)
 	}
 	res <- plyr::alply(1:max_bin, 1, sub_dsamp, .parallel=TRUE)
 	umis_ds = do.call(cbind, res)
+	if(ncol(umis_ds) != ncol(umis)) {
+		message("parallel downsampling incomplete (", ncol(umis_ds), "/", ncol(umis), " cells), retrying sequentially")
+		res <- plyr::alply(1:max_bin, 1, sub_dsamp, .parallel=FALSE)
+		umis_ds = do.call(cbind, res)
+	}
 
 	.restore_seed(old_seed)
 

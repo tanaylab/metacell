@@ -134,6 +134,11 @@ scm_gene_stat = function(mat_id,
 
 	res <- plyr::alply(1:max_bin, 1, stat_on_genes, .parallel=TRUE)
 	gene_stat = do.call(rbind, res)
+	if(nrow(gene_stat) != nrow(mat_fg)) {
+		message("parallel gstat computation incomplete (", nrow(gene_stat), "/", nrow(mat_fg), " genes), retrying sequentially")
+		res <- plyr::alply(1:max_bin, 1, stat_on_genes, .parallel=FALSE)
+		gene_stat = do.call(rbind, res)
+	}
 	message("done computing basic gstat, will compute trends")
 
 	if(ncol(mat) > 50000) {

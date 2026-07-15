@@ -43,7 +43,7 @@ scm_downsamp = function(umis, n)
 	max_bin = min(max_bin, ceiling(ncol(umis)/500))
 
 	if(max_bin*10000 < ncol(umis)) {
-		max_bin =  round(ncol(umis))/10000
+		max_bin = ceiling(ncol(umis)/10000)   # ponytail: ceiling, not round(ncol)/10000 -> that gave a non-integer bin count that dropped tail cells (#96)
 	}
 	cell_quant = ceiling(ncol(umis)/max_bin)
 	seed = 19
@@ -61,6 +61,9 @@ scm_downsamp = function(umis, n)
 		message("parallel downsampling incomplete (", ncol(umis_ds), "/", ncol(umis), " cells), retrying sequentially")
 		res <- plyr::alply(1:max_bin, 1, sub_dsamp, .parallel=FALSE)
 		umis_ds = do.call(cbind, res)
+	}
+	if(ncol(umis_ds) != ncol(umis)) {
+		stop("scm_downsamp dropped cells (", ncol(umis_ds), "/", ncol(umis), ") - refusing to return an incomplete matrix")
 	}
 
 	.restore_seed(old_seed)

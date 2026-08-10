@@ -110,15 +110,15 @@ scm_gene_stat = function(mat_id,
 	n = ncol(mat)
 	stat_on_genes = function(i) {
 		g_i = (1+(i-1)*quant):(min(nrow(mat_fg),i*quant))
-		mat_gi = as.matrix(mat_fg[g_i,])
-		mat_ds_gi = as.matrix(mat_ds[g_i,])
+		mat_gi = as.matrix(mat_fg[g_i,,drop=FALSE])
+		mat_ds_gi = as.matrix(mat_ds[g_i,,drop=FALSE])
 		gstat = data.frame(stringsAsFactors = F,
 	   	name = rownames(mat_gi),
 			tot = rowSums(mat_gi),
 			var = round(matrixStats::rowVars(mat_gi),7),
 			niche_stat =
 		  		apply(mat_gi, 1, quant_mean, k_reg = 10),
-			n_mean = round(matrixStats::rowMeans2(as.matrix(mat_n[g_i,])),7),
+			n_mean = round(matrixStats::rowMeans2(as.matrix(mat_n[g_i,,drop=FALSE])),7),
 			ds_top1 = matrixStats::rowMaxs(mat_ds_gi) ,
 			ds_top2 = matrixStats::rowOrderStats(mat_ds_gi, which = n_ds-1) ,
 			ds_top3 = matrixStats::rowOrderStats(mat_ds_gi, which = n_ds-2) ,
@@ -128,9 +128,10 @@ scm_gene_stat = function(mat_id,
 			ds_mean = round(matrixStats::rowMeans2(mat_ds_gi),7))
 		return(gstat)
 	}
-	max_bin = get_param("mc_cores")
-	doMC::registerDoMC(max_bin)
-	quant = ceiling(nrow(mat_fg)/max_bin)
+	doMC::registerDoMC(get_param("mc_cores"))
+	# ponytail: ~50MB per dense block; quant=nrow/mc_cores densified multi-GiB per fork
+	quant = max(1L, floor(5e7/(8*n)))
+	max_bin = ceiling(nrow(mat_fg)/quant)
 
 	res <- plyr::alply(1:max_bin, 1, stat_on_genes, .parallel=TRUE)
 	gene_stat = do.call(rbind, res)
@@ -138,17 +139,17 @@ scm_gene_stat = function(mat_id,
 		message("parallel gstat computation incomplete (", nrow(gene_stat), "/", nrow(mat_fg), " genes), retrying sequentially")
 		res <- plyr::alply(1:max_bin, 1, stat_on_genes, .parallel=FALSE)
 		gene_stat = do.call(rbind, res)
+		if(nrow(gene_stat) != nrow(mat_fg)) {
+			stop("MCERR - gstat computation incomplete after sequential retry (", nrow(gene_stat), "/", nrow(mat_fg), " genes)")
+		}
 	}
 	message("done computing basic gstat, will compute trends")
 
 	if(ncol(mat) > 50000) {
 		subs = sample(1:ncol(mat),50000)
-		ctot = colSums(mat[,subs])
-		gene_stat$sz_cor = round(apply(mat_fg[,subs], 1, function(x) { cor(x, ctot) }),3)
-
+		gene_stat$sz_cor = round(.sparse_row_cor(mat_fg[,subs], colSums(mat[,subs])),3)
 	} else {
-		ctot = colSums(mat)
-		gene_stat$sz_cor = round(apply(mat_fg, 1, function(x) { cor(x, ctot) }),3)
+		gene_stat$sz_cor = round(.sparse_row_cor(mat_fg, colSums(mat)),3)
 	}
 
 	tot_ord = order(gene_stat$tot)
@@ -202,6 +203,19 @@ scm_gene_stat = function(mat_id,
 	cat("..done\n")
 
 	return(gene_stat)
+}
+
+# Pearson correlation of every matrix row with y, without densifying.
+# ponytail: sums-of-products formula - apply(sparse_mat, 1, cor) coerces the
+# whole matrix to dense (genes x 50k cells x 8B = multi-GiB) and OOMs.
+.sparse_row_cor = function(mat_use, y)
+{
+	n = length(y)
+	sx = Matrix::rowSums(mat_use)
+	sxx = Matrix::rowSums(mat_use * mat_use)
+	sxy = as.vector(mat_use %*% y)
+	den = sqrt((sxx - sx^2/n) * (sum(y*y) - sum(y)^2/n))
+	ifelse(den > 0, (sxy - sx*sum(y)/n)/den, NA_real_)
 }
 
 
